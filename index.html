@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃金殿 · 貴金屬投資資訊平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-pale: #F5E6B8;
+    --gold-deep: #8B6914;
+    --obsidian: #0D0D0D;
+    --dark: #111111;
+    --dark-2: #1A1A1A;
+    --dark-3: #222222;
+    --dark-4: #2C2C2C;
+    --text: #E8E0D0;
+    --text-muted: #9A9080;
+    --text-dim: #5A5448;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--obsidian);
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ─── TICKER BAR ─── */
+  .ticker-bar {
+    background: var(--gold-deep);
+    background: linear-gradient(90deg, #4a3200, #6b4a0a, #4a3200);
+    padding: 6px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-bar::before, .ticker-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+  }
+  .ticker-bar::before { left: 0; background: linear-gradient(90deg, #4a3200, transparent); }
+  .ticker-bar::after { right: 0; background: linear-gradient(270deg, #4a3200, transparent); }
+
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--gold-pale);
+    font-family: 'Noto Sans TC', monospace;
+  }
+  .ticker-item .label {
+    color: var(--gold-light);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .ticker-item .price { font-weight: 500; font-size: 13px; }
+  .ticker-item .change.up { color: #6EE7B7; }
+  .ticker-item .change.down { color: #FCA5A5; }
+  .ticker-sep { color: var(--gold-deep); font-size: 16px; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 16px rgba(201,168,76,0.4);
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+  }
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    transition: all 0.25s;
+    position: relative;
+    white-space: nowrap;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 18px; right: 18px;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+    transform-origin: left;
+  }
+  nav a:hover { color: var(--gold-light); }
+  nav a:hover::after { transform: scaleX(1); }
+  nav a.active { color: var(--gold-light); }
+  nav a.active::after { transform: scaleX(1); }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-login {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--gold);
+    padding: 7px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 1px;
+  }
+  .btn-login:hover {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--gold);
+  }
+  .btn-register {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    border: none;
+    color: var(--obsidian);
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 1px;
+  }
+  .btn-register:hover {
+    box-shadow: 0 4px 16px rgba(201,168,76,0.4);
+    transform: translateY(-1px);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--dark);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 10% 80%, rgba(139,105,20,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 32px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border-strong);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .badge-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-title span {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    max-width: 500px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .cta-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color: var(--obsidian);
+    border: none;
+    padding: 14px 32px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+  }
+  .cta-primary:hover { box-shadow: 0 6px 24px rgba(201,168,76,0.45); transform: translateY(-2px); }
+  .cta-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 14px 32px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+  }
+  .cta-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ─── GOLD PRICE CARD ─── */
+  .gold-card {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gold-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: #6EE7B7;
+    letter-spacing: 1px;
+  }
+  .live-dot { width: 5px; height: 5px; background: #6EE7B7; border-radius: 50%; animation: pulse 1.5s infinite; }
+
+  .price-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .price-unit { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+  .price-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(110,231,183,0.1);
+    color: #6EE7B7;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .price-stat label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .price-stat span {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .update-note {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 14px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  /* ─── SECTION LAYOUT ─── */
+  .section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .section-more {
+    color: var(--text-muted);
+    font-size: 13px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+  .section-more:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 32px;
+  }
+
+  /* ─── CARDS GRID ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .article-card {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .article-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+  .article-card:hover .card-img-inner { transform: scale(1.04); }
+
+  .card-img {
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-img-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.4s ease;
+  }
+  .card-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+  .card-body { padding: 20px; }
+  .card-category {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card-title-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .card-excerpt {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ─── CHART SECTION ─── */
+  .chart-section {
+    background: var(--dark-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .chart-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .chart-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--dark-3);
+    padding: 4px;
+    border-radius: 6px;
+  }
+  .chart-tab {
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .chart-tab.active {
+    background: var(--dark-4);
+    color: var(--gold);
+  }
+  .chart-area {
+    height: 200px;
+    position: relative;
+  }
+  svg.sparkline { width: 100%; height: 100%; }
+
+  /* ─── DISCUSSION PREVIEW ─── */
+  .discussion-list { display: flex; flex-direction: column; gap: 12px; }
+  .discussion-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .discussion-item:hover {
+    border-color: var(--border-strong);
+    background: var(--dark-3);
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-deep), var(--dark-4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold-pale);
+    flex-shrink: 0;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .discussion-body { flex: 1; }
+  .discussion-title {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .discussion-title:hover { color: var(--gold-light); }
+  .discussion-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .discussion-stat { display: flex; align-items: center; gap: 4px; }
+  .discussion-tag {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── MARKET OVERVIEW ─── */
+  .market-table {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .market-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.2s;
+  }
+  .market-row:last-child { border-bottom: none; }
+  .market-row:hover:not(.market-header) { background: var(--dark-3); }
+  .market-row.market-header {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    background: var(--dark-3);
+  }
+  .market-name { display: flex; align-items: center; gap: 10px; }
+  .metal-icon { width: 28px; height: 28px; border-radius: 50%; display:flex;align-items:center;justify-content:center;font-size:13px; }
+  .metal-name { font-size: 14px; color: var(--text); }
+  .metal-symbol { font-size: 11px; color: var(--text-dim); }
+  .market-price { font-size: 14px; color: var(--text); font-weight: 400; }
+  .market-change { font-size: 13px; }
+  .market-change.up { color: #6EE7B7; }
+  .market-change.down { color: #FCA5A5; }
+  .market-sparkline { display: flex; align-items: center; }
+  .mini-chart { width: 80px; height: 30px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .footer-main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px 32px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+  .footer-brand .logo-text { font-size: 20px; margin-bottom: 12px; display: block; }
+  .footer-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .footer-heading {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold-light); }
+  .footer-bottom {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom-links a:hover { color: var(--gold); }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 36px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 12px 12px 0 0;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+  .modal-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .modal-tab {
+    padding: 10px 24px;
+    font-size: 14px;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .modal-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+  .modal-tab.active { color: var(--gold); }
+  .modal-tab.active::after { transform: scaleX(1); }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 6px; display: block; }
+  .form-input {
+    width: 100%;
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--text-dim); }
+  .form-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    border: none;
+    color: var(--obsidian);
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    transition: all 0.2s;
+  }
+  .form-submit:hover { box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .modal-panel { display: none; }
+  .modal-panel.active { display: block; }
+
+  /* animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="label">黃金 XAU/USD</span><span class="price" id="t-gold">$3,285.40</span><span class="change up" id="t-gold-c">▲ +12.30</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">白銀 XAG/USD</span><span class="price" id="t-silver">$32.84</span><span class="change up">▲ +0.52</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鉑金 XPT/USD</span><span class="price">$982.50</span><span class="change down">▼ -3.20</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鈀金 XPD/USD</span><span class="price">$1,024.70</span><span class="change up">▲ +8.40</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.45</span><span class="change down">▼ -0.08</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">黃金台灣牌價</span><span class="price">NT$3,371/g</span><span class="change up">▲ +15</span></div>
+    <div class="ticker-sep">·</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><span class="label">黃金 XAU/USD</span><span class="price">$3,285.40</span><span class="change up">▲ +12.30</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">白銀 XAG/USD</span><span class="price">$32.84</span><span class="change up">▲ +0.52</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鉑金 XPT/USD</span><span class="price">$982.50</span><span class="change down">▼ -3.20</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鈀金 XPD/USD</span><span class="price">$1,024.70</span><span class="change up">▲ +8.40</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.45</span><span class="change down">▼ -0.08</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">黃金台灣牌價</span><span class="price">NT$3,371/g</span><span class="change up">▲ +15</span></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">金</div>
+      <div>
+        <div class="logo-text">黃金殿</div>
+        <div class="logo-sub">GOLD INVESTMENT PLATFORM</div>
+      </div>
+    </a>
+    <nav>
+      <a href="#" class="active">國際金價</a>
+      <a href="#">黃金飾品</a>
+      <a href="#">投資訊息</a>
+      <a href="#">討論區</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-login" onclick="openModal('login')">登入</button>
+      <button class="btn-register" onclick="openModal('register')">免費註冊</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="fade-up">
+      <div class="hero-badge"><span class="badge-dot"></span>即時金價更新中</div>
+      <h1 class="hero-title">
+        掌握<span>黃金市場</span><br>
+        精準投資時機
+      </h1>
+      <p class="hero-desc">
+        整合全球貴金屬即時行情、專業投資分析與活躍社群討論。<br>
+        從新手到專業投資人，一站式掌握黃金市場動向。
+      </p>
+      <div class="hero-cta">
+        <button class="cta-primary" onclick="openModal('register')">立即加入會員</button>
+        <button class="cta-secondary">瀏覽金價走勢</button>
+      </div>
+    </div>
+
+    <!-- Live Gold Price Card -->
+    <div class="gold-card fade-up delay-2">
+      <div class="card-header">
+        <span class="card-title">黃金現貨 · XAU/USD</span>
+        <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      </div>
+      <div class="price-main" id="hero-price">3,285.40</div>
+      <div class="price-unit">美元 / 盎司</div>
+      <div class="price-change" id="hero-change">▲ +12.30 &nbsp;(+0.38%)</div>
+      <div class="price-grid">
+        <div class="price-stat"><label>今日最高</label><span id="h-high">3,298.70</span></div>
+        <div class="price-stat"><label>今日最低</label><span id="h-low">3,270.20</span></div>
+        <div class="price-stat"><label>開盤價</label><span>3,273.10</span></div>
+        <div class="price-stat"><label>台灣牌價</label><span>NT$3,371/g</span></div>
+      </div>
+      <div class="update-note" id="update-time">資料延遲 · 最後更新：--:--:--</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHART SECTION -->
+<div class="chart-section">
+  <div class="chart-inner">
+    <div class="chart-header">
+      <div>
+        <div class="section-label">價格走勢</div>
+        <div class="section-title" style="font-size:20px;">黃金歷史走勢圖</div>
+      </div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" onclick="setTab(this,'1D')">1日</button>
+        <button class="chart-tab" onclick="setTab(this,'1W')">1週</button>
+        <button class="chart-tab" onclick="setTab(this,'1M')">1個月</button>
+        <button class="chart-tab" onclick="setTab(this,'3M')">3個月</button>
+        <button class="chart-tab" onclick="setTab(this,'1Y')">1年</button>
+      </div>
+    </div>
+    <div class="chart-area">
+      <svg class="sparkline" viewBox="0 0 1200 200" preserveAspectRatio="none" id="mainChart">
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path id="chartFill" fill="url(#chartGrad)" stroke="none"/>
+        <path id="chartLine" fill="none" stroke="#C9A84C" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- MARKET OVERVIEW -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label">市場概覽</div>
+      <div class="section-title">貴金屬行情一覽</div>
+    </div>
+    <a href="#" class="section-more">查看完整行情 →</a>
+  </div>
+  <div class="market-table fade-up delay-1">
+    <div class="market-row market-header">
+      <div>貴金屬</div>
+      <div>現貨價格</div>
+      <div>漲跌幅</div>
+      <div>走勢</div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C9A84C,#8B6914)">Au</div><div><div class="metal-name">黃金</div><div class="metal-symbol">XAU/USD</div></div></div>
+      <div class="market-price">$3,285.40</div>
+      <div class="market-change up">▲ +0.38%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,20 10,18 20,22 30,15 40,12 50,14 60,8 70,10 80,6" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C0C0C0,#808080)">Ag</div><div><div class="metal-name">白銀</div><div class="metal-symbol">XAG/USD</div></div></div>
+      <div class="market-price">$32.84</div>
+      <div class="market-change up">▲ +1.61%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,22 10,20 20,18 30,16 40,14 50,16 60,12 70,10 80,8" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#E5E4E2,#6E6E6E)">Pt</div><div><div class="metal-name">鉑金</div><div class="metal-symbol">XPT/USD</div></div></div>
+      <div class="market-price">$982.50</div>
+      <div class="market-change down">▼ -0.32%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,8 10,10 20,12 30,14 40,12 50,15 60,18 70,16 80,20" fill="none" stroke="#FCA5A5" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#B5B5B5,#5a5a5a)">Pd</div><div><div class="metal-name">鈀金</div><div class="metal-symbol">XPD/USD</div></div></div>
+      <div class="market-price">$1,024.70</div>
+      <div class="market-change up">▲ +0.83%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,18 10,16 20,14 30,12 40,15 50,10 60,8 70,12 80,9" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- INVESTMENT NEWS -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label">最新動態</div>
+      <div class="section-title">投資資訊精選</div>
+    </div>
+    <a href="#" class="section-more">更多資訊 →</a>
+  </div>
+  <div class="cards-grid">
+    <div class="article-card fade-up delay-1">
+      <div class="card-img"><div class="card-img-inner card-img-placeholder" style="background:linear-gradient(135deg,#1a1206,#3a2a0a)">📊</div></div>
+      <div class="card-body">
+        <div class="card-category">市場分析</div>
+        <div class="card-title-text">聯準會政策轉向預期推升金價 分析師看好後市</div>
+        <div class="card-excerpt">隨著通膨數據持續降溫，市場對聯準會降息預期升溫，帶動黃金現貨突破3,280美元關鍵阻力位...</div>
+        <div class="card-meta"><span>2025.02.27</span><span>📖 閱讀 2.1k</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up delay-2">
+      <div class="card-img"><div class="card-img-inner card-img-placeholder" style="background:linear-gradient(135deg,#0d1a1a,#0a2a1a)">🌍</div></div>
+      <div class="card-body">
+        <div class="card-category">國際情勢</div>
+        <div class="card-title-text">地緣政治緊張局勢升溫 避險需求帶動貴金屬走揚</div>
+        <div class="card-excerpt">中東局勢再度緊繃，全球投資人轉向黃金等避險資產，本週黃金ETF淨流入創近三個月新高...</div>
+        <div class="card-meta"><span>2025.02.26</span><span>📖 閱讀 1.8k</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up delay-3">
+      <div class="card-img"><div class="card-img-inner card-img-placeholder" style="background:linear-gradient(135deg,#1a0d0d,#2a1010)">💡</div></div>
+      <div class="card-body">
+        <div class="card-category">投資教學</div>
+        <div class="card-title-text">黃金ETF vs 實體黃金 新手投資人完整比較指南</div>
+        <div class="card-excerpt">許多投資人在考慮布局黃金時，常面臨選擇ETF還是實體黃金的困惑。本文從流動性、保管成本...</div>
+        <div class="card-meta"><span>2025.02.25</span><span>📖 閱讀 3.4k</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- DISCUSSION PREVIEW -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label">社群討論</div>
+      <div class="section-title">熱門話題</div>
+    </div>
+    <a href="#" class="section-more">進入討論區 →</a>
+  </div>
+  <div class="discussion-list">
+    <div class="discussion-item">
+      <div class="avatar">王</div>
+      <div class="discussion-body">
+        <div class="discussion-title">📈 黃金突破3300美元後能否繼續上攻？技術面分析討論</div>
+        <div class="discussion-meta">
+          <span>王大明</span>
+          <span class="discussion-tag">技術分析</span>
+          <span class="discussion-stat">💬 38 回覆</span>
+          <span class="discussion-stat">👁 412 瀏覽</span>
+          <span>2小時前</span>
+        </div>
+      </div>
+    </div>
+    <div class="discussion-item">
+      <div class="avatar">林</div>
+      <div class="discussion-body">
+        <div class="discussion-title">請問台灣銀行與土地銀行的黃金存摺，哪家手續費比較划算？</div>
+        <div class="discussion-meta">
+          <span>林小玲</span>
+          <span class="discussion-tag">新手提問</span>
+          <span class="discussion-stat">💬 24 回覆</span>
+          <span class="discussion-stat">👁 287 瀏覽</span>
+          <span>5小時前</span>
+        </div>
+      </div>
+    </div>
+    <div class="discussion-item">
+      <div class="avatar">陳</div>
+      <div class="discussion-body">
+        <div class="discussion-title">分享：定期定額買黃金存摺三年心得，報酬率超過40%</div>
+        <div class="discussion-meta">
+          <span>陳建宏</span>
+          <span class="discussion-tag">經驗分享</span>
+          <span class="discussion-stat">💬 61 回覆</span>
+          <span class="discussion-stat">👁 1,240 瀏覽</span>
+          <span>昨天</span>
+        </div>
+      </div>
+    </div>
+    <div class="discussion-item">
+      <div class="avatar">張</div>
+      <div class="discussion-body">
+        <div class="discussion-title">美元走弱對黃金的影響，以及2025下半年預測整理</div>
+        <div class="discussion-meta">
+          <span>張雅婷</span>
+          <span class="discussion-tag">總體經濟</span>
+          <span class="discussion-stat">💬 19 回覆</span>
+          <span class="discussion-stat">👁 534 瀏覽</span>
+          <span>昨天</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <span class="logo-text" style="font-family:'Noto Serif TC',serif;color:var(--gold-light)">黃金殿</span>
+      <p class="footer-desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。</p>
+    </div>
+    <div>
+      <div class="footer-heading">快速連結</div>
+      <ul class="footer-links">
+        <li><a href="#">國際金價</a></li>
+        <li><a href="#">黃金飾品</a></li>
+        <li><a href="#">投資訊息</a></li>
+        <li><a href="#">討論區</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">會員服務</div>
+      <ul class="footer-links">
+        <li><a href="#" onclick="openModal('register');return false;">免費註冊</a></li>
+        <li><a href="#" onclick="openModal('login');return false;">會員登入</a></li>
+        <li><a href="#">帳號設定</a></li>
+        <li><a href="#">發表文章</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">關於</div>
+      <ul class="footer-links">
+        <li><a href="#">關於我們</a></li>
+        <li><a href="#">聯絡我們</a></li>
+        <li><a href="#">隱私政策</a></li>
+        <li><a href="#">服務條款</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 黃金殿 · 貴金屬投資平台 ·&nbsp;<span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span>
+    <div class="footer-bottom-links">
+      <a href="#">聯絡我們</a>
+      <a href="#">隱私政策</a>
+      <a href="#">關於我們</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">歡迎來到黃金殿</div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">登入</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">免費註冊</button>
+    </div>
+    <div class="modal-panel active" id="panel-login">
+      <div class="form-group">
+        <label class="form-label">電子郵件</label>
+        <input type="email" class="form-input" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">密碼</label>
+        <input type="password" class="form-input" placeholder="••••••••">
+      </div>
+      <button class="form-submit">登入</button>
+    </div>
+    <div class="modal-panel" id="panel-register">
+      <div class="form-group">
+        <label class="form-label">使用者名稱</label>
+        <input type="text" class="form-input" placeholder="您的暱稱">
+      </div>
+      <div class="form-group">
+        <label class="form-label">電子郵件</label>
+        <input type="email" class="form-input" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">密碼</label>
+        <input type="password" class="form-input" placeholder="至少 8 個字元">
+      </div>
+      <button class="form-submit">立即註冊</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── MODAL ──
+function openModal(tab) {
+  document.getElementById('modalOverlay').classList.add('open');
+  switchTab(tab);
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+function switchTab(tab) {
+  ['login','register'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+// ── CHART TABS ──
+function setTab(el, period) {
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  drawChart(period);
+}
+
+// ── CHART GENERATION ──
+function generatePrices(base, points, volatility) {
+  let prices = [base];
+  for (let i=1; i<points; i++) {
+    let change = (Math.random() - 0.48) * volatility;
+    prices.push(Math.max(prices[i-1] + change, base * 0.85));
+  }
+  return prices;
+}
+
+function drawChart(period) {
+  const configs = {
+    '1D': { points: 48, vol: 3, base: 3250 },
+    '1W': { points: 84, vol: 5, base: 3200 },
+    '1M': { points: 60, vol: 8, base: 3100 },
+    '3M': { points: 90, vol: 12, base: 2900 },
+    '1Y': { points: 120, vol: 15, base: 2500 },
+  };
+  const c = configs[period] || configs['1D'];
+  const prices = generatePrices(c.base, c.points, c.vol);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const range = max - min || 1;
+  const W = 1200, H = 200, pad = 10;
+  const pts = prices.map((p, i) => {
+    const x = (i / (prices.length - 1)) * W;
+    const y = H - pad - ((p - min) / range) * (H - pad * 2);
+    return `${x},${y}`;
+  });
+  const lineD = 'M ' + pts.join(' L ');
+  const fillD = `M 0,${H} L ` + pts.join(' L ') + ` L ${W},${H} Z`;
+  document.getElementById('chartLine').setAttribute('d', lineD);
+  document.getElementById('chartFill').setAttribute('d', fillD);
+}
+drawChart('1D');
+
+// ── REAL PRICE FROM METALS.DEV API ──
+const UPDATE_INTERVAL = 60 * 60 * 1000; // 每60分鐘更新一次
+
+let lastGoldPrice = null;
+let lastOpenPrice = null;
+
+function renderPrice(data) {
+  try {
+    const metals = data.metals;
+    const gold = metals.XAU; // 每盎司美元金價
+
+    // 計算漲跌（用開盤價對比，若無則與上次比）
+    const open = lastOpenPrice || gold;
+    const change = gold - open;
+    const changePct = ((change / open) * 100).toFixed(2);
+    const sign = change >= 0 ? '▲ +' : '▼ ';
+    const colorClass = change >= 0 ? '#6EE7B7' : '#FCA5A5';
+
+    // 更新主卡片金價
+    document.getElementById('hero-price').textContent = gold.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    const changeEl = document.getElementById('hero-change');
+    changeEl.style.background = change >= 0 ? 'rgba(110,231,183,0.1)' : 'rgba(252,165,165,0.1)';
+    changeEl.style.color = colorClass;
+    changeEl.innerHTML = `${sign}${Math.abs(change).toFixed(2)} &nbsp;(${change >= 0 ? '+' : ''}${changePct}%)`;
+
+    // 更新高低點（用±0.5%估算，免費方案不提供高低點）
+    document.getElementById('h-high').textContent = (gold * 1.005).toFixed(2);
+    document.getElementById('h-low').textContent = (gold * 0.995).toFixed(2);
+
+    // 更新跑馬燈
+    const tickerGold = document.getElementById('t-gold');
+    const tickerGoldC = document.getElementById('t-gold-c');
+    if (tickerGold) tickerGold.textContent = `$${gold.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+    if (tickerGoldC) {
+      tickerGoldC.textContent = `${sign}${Math.abs(change).toFixed(2)}`;
+      tickerGoldC.className = `change ${change >= 0 ? 'up' : 'down'}`;
+    }
+
+    // 更新白銀
+    if (metals.XAG) {
+      const silverEl = document.getElementById('t-silver');
+      if (silverEl) silverEl.textContent = `$${metals.XAG.toFixed(2)}`;
+    }
+
+    // 更新時間
+    const now = new Date();
+    document.getElementById('update-time').textContent =
+      `資料每60分鐘更新 · 最後更新：${now.toLocaleTimeString('zh-TW')}`;
+
+    lastGoldPrice = gold;
+    if (!lastOpenPrice) lastOpenPrice = gold;
+
+  } catch(e) {
+    console.error('金價解析錯誤:', e);
+  }
+}
+
+async function fetchGoldPrice() {
+  try {
+    const res = await fetch('/api/goldprice');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderPrice(data);
+  } catch(err) {
+    console.error('金價API錯誤:', err);
+    // API失敗時保留上次數字，不顯示錯誤給用戶
+    const now = new Date();
+    const updateEl = document.getElementById('update-time');
+    if (updateEl) updateEl.textContent = `連線中… · ${now.toLocaleTimeString('zh-TW')}`;
+  }
+}
+
+// 立即執行一次，之後每60分鐘更新
+fetchGoldPrice();
+setInterval(fetchGoldPrice, UPDATE_INTERVAL);
+</script>
+</body>
+</html>
