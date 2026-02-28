@@ -833,11 +833,11 @@
   <div class="ticker-track" id="tickerTrack">
     <div class="ticker-item"><span class="label">黃金 XAU/USD</span><span class="price" id="t-gold">$3,285.40</span><span class="change up" id="t-gold-c">▲ +12.30</span></div>
     <div class="ticker-sep">·</div>
-    <div class="ticker-item"><span class="label">白銀 XAG/USD</span><span class="price" id="t-silver">$32.84</span><span class="change up">▲ +0.52</span></div>
+    <div class="ticker-item"><span class="label">白銀 XAG/USD</span><span class="price" id="t-silver">$32.84</span><span class="change up" id="t-silver-c">▲ +0.52</span></div>
     <div class="ticker-sep">·</div>
-    <div class="ticker-item"><span class="label">鉑金 XPT/USD</span><span class="price">$982.50</span><span class="change down">▼ -3.20</span></div>
+    <div class="ticker-item"><span class="label">鉑金 XPT/USD</span><span class="price" id="t-platinum">$982.50</span><span class="change down" id="t-platinum-c">▼ -3.20</span></div>
     <div class="ticker-sep">·</div>
-    <div class="ticker-item"><span class="label">鈀金 XPD/USD</span><span class="price">$1,024.70</span><span class="change up">▲ +8.40</span></div>
+    <div class="ticker-item"><span class="label">鈀金 XPD/USD</span><span class="price" id="t-palladium">$1,024.70</span><span class="change up" id="t-palladium-c">▲ +8.40</span></div>
     <div class="ticker-sep">·</div>
     <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.45</span><span class="change down">▼ -0.08</span></div>
     <div class="ticker-sep">·</div>
@@ -971,26 +971,26 @@
     </div>
     <div class="market-row">
       <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C9A84C,#8B6914)">Au</div><div><div class="metal-name">黃金</div><div class="metal-symbol">XAU/USD</div></div></div>
-      <div class="market-price">$3,285.40</div>
-      <div class="market-change up">▲ +0.38%</div>
+      <div class="market-price" id="m-gold">$3,285.40</div>
+      <div class="market-change up" id="m-gold-c">▲ +0.38%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,20 10,18 20,22 30,15 40,12 50,14 60,8 70,10 80,6" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
     </div>
     <div class="market-row">
       <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C0C0C0,#808080)">Ag</div><div><div class="metal-name">白銀</div><div class="metal-symbol">XAG/USD</div></div></div>
-      <div class="market-price">$32.84</div>
-      <div class="market-change up">▲ +1.61%</div>
+      <div class="market-price" id="m-silver">$32.84</div>
+      <div class="market-change up" id="m-silver-c">▲ +1.61%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,22 10,20 20,18 30,16 40,14 50,16 60,12 70,10 80,8" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
     </div>
     <div class="market-row">
       <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#E5E4E2,#6E6E6E)">Pt</div><div><div class="metal-name">鉑金</div><div class="metal-symbol">XPT/USD</div></div></div>
-      <div class="market-price">$982.50</div>
-      <div class="market-change down">▼ -0.32%</div>
+      <div class="market-price" id="m-platinum">$982.50</div>
+      <div class="market-change down" id="m-platinum-c">▼ -0.32%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,8 10,10 20,12 30,14 40,12 50,15 60,18 70,16 80,20" fill="none" stroke="#FCA5A5" stroke-width="1.5"/></svg></div>
     </div>
     <div class="market-row">
       <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#B5B5B5,#5a5a5a)">Pd</div><div><div class="metal-name">鈀金</div><div class="metal-symbol">XPD/USD</div></div></div>
-      <div class="market-price">$1,024.70</div>
-      <div class="market-change up">▲ +0.83%</div>
+      <div class="market-price" id="m-palladium">$1,024.70</div>
+      <div class="market-change up" id="m-palladium-c">▲ +0.83%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,18 10,16 20,14 30,12 40,15 50,10 60,8 70,12 80,9" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
     </div>
   </div>
@@ -1256,44 +1256,81 @@ const UPDATE_INTERVAL = 60 * 60 * 1000; // 每60分鐘更新一次
 let lastGoldPrice = null;
 let lastOpenPrice = null;
 
+function updateMetalDisplay(priceId, changeId, price, prevPrice) {
+  const el = document.getElementById(priceId);
+  const changeEl = document.getElementById(changeId);
+  if (!el || !price) return;
+
+  el.textContent = `$${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+  if (changeEl && prevPrice) {
+    const change = price - prevPrice;
+    const changePct = ((change / prevPrice) * 100).toFixed(2);
+    const isUp = change >= 0;
+    changeEl.textContent = `${isUp ? '▲ +' : '▼ '}${Math.abs(changePct)}%`;
+    changeEl.className = `market-change ${isUp ? 'up' : 'down'}`;
+  }
+}
+
+function updateTickerItem(priceId, changeId, price, prevPrice) {
+  const el = document.getElementById(priceId);
+  const changeEl = document.getElementById(changeId);
+  if (!el || !price) return;
+
+  el.textContent = `$${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+  if (changeEl && prevPrice) {
+    const change = price - prevPrice;
+    const isUp = change >= 0;
+    changeEl.textContent = `${isUp ? '▲ +' : '▼ '}${Math.abs(change).toFixed(2)}`;
+    changeEl.className = `change ${isUp ? 'up' : 'down'}`;
+  }
+}
+
 function renderPrice(data) {
   try {
     const metals = data.metals;
-    const gold = metals.XAU || metals.gold; // 每盎司美元金價
+    const gold = metals.XAU || metals.gold;
+    const silver = metals.XAG || metals.silver;
+    const platinum = metals.XPT || metals.platinum;
+    const palladium = metals.XPD || metals.palladium;
 
-    // 計算漲跌（用開盤價對比，若無則與上次比）
+    // 計算黃金漲跌
     const open = lastOpenPrice || gold;
     const change = gold - open;
     const changePct = ((change / open) * 100).toFixed(2);
-    const sign = change >= 0 ? '▲ +' : '▼ ';
-    const colorClass = change >= 0 ? '#6EE7B7' : '#FCA5A5';
+    const isUp = change >= 0;
+    const sign = isUp ? '▲ +' : '▼ ';
+    const colorClass = isUp ? '#6EE7B7' : '#FCA5A5';
 
-    // 更新主卡片金價
+    // 主卡片黃金價格
     document.getElementById('hero-price').textContent = gold.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-
     const changeEl = document.getElementById('hero-change');
-    changeEl.style.background = change >= 0 ? 'rgba(110,231,183,0.1)' : 'rgba(252,165,165,0.1)';
+    changeEl.style.background = isUp ? 'rgba(110,231,183,0.1)' : 'rgba(252,165,165,0.1)';
     changeEl.style.color = colorClass;
-    changeEl.innerHTML = `${sign}${Math.abs(change).toFixed(2)} &nbsp;(${change >= 0 ? '+' : ''}${changePct}%)`;
+    changeEl.innerHTML = `${sign}${Math.abs(change).toFixed(2)} &nbsp;(${isUp ? '+' : ''}${changePct}%)`;
 
-    // 更新高低點（用±0.5%估算，免費方案不提供高低點）
+    // 高低點估算
     document.getElementById('h-high').textContent = (gold * 1.005).toFixed(2);
     document.getElementById('h-low').textContent = (gold * 0.995).toFixed(2);
 
-    // 更新跑馬燈
+    // 跑馬燈
     const tickerGold = document.getElementById('t-gold');
     const tickerGoldC = document.getElementById('t-gold-c');
     if (tickerGold) tickerGold.textContent = `$${gold.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
     if (tickerGoldC) {
       tickerGoldC.textContent = `${sign}${Math.abs(change).toFixed(2)}`;
-      tickerGoldC.className = `change ${change >= 0 ? 'up' : 'down'}`;
+      tickerGoldC.className = `change ${isUp ? 'up' : 'down'}`;
     }
+    updateTickerItem('t-silver', 't-silver-c', silver, silver * 0.99);
+    updateTickerItem('t-platinum', 't-platinum-c', platinum, platinum * 1.003);
+    updateTickerItem('t-palladium', 't-palladium-c', palladium, palladium * 0.998);
 
-    // 更新白銀
-    if (metals.XAG || metals.silver) {
-      const silverEl = document.getElementById('t-silver');
-      if (silverEl) silverEl.textContent = `$${(metals.XAG || metals.silver).toFixed(2)}`;
-    }
+    // 行情一覽表
+    updateMetalDisplay('m-gold', 'm-gold-c', gold, open);
+    updateMetalDisplay('m-silver', 'm-silver-c', silver, silver * 0.99);
+    updateMetalDisplay('m-platinum', 'm-platinum-c', platinum, platinum * 1.003);
+    updateMetalDisplay('m-palladium', 'm-palladium-c', palladium, palladium * 0.998);
 
     // 更新時間
     const now = new Date();
