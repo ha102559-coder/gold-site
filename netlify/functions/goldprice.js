@@ -25,7 +25,7 @@ exports.handler = async function(event, context) {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'no-store'
       },
       body: JSON.stringify(data)
     };
