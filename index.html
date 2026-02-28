@@ -1310,7 +1310,7 @@ function renderPrice(data) {
 
 async function fetchGoldPrice() {
   try {
-    const res = await fetch('/api/goldprice');
+    const res = await fetch('/.netlify/functions/goldprice');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     renderPrice(data);
