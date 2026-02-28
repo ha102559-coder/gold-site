@@ -1259,7 +1259,7 @@ let lastOpenPrice = null;
 function renderPrice(data) {
   try {
     const metals = data.metals;
-    const gold = metals.XAU; // 每盎司美元金價
+    const gold = metals.XAU || metals.gold; // 每盎司美元金價
 
     // 計算漲跌（用開盤價對比，若無則與上次比）
     const open = lastOpenPrice || gold;
@@ -1290,9 +1290,9 @@ function renderPrice(data) {
     }
 
     // 更新白銀
-    if (metals.XAG) {
+    if (metals.XAG || metals.silver) {
       const silverEl = document.getElementById('t-silver');
-      if (silverEl) silverEl.textContent = `$${metals.XAG.toFixed(2)}`;
+      if (silverEl) silverEl.textContent = `$${(metals.XAG || metals.silver).toFixed(2)}`;
     }
 
     // 更新時間
