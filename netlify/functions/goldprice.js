@@ -11,7 +11,7 @@ exports.handler = async function(event, context) {
 
   try {
     const res = await fetch(
-      `https://metals.dev/api/latest?api_key=${API_KEY}&currency=USD&unit=toz`
+      `https://api.metals.dev/v1/latest?api_key=${API_KEY}&currency=USD&unit=toz`
     );
 
     if (!res.ok) {
