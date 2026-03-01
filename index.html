@@ -558,10 +558,17 @@
     color: var(--gold);
   }
   .chart-area {
-    height: 200px;
+    height: 460px;
     position: relative;
+    border-radius: 8px;
+    overflow: hidden;
   }
-  svg.sparkline { width: 100%; height: 100%; }
+  .chart-area iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
 
   /* ─── DISCUSSION PREVIEW ─── */
   .discussion-list { display: flex; flex-direction: column; gap: 12px; }
@@ -1121,24 +1128,23 @@
         <div class="section-title" style="font-size:20px;">黃金歷史走勢圖</div>
       </div>
       <div class="chart-tabs">
-        <button class="chart-tab active" onclick="setTab(this,'1D')">1日</button>
-        <button class="chart-tab" onclick="setTab(this,'1W')">1週</button>
-        <button class="chart-tab" onclick="setTab(this,'1M')">1個月</button>
-        <button class="chart-tab" onclick="setTab(this,'3M')">3個月</button>
-        <button class="chart-tab" onclick="setTab(this,'1Y')">1年</button>
+        <button class="chart-tab active" onclick="setTVInterval('1D',this)">1日</button>
+        <button class="chart-tab" onclick="setTVInterval('1W',this)">1週</button>
+        <button class="chart-tab" onclick="setTVInterval('1M',this)">1個月</button>
+        <button class="chart-tab" onclick="setTVInterval('3M',this)">3個月</button>
+        <button class="chart-tab" onclick="setTVInterval('12M',this)">1年</button>
+        <button class="chart-tab" onclick="setTVInterval('60M',this)">5年</button>
       </div>
     </div>
-    <div class="chart-area">
-      <svg class="sparkline" viewBox="0 0 1200 200" preserveAspectRatio="none" id="mainChart">
-        <defs>
-          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.3"/>
-            <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path id="chartFill" fill="url(#chartGrad)" stroke="none"/>
-        <path id="chartLine" fill="none" stroke="#C9A84C" stroke-width="2"/>
-      </svg>
+    <div class="chart-area" id="tvChartArea">
+      <!-- TradingView Widget BEGIN -->
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div id="tradingview_xauusd" style="height:100%;width:100%"></div>
+      </div>
+      <!-- TradingView Widget END -->
+    </div>
+    <div style="font-size:10px;color:var(--text-dim);text-align:right;margin-top:8px;letter-spacing:1px;">
+      圖表數據由 <a href="https://www.tradingview.com/" target="_blank" style="color:var(--text-dim);text-decoration:none;">TradingView</a> 提供
     </div>
   </div>
 </div>
@@ -1395,48 +1401,69 @@ function switchTab(tab) {
   });
 }
 
-// ── CHART TABS ──
-function setTab(el, period) {
+// ── TRADINGVIEW CHART ──
+const tvRangeMap = {
+  '1D':  { range: '1D',  interval: '15' },
+  '1W':  { range: '1W',  interval: '60' },
+  '1M':  { range: '1M',  interval: '240' },
+  '3M':  { range: '3M',  interval: 'D' },
+  '12M': { range: '12M', interval: 'W' },
+  '60M': { range: '60M', interval: 'M' },
+};
+
+let tvWidget = null;
+
+function initTVChart(rangeKey) {
+  const container = document.getElementById('tradingview_xauusd');
+  container.innerHTML = '';
+  const cfg = tvRangeMap[rangeKey] || tvRangeMap['1D'];
+  tvWidget = new TradingView.widget({
+    container_id: 'tradingview_xauusd',
+    symbol: 'OANDA:XAUUSD',
+    interval: cfg.interval,
+    range: cfg.range,
+    timezone: 'Asia/Taipei',
+    theme: 'dark',
+    style: '1',
+    locale: 'zh_TW',
+    toolbar_bg: '#1A1A1A',
+    enable_publishing: false,
+    hide_top_toolbar: false,
+    hide_legend: false,
+    save_image: false,
+    backgroundColor: '#111111',
+    gridColor: 'rgba(201,168,76,0.05)',
+    width: '100%',
+    height: '100%',
+    allow_symbol_change: false,
+    hide_side_toolbar: true,
+    withdateranges: false,
+    studies: [],
+    overrides: {
+      'mainSeriesProperties.candleStyle.upColor': '#6EE7B7',
+      'mainSeriesProperties.candleStyle.downColor': '#FCA5A5',
+      'mainSeriesProperties.candleStyle.borderUpColor': '#6EE7B7',
+      'mainSeriesProperties.candleStyle.borderDownColor': '#FCA5A5',
+      'mainSeriesProperties.candleStyle.wickUpColor': '#6EE7B7',
+      'mainSeriesProperties.candleStyle.wickDownColor': '#FCA5A5',
+    },
+  });
+}
+
+function setTVInterval(rangeKey, el) {
   document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  drawChart(period);
+  initTVChart(rangeKey);
 }
 
-// ── CHART GENERATION ──
-function generatePrices(base, points, volatility) {
-  let prices = [base];
-  for (let i=1; i<points; i++) {
-    let change = (Math.random() - 0.48) * volatility;
-    prices.push(Math.max(prices[i-1] + change, base * 0.85));
-  }
-  return prices;
-}
-
-function drawChart(period) {
-  const configs = {
-    '1D': { points: 48, vol: 3, base: 3250 },
-    '1W': { points: 84, vol: 5, base: 3200 },
-    '1M': { points: 60, vol: 8, base: 3100 },
-    '3M': { points: 90, vol: 12, base: 2900 },
-    '1Y': { points: 120, vol: 15, base: 2500 },
-  };
-  const c = configs[period] || configs['1D'];
-  const prices = generatePrices(c.base, c.points, c.vol);
-  const min = Math.min(...prices);
-  const max = Math.max(...prices);
-  const range = max - min || 1;
-  const W = 1200, H = 200, pad = 10;
-  const pts = prices.map((p, i) => {
-    const x = (i / (prices.length - 1)) * W;
-    const y = H - pad - ((p - min) / range) * (H - pad * 2);
-    return `${x},${y}`;
-  });
-  const lineD = 'M ' + pts.join(' L ');
-  const fillD = `M 0,${H} L ` + pts.join(' L ') + ` L ${W},${H} Z`;
-  document.getElementById('chartLine').setAttribute('d', lineD);
-  document.getElementById('chartFill').setAttribute('d', fillD);
-}
-drawChart('1D');
+// 載入 TradingView library 後初始化
+(function() {
+  const script = document.createElement('script');
+  script.src = 'https://s3.tradingview.com/tv.js';
+  script.async = true;
+  script.onload = function() { initTVChart('1D'); };
+  document.head.appendChild(script);
+})();
 
 // ── REAL PRICE FROM METALS.DEV API ──
 const UPDATE_INTERVAL = 60 * 60 * 1000; // 每60分鐘更新一次
@@ -1605,7 +1632,7 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
               <div class="info-contact-icon">✉️</div>
               <div>
                 <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">客服信箱</div>
-                <a href="mailto:enzdwllg@gmail.com">enzdwllg@gmail.com</a>
+                <a href="/cdn-cgi/l/email-protection#8feae1f5ebf8e3e3e8cfe8e2eee6e3a1ece0e2"><span class="__cf_email__" data-cfemail="0f6a61756b786363684f68626e6663216c6062">[email&#160;protected]</span></a>
               </div>
             </div>
             <div class="info-contact-row">
@@ -1652,7 +1679,7 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
         </div>
         <div class="info-section">
           <div class="info-section-title">資料安全</div>
-          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="mailto:enzdwllg@gmail.com" style="color:var(--gold)">enzdwllg@gmail.com</a>。</p>
+          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="/cdn-cgi/l/email-protection#64010a1e0013080803240309050d084a070b09" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="31545f4b55465d5d5671565c50585d1f525e5c">[email&#160;protected]</span></a>。</p>
         </div>
         <div class="info-section">
           <div class="info-section-title">政策更新</div>
@@ -1684,7 +1711,7 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
         </div>
         <div class="info-section">
           <div class="info-section-title">智慧財產權</div>
-          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="mailto:enzdwllg@gmail.com" style="color:var(--gold)">enzdwllg@gmail.com</a>。</p>
+          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="/cdn-cgi/l/email-protection#87e2e9fde3f0ebebe0c7e0eae6eeeba9e4e8ea" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="35505b4f5142595952755258545c591b565a58">[email&#160;protected]</span></a>。</p>
         </div>
         <div class="info-section">
           <div class="info-section-title">條款修訂</div>
@@ -1696,7 +1723,7 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── INFO MODAL ──
 const infoConfig = {
   about:   { icon: '🏛️', label: 'ABOUT US', title: '關於我們' },
@@ -1717,17 +1744,4 @@ function closeInfoModalOutside(e) {
 function switchInfoTab(tab, clickedBtn) {
   const cfg = infoConfig[tab];
   document.getElementById('infoModalIcon').textContent = cfg.icon;
-  document.getElementById('infoModalLabel').textContent = cfg.label;
-  document.getElementById('infoModalTitle').textContent = cfg.title;
-  ['about','contact','privacy','terms'].forEach(t => {
-    document.getElementById('info-'+t).classList.toggle('active', t===tab);
-  });
-  // Update tab buttons
-  document.querySelectorAll('.info-modal-tab').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.getAttribute('onclick').includes("'"+tab+"'")) btn.classList.add('active');
-  });
-}
-</script>
-
-</body>
+  docum
