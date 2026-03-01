@@ -1,0 +1,8 @@
+{
+  "name": "forum-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for investment forum",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}

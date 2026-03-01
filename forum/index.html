@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投資討論區</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- ★ 在這裡填入你的 Firebase 設定 ★ -->
+<script type="module">
+  import { initializeApp }                           from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+                                                     from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+  import { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, query,
+           where, orderBy, limit, startAfter, increment, serverTimestamp, Timestamp }
+                                                     from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+  import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
+                                                     from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
+
+  // ══════════════════════════════════════════════
+  // ★ 填入你的 Firebase 設定（步驟三取得）★
+  // ══════════════════════════════════════════════
+  const firebaseConfig = {
+    apiKey:            "AIzaSyB7SY3k0835AyM1fLDtOs0thPrg3cmxifk",
+    authDomain:        "gold-bed6c.firebaseapp.com",
+    projectId:         "gold-bed6c",
+    storageBucket:     "gold-bed6c.firebasestorage.app",
+    messagingSenderId: "498200351921",
+    appId:             "1:498200351921:web:66e590427b3457a43afe90",
+  };
+
+  const app      = initializeApp(firebaseConfig);
+  const auth     = getAuth(app);
+  const db       = getFirestore(app);
+  const storage  = getStorage(app);
+  const provider = new GoogleAuthProvider();
+
+  // ══════════════════════════════════════════════
+  // State
+  // ══════════════════════════════════════════════
+  let currentUser   = null;
+  let currentCat    = 'all';
+  let currentPage   = 1;
+  let lastVisible   = null;   // Firestore pagination cursor
+  let pageStack     = [null]; // stack of cursors for prev page
+  let searchKeyword = '';
+  let currentPostId = null;
+  const uploadFiles = { post: [], reply: [] };
+
+  const PAGE_SIZE = 30;
+
+  const catTagClass = { '黃金':'cat-gold','白銀':'cat-silver','ETF':'cat-etf','科技股':'cat-tech' };
+  const catEmoji    = { '黃金':'🥇','白銀':'🥈','ETF':'📊','科技股':'💻' };
+  const catInfo = {
+    all:    { title:'全部討論',  sub:'顯示所有分類的最新討論' },
+    '黃金':  { title:'黃金討論',  sub:'黃金投資相關討論' },
+    '白銀':  { title:'白銀討論',  sub:'白銀投資相關討論' },
+    'ETF':   { title:'ETF 討論', sub:'ETF 基金相關討論' },
+    '科技股':{ title:'科技股討論',sub:'科技類股討論' },
+  };
+
+  // ══════════════════════════════════════════════
+  // Auth
+  // ══════════════════════════════════════════════
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
+      // Upsert user doc in Firestore
+      const uRef = doc(db, 'users', user.uid);
+      const uSnap = await getDoc(uRef);
+      if (!uSnap.exists()) {
+        await updateDoc(uRef, {}).catch(() =>
+          addDoc(collection(db, 'users'), {}).catch(() => null)
+        );
+        const { setDoc } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+        await setDoc(uRef, {
+          uid:         user.uid,
+          email:       user.email,
+          displayName: user.displayName,
+          photoURL:    user.photoURL,
+          role:        'member',
+          createdAt:   serverTimestamp(),
+        }, { merge: true });
+      }
+      // Check admin role
+      const fresh = await getDoc(uRef);
+      currentUser._role = fresh.exists() ? (fresh.data().role || 'member') : 'member';
+    } else {
+      currentUser = null;
+    }
+    renderUserUI();
+    loadPosts();
+  });
+
+  async function loginGoogle() {
+    try { await signInWithPopup(auth, provider); }
+    catch(e) { alert('登入失敗：' + e.message); }
+  }
+
+  async function logout() {
+    await signOut(auth);
+    currentUser = null;
+    renderUserUI();
+  }
+
+  function renderUserUI() {
+    const el = document.getElementById('headerUser');
+    const pb = document.getElementById('postBtn');
+    if (!currentUser) {
+      el.innerHTML = `<button class="btn-google" id="loginBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google 登入</button>`;
+      document.getElementById('loginBtn').onclick = loginGoogle;
+      pb.disabled = true; pb.title = '請先登入';
+    } else {
+      const av = currentUser.photoURL
+        ? `<img class="avatar" src="${esc(currentUser.photoURL)}" alt="">`
+        : `<div class="avatar-ph">👤</div>`;
+      el.innerHTML = `${av}<span class="uname">${esc(currentUser.displayName||currentUser.email)}</span>
+        <button class="btn-logout" id="logoutBtn">登出</button>`;
+      document.getElementById('logoutBtn').onclick = logout;
+      pb.disabled = false; pb.title = '';
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // Load Posts
+  // ══════════════════════════════════════════════
+  async function loadPosts(direction = 'reset') {
+    document.getElementById('postList').innerHTML = '<div class="loading">載入中…</div>';
+    document.getElementById('paginationArea').innerHTML = '';
+
+    try {
+      let q;
+      const postsCol = collection(db, 'posts');
+
+      if (searchKeyword) {
+        // Firestore 不支援原生全文搜尋，用前綴比對標題
+        // 搜尋 title >= keyword AND title < keyword + '\uf8ff'
+        const kw = searchKeyword;
+        const conditions = [
+          where('isDeleted', '==', false),
+          where('title', '>=', kw),
+          where('title', '<=', kw + '\uf8ff'),
+          orderBy('title'),
+          limit(PAGE_SIZE + 1),
+        ];
+        if (currentCat !== 'all') conditions.splice(1, 0, where('category', '==', currentCat));
+        q = query(postsCol, ...conditions);
+      } else {
+        const conditions = [
+          where('isDeleted', '==', false),
+          orderBy('createdAt', 'desc'),
+          limit(PAGE_SIZE + 1),
+        ];
+        if (currentCat !== 'all') conditions.splice(1, 0, where('category', '==', currentCat));
+
+        // Pagination cursor
+        if (direction === 'next' && lastVisible) {
+          const { startAfter: sa } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+          conditions.push(sa(lastVisible));
+        } else if (direction === 'prev' && pageStack.length > 1) {
+          pageStack.pop();
+          const cursor = pageStack[pageStack.length - 1];
+          if (cursor) {
+            const { startAfter: sa } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+            conditions.push(sa(cursor));
+          }
+        } else {
+          // reset
+          pageStack  = [null];
+          currentPage = 1;
+        }
+        q = query(postsCol, ...conditions);
+      }
+
+      const snap     = await getDocs(q);
+      const hasNext  = snap.docs.length > PAGE_SIZE;
+      const docs     = hasNext ? snap.docs.slice(0, PAGE_SIZE) : snap.docs;
+
+      if (docs.length && direction === 'next') {
+        pageStack.push(docs[0]);
+        currentPage++;
+      }
+
+      lastVisible = docs.length ? docs[docs.length - 1] : null;
+
+      renderPosts(docs.map(d => ({ id: d.id, ...d.data() })));
+      renderPagination(hasNext);
+
+    } catch(e) {
+      document.getElementById('postList').innerHTML =
+        `<div class="error-msg">⚠️ 載入失敗：${esc(e.message)}<br><small>請確認 Firebase 設定是否正確，或 Firestore 索引是否已建立。</small></div>`;
+    }
+  }
+
+  function renderPosts(posts) {
+    const el  = document.getElementById('postList');
+    const now = Date.now();
+    if (!posts.length) {
+      el.innerHTML = `<div class="empty"><div class="ei">📭</div>暫無討論</div>`;
+      return;
+    }
+    el.innerHTML = posts.map(p => {
+      const ts    = p.createdAt?.toDate ? p.createdAt.toDate() : new Date(p.createdAt);
+      const isNew = (now - ts.getTime()) < 24*3600*1000;
+      const img   = p.mediaUrls?.[0];
+      const thumb = img
+        ? `<img class="post-thumb" src="${esc(img)}" alt="">`
+        : `<div class="post-thumb-ph">${catEmoji[p.category]||'📄'}</div>`;
+      return `
+      <div class="post-card" data-id="${p.id}">
+        ${thumb}
+        <div class="post-body">
+          <div class="title-row">
+            <span class="ptitle">${esc(p.title)}</span>
+            ${isNew?'<span class="badge bnew">新</span>':''}
+            ${p.replyCount>0?'<span class="badge breply">新回</span>':''}
+          </div>
+          <div class="pmeta">
+            <span class="cat-tag ${catTagClass[p.category]||''}">${catEmoji[p.category]||''} ${esc(p.category)}</span>
+            <span>👤 ${esc(p.authorName)}</span>
+            <span>🕐 ${fmtDate(ts)}</span>
+          </div>
+        </div>
+        <div class="pstats">
+          <div class="stat-row"><span>👁 ${p.views||0}</span><span>💬 ${p.replyCount||0}</span></div>
+          ${p.lastReplier?`<div class="last-rep">↩ ${esc(p.lastReplier)}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+
+    // Attach click listeners
+    document.querySelectorAll('.post-card').forEach(card => {
+      card.addEventListener('click', () => openDetail(card.dataset.id));
+    });
+  }
+
+  function renderPagination(hasNext) {
+    const el = document.getElementById('paginationArea');
+    const hasPrev = currentPage > 1;
+    if (!hasPrev && !hasNext) return;
+    el.innerHTML = `
+      <div class="pagination">
+        <button class="page-btn" ${hasPrev?'':'disabled'} id="prevBtn">‹ 上頁</button>
+        <span class="page-info">第 ${currentPage} 頁</span>
+        <button class="page-btn" ${hasNext?'':'disabled'} id="nextBtn">下頁 ›</button>
+      </div>`;
+    if (hasPrev) document.getElementById('prevBtn').onclick = () => loadPosts('prev');
+    if (hasNext) document.getElementById('nextBtn').onclick = () => loadPosts('next');
+  }
+
+  // ══════════════════════════════════════════════
+  // Search
+  // ══════════════════════════════════════════════
+  function doSearch() {
+    const kw = document.getElementById('headerSearch').value.trim();
+    searchKeyword = kw;
+    const bar  = document.getElementById('searchBar');
+    const txt  = document.getElementById('searchTxt');
+    if (kw) { bar.style.display='flex'; txt.textContent=`搜尋「${kw}」中…`; }
+    else    { bar.style.display='none'; }
+    loadPosts('reset');
+  }
+
+  function clearSearch() {
+    searchKeyword = '';
+    document.getElementById('headerSearch').value = '';
+    document.getElementById('searchBar').style.display = 'none';
+    loadPosts('reset');
+  }
+
+  // ══════════════════════════════════════════════
+  // Post Detail
+  // ══════════════════════════════════════════════
+  async function openDetail(postId) {
+    currentPostId = postId;
+    document.getElementById('detailTitle').textContent = '載入中…';
+    document.getElementById('detailBody').innerHTML    = '<div class="loading">載入中…</div>';
+    openModal('detailModal');
+
+    try {
+      // Increment views
+      const pRef  = doc(db, 'posts', postId);
+      await updateDoc(pRef, { views: increment(1) });
+      const pSnap = await getDoc(pRef);
+      const post  = { id: pSnap.id, ...pSnap.data() };
+
+      // Load replies
+      const rSnap = await getDocs(
+        query(collection(db, 'replies'),
+          where('postId', '==', postId),
+          where('isDeleted', '==', false),
+          orderBy('createdAt', 'asc')
+        )
+      );
+      const replies = rSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      renderDetail(post, replies);
+    } catch(e) {
+      document.getElementById('detailBody').innerHTML =
+        `<div class="error-msg">載入失敗：${esc(e.message)}</div>`;
+    }
+  }
+
+  function renderDetail(post, replies) {
+    document.getElementById('detailTitle').textContent = post.title;
+    const ts      = post.createdAt?.toDate ? post.createdAt.toDate() : new Date(post.createdAt);
+    const isOwner = currentUser && (currentUser.uid === post.authorId || currentUser._role === 'admin');
+
+    const mediaHtml = post.mediaUrls?.length
+      ? `<div class="detail-media">${post.mediaUrls.map(u =>
+          /\.(mp4|mov|webm)/.test(u)
+            ? `<video src="${esc(u)}" controls></video>`
+            : `<img src="${esc(u)}" alt="" onclick="window.open('${esc(u)}','_blank')">`
+        ).join('')}</div>` : '';
+
+    const actHtml = isOwner ? `
+      <div class="post-actions">
+        <button class="act-btn edit" onclick="openEditPost(${JSON.stringify(post).replace(/"/g,'&quot;')})">✏ 編輯</button>
+        <button class="act-btn del"  onclick="deletePost('${post.id}')">🗑 刪除</button>
+      </div>` : '';
+
+    const repliesHtml = replies.length
+      ? replies.map((r,i) => renderReplyCard(r, i, post.id)).join('')
+      : '<div class="no-reply">尚無回覆，來第一個留言！</div>';
+
+    const replyFormHtml = currentUser
+      ? `<div class="reply-form">
+          <div class="rf-title">發表回覆</div>
+          <div id="replyErr" class="error-msg" style="display:none"></div>
+          <div class="form-group">
+            <textarea class="form-textarea" id="r_content" placeholder="輸入回覆內容…" style="height:90px"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">附加圖片 / 影片（最多 5 個）</label>
+            <div class="media-previews" id="replyPrev"></div>
+            <div class="upload-area" onclick="document.getElementById('replyFileInput').click()">
+              <input type="file" id="replyFileInput" multiple accept="image/*,video/*" style="display:none">
+              <span class="upload-label">點擊上傳圖片或影片</span>
+            </div>
+          </div>
+          <button class="submit-btn" id="replySubmitBtn">送出回覆</button>
+        </div>`
+      : `<div class="login-prompt">請 <a onclick="loginGoogle()" style="color:var(--gold);cursor:pointer">Google 登入</a> 後才能回覆</div>`;
+
+    document.getElementById('detailBody').innerHTML = `
+      <div class="detail-meta">
+        ${post.authorPhoto?`<img class="u-av" src="${esc(post.authorPhoto)}" alt="">`:'<span>👤</span>'}
+        <span class="u-name">${esc(post.authorName)}</span>
+        <span class="cat-tag ${catTagClass[post.category]||''}">${catEmoji[post.category]||''} ${esc(post.category)}</span>
+        <span class="dmeta-time">🕐 ${fmtDate(ts)}</span>
+        <span class="dmeta-time">👁 ${post.views||0}</span>
+      </div>
+      ${actHtml}
+      <div class="detail-content">${esc(post.content)}</div>
+      ${mediaHtml}
+      <div class="replies-hd">回覆留言（<span id="replyCount">${replies.length}</span>）</div>
+      <div id="repliesList">${repliesHtml}</div>
+      ${replyFormHtml}`;
+
+    // Bind reply events
+    if (currentUser) {
+      uploadFiles.reply = [];
+      document.getElementById('replyFileInput').addEventListener('change', e =>
+        handleFileSelect(e.target, 'replyPrev', 'reply', 5)
+      );
+      document.getElementById('replySubmitBtn').addEventListener('click', () => submitReply(post.id));
+    }
+  }
+
+  function renderReplyCard(r, i, postId) {
+    const ts      = r.createdAt?.toDate ? r.createdAt.toDate() : new Date(r.createdAt||Date.now());
+    const isOwner = currentUser && (currentUser.uid === r.authorId || currentUser._role === 'admin');
+    const mediaHtml = r.mediaUrls?.length
+      ? `<div class="reply-media">${r.mediaUrls.map(u =>
+          /\.(mp4|mov|webm)/.test(u)
+            ? `<video src="${esc(u)}" controls></video>`
+            : `<img src="${esc(u)}" onclick="window.open('${esc(u)}','_blank')">`
+        ).join('')}</div>` : '';
+
+    const acts = isOwner ? `
+      <div class="reply-acts">
+        <button class="act-btn edit sm" onclick="openReplyEdit('${r.id}','${postId}',\`${r.content.replace(/`/g,'\\`')}\`)">✏ 編輯</button>
+        <button class="act-btn del sm"  onclick="deleteReply('${r.id}','${postId}')">🗑</button>
+      </div>` : '';
+
+    return `
+    <div class="reply-card" id="reply-${r.id}">
+      <div class="reply-hd">
+        <div class="reply-user">
+          ${r.authorPhoto?`<img class="u-av sm" src="${esc(r.authorPhoto)}" alt="">`:'<span>👤</span>'}
+          <span class="u-name">${esc(r.authorName)}</span>
+          <span class="reply-num">#${i+1}</span>
+        </div>
+        <span class="reply-time">${fmtDate(ts)}</span>
+      </div>
+      <div class="reply-content">${esc(r.content)}</div>
+      ${mediaHtml}
+      ${acts}
+    </div>`;
+  }
+
+  // ══════════════════════════════════════════════
+  // Post CRUD
+  // ══════════════════════════════════════════════
+  function openPostModal(editData = null) {
+    if (!currentUser) { loginGoogle(); return; }
+    document.getElementById('postModalTitle').textContent = editData ? '編輯文章' : '發表文章';
+    document.getElementById('editPostId').value  = editData?.id  || '';
+    document.getElementById('f_cat').value       = editData?.category || '';
+    document.getElementById('f_title').value     = editData?.title   || '';
+    document.getElementById('f_content').value   = editData?.content || '';
+    document.getElementById('postFormErr').style.display = 'none';
+    document.getElementById('postPrev').innerHTML = '';
+    uploadFiles.post = [];
+    openModal('postModal');
+  }
+
+  function openEditPost(post) {
+    openPostModal(post);
+  }
+
+  async function submitPost() {
+    const btn    = document.getElementById('postSubmitBtn');
+    const errEl  = document.getElementById('postFormErr');
+    errEl.style.display = 'none';
+    const editId   = document.getElementById('editPostId').value;
+    const category = document.getElementById('f_cat').value;
+    const title    = document.getElementById('f_title').value.trim();
+    const content  = document.getElementById('f_content').value.trim();
+
+    if (!category) { showErr(errEl,'請選擇分類'); return; }
+    if (!title)    { showErr(errEl,'請輸入標題'); return; }
+    if (!content)  { showErr(errEl,'請輸入內容'); return; }
+
+    btn.disabled = true; btn.textContent = '上傳中…';
+
+    try {
+      // Upload media to Firebase Storage
+      const mediaUrls = await uploadMediaFiles(uploadFiles.post, `posts/${Date.now()}`);
+
+      if (editId) {
+        // Edit existing post
+        await updateDoc(doc(db, 'posts', editId), {
+          category, title, content,
+          ...(mediaUrls.length ? { mediaUrls } : {}),
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // New post
+        await addDoc(collection(db, 'posts'), {
+          category, title, content,
+          authorId:    currentUser.uid,
+          authorName:  currentUser.displayName || currentUser.email,
+          authorPhoto: currentUser.photoURL || '',
+          mediaUrls,
+          views:       0,
+          replyCount:  0,
+          lastReplier: '',
+          isDeleted:   false,
+          createdAt:   serverTimestamp(),
+          updatedAt:   serverTimestamp(),
+        });
+      }
+
+      closeModal('postModal');
+      loadPosts('reset');
+      if (editId && currentPostId === editId) openDetail(editId);
+    } catch(e) {
+      showErr(errEl, e.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = editId ? '儲存文章' : '發　表';
+    }
+  }
+
+  async function deletePost(postId) {
+    if (!confirm('確定要刪除這篇文章？此操作無法復原。')) return;
+    try {
+      const token = await currentUser.getIdToken();
+      const res   = await fetch('/.netlify/functions/deletePost', {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      closeModal('detailModal');
+      loadPosts('reset');
+    } catch(e) { alert('刪除失敗：' + e.message); }
+  }
+
+  // ══════════════════════════════════════════════
+  // Reply CRUD
+  // ══════════════════════════════════════════════
+  async function submitReply(postId) {
+    const btn     = document.getElementById('replySubmitBtn');
+    const errEl   = document.getElementById('replyErr');
+    const content = document.getElementById('r_content').value.trim();
+    errEl.style.display = 'none';
+    if (!content) { showErr(errEl,'請輸入回覆內容'); return; }
+
+    btn.disabled = true; btn.textContent = '上傳中…';
+    try {
+      const mediaUrls = await uploadMediaFiles(uploadFiles.reply, `replies/${Date.now()}`);
+
+      const replyRef = await addDoc(collection(db, 'replies'), {
+        postId,
+        content,
+        mediaUrls,
+        authorId:    currentUser.uid,
+        authorName:  currentUser.displayName || currentUser.email,
+        authorPhoto: currentUser.photoURL || '',
+        isDeleted:   false,
+        createdAt:   serverTimestamp(),
+      });
+
+      // Update post reply count & lastReplier
+      await updateDoc(doc(db, 'posts', postId), {
+        replyCount:  increment(1),
+        lastReplier: currentUser.displayName || currentUser.email,
+        updatedAt:   serverTimestamp(),
+      });
+
+      // Append reply to UI
+      document.getElementById('r_content').value = '';
+      uploadFiles.reply = [];
+      document.getElementById('replyPrev').innerHTML = '';
+
+      const newReply = {
+        id: replyRef.id, postId, content, mediaUrls,
+        authorId: currentUser.uid,
+        authorName: currentUser.displayName || currentUser.email,
+        authorPhoto: currentUser.photoURL || '',
+        createdAt: { toDate: () => new Date() },
+      };
+      const list  = document.getElementById('repliesList');
+      const count = list.querySelectorAll('.reply-card').length;
+      // Remove "no reply" placeholder if present
+      list.querySelector('.no-reply')?.remove();
+      list.insertAdjacentHTML('beforeend', renderReplyCard(newReply, count, postId));
+      document.getElementById('replyCount').textContent = count + 1;
+
+      loadPosts('reset');
+    } catch(e) { showErr(errEl, e.message); }
+    finally { btn.disabled = false; btn.textContent = '送出回覆'; }
+  }
+
+  function openReplyEdit(replyId, postId, content) {
+    document.getElementById('editReplyId').value    = replyId;
+    document.getElementById('editReplyPostId').value = postId;
+    document.getElementById('editReplyContent').value = content;
+    document.getElementById('replyEditErr').style.display = 'none';
+    openModal('replyEditModal');
+  }
+
+  async function submitReplyEdit() {
+    const btn     = document.getElementById('replyEditBtn');
+    const errEl   = document.getElementById('replyEditErr');
+    const replyId = document.getElementById('editReplyId').value;
+    const postId  = document.getElementById('editReplyPostId').value;
+    const content = document.getElementById('editReplyContent').value.trim();
+    if (!content) { showErr(errEl,'內容不能為空'); return; }
+
+    btn.disabled = true; btn.textContent = '儲存中…';
+    try {
+      await updateDoc(doc(db, 'replies', replyId), {
+        content, updatedAt: serverTimestamp(),
+      });
+      const card = document.getElementById(`reply-${replyId}`);
+      if (card) card.querySelector('.reply-content').textContent = content;
+      closeModal('replyEditModal');
+    } catch(e) { showErr(errEl, e.message); }
+    finally { btn.disabled = false; btn.textContent = '儲存回覆'; }
+  }
+
+  async function deleteReply(replyId, postId) {
+    if (!confirm('確定要刪除此回覆？')) return;
+    try {
+      const token = await currentUser.getIdToken();
+      const res   = await fetch('/.netlify/functions/deleteReply', {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ replyId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      document.getElementById(`reply-${replyId}`)?.remove();
+      const count = document.querySelectorAll('.reply-card').length;
+      const el = document.getElementById('replyCount');
+      if (el) el.textContent = count;
+    } catch(e) { alert('刪除失敗：' + e.message); }
+  }
+
+  // ══════════════════════════════════════════════
+  // Firebase Storage Upload
+  // ══════════════════════════════════════════════
+  async function uploadMediaFiles(files, pathPrefix) {
+    if (!files.length) return [];
+    const urls = await Promise.all(files.map(async (file) => {
+      const storageRef = ref(storage, `${pathPrefix}/${Date.now()}_${file.name}`);
+      const task = uploadBytesResumable(storageRef, file);
+      await new Promise((res, rej) => {
+        task.on('state_changed', null, rej, res);
+      });
+      return getDownloadURL(task.snapshot.ref);
+    }));
+    return urls;
+  }
+
+  // ══════════════════════════════════════════════
+  // File Preview
+  // ══════════════════════════════════════════════
+  function handleFileSelect(input, previewId, type, maxFiles) {
+    const files = Array.from(input.files);
+    files.forEach(f => {
+      if (uploadFiles[type].length >= maxFiles) return;
+      uploadFiles[type].push(f);
+      const item = document.createElement('div');
+      item.className = 'preview-item';
+      const url = URL.createObjectURL(f);
+      item.innerHTML = f.type.startsWith('video/')
+        ? `<video src="${url}" muted></video>`
+        : `<img src="${url}" alt="">`;
+      const rm = document.createElement('button');
+      rm.className = 'media-rm'; rm.textContent = '×';
+      const idx = uploadFiles[type].length - 1;
+      rm.onclick = e => {
+        e.stopPropagation();
+        uploadFiles[type].splice(idx, 1);
+        item.remove();
+      };
+      item.appendChild(rm);
+      document.getElementById(previewId).appendChild(item);
+    });
+    input.value = '';
+  }
+
+  // ══════════════════════════════════════════════
+  // Nav helpers exposed to HTML onclick
+  // ══════════════════════════════════════════════
+  window.filterCat = (cat, el) => {
+    currentCat = cat;
+    searchKeyword = '';
+    document.getElementById('headerSearch').value = '';
+    document.getElementById('searchBar').style.display = 'none';
+    document.querySelectorAll('#navList li').forEach(li => li.classList.remove('active'));
+    el.closest('li').classList.add('active');
+    const info = catInfo[cat] || catInfo.all;
+    document.getElementById('feedTitle').textContent    = info.title;
+    document.getElementById('feedSubtitle').textContent = info.sub;
+    loadPosts('reset');
+  };
+
+  window.goHome = () => {
+    currentCat = 'all'; searchKeyword = '';
+    document.getElementById('headerSearch').value = '';
+    document.getElementById('searchBar').style.display = 'none';
+    document.querySelectorAll('#navList li').forEach((li,i) => li.classList.toggle('active',i===0));
+    document.getElementById('feedTitle').textContent    = catInfo.all.title;
+    document.getElementById('feedSubtitle').textContent = catInfo.all.sub;
+    loadPosts('reset');
+  };
+
+  window.openPostModal  = openPostModal;
+  window.openEditPost   = openEditPost;
+  window.openReplyEdit  = openReplyEdit;
+  window.submitPost     = submitPost;
+  window.submitReplyEdit = submitReplyEdit;
+  window.deletePost     = deletePost;
+  window.deleteReply    = deleteReply;
+  window.doSearch       = doSearch;
+  window.clearSearch    = clearSearch;
+  window.loginGoogle    = loginGoogle;
+  window.openModal      = openModal;
+  window.closeModal     = closeModal;
+
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  // ══════════════════════════════════════════════
+  // Utilities
+  // ══════════════════════════════════════════════
+  function esc(s) {
+    return String(s||'')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function fmtDate(d) {
+    if (!d) return '';
+    const dt = d instanceof Date ? d : new Date(d);
+    return dt.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  }
+  function showErr(el, msg) { el.textContent = '⚠️ ' + msg; el.style.display = 'block'; }
+
+  // Post file input binding (after DOM ready)
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('postFileInput').addEventListener('change', e =>
+      handleFileSelect(e.target, 'postPrev', 'post', 10)
+    );
+    document.getElementById('headerSearch').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doSearch();
+    });
+  });
+</script>
+
+<style>
+:root {
+  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#FAF5E9;
+  --silver:#8A9BAE;--ink:#1a1a1a;--ink-soft:#4a4a4a;--ink-muted:#888;
+  --border:#E0D5C0;--bg:#F7F3EC;--white:#FEFCF8;
+  --etf:#5B8A6F;--tech:#5B6FA8;--red:#D04A2B;--blue:#2B7DD0;--green:#2D8A4E;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;}
+
+/* NAV BACK LINK */
+.back-link{background:var(--ink);padding:6px 20px;font-size:12px;}
+.back-link a{color:#aaa;text-decoration:none;}
+.back-link a:hover{color:var(--gold);}
+
+/* HEADER */
+header{background:var(--ink);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:50;gap:12px;}
+.logo{font-family:'Noto Serif TC',serif;font-size:20px;color:var(--gold-light);letter-spacing:2px;font-weight:700;cursor:pointer;flex-shrink:0;}
+.logo span{color:var(--gold);}
+.search-wrap{display:flex;align-items:center;background:#2a2a2a;border:1px solid #444;border-radius:3px;flex:1;max-width:400px;}
+.search-wrap input{background:none;border:none;padding:7px 10px;color:#eee;font-family:'Noto Sans TC',sans-serif;font-size:14px;width:100%;outline:none;}
+.search-wrap input::placeholder{color:#555;}
+.search-wrap button{background:none;border:none;padding:7px 10px;color:#888;cursor:pointer;font-size:14px;flex-shrink:0;}
+.search-wrap button:hover{color:var(--gold);}
+#headerUser{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.avatar-ph{width:28px;height:28px;border-radius:50%;background:#444;border:2px solid #555;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.uname{font-size:13px;color:#ccc;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-google{display:flex;align-items:center;gap:5px;background:#fff;border:none;padding:5px 12px;border-radius:3px;font-size:13px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;font-weight:500;}
+.btn-logout{background:none;border:1px solid #555;color:#aaa;padding:4px 10px;border-radius:3px;font-size:13px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;}
+
+/* LAYOUT */
+.layout{display:flex;max-width:1140px;margin:0 auto;width:100%;padding:22px 14px;gap:22px;flex:1;}
+aside{width:175px;flex-shrink:0;}
+main{flex:1;min-width:0;}
+
+/* SIDEBAR */
+.post-btn{display:block;width:100%;padding:9px 0;background:transparent;border:2px solid var(--gold);color:var(--gold);font-family:'Noto Sans TC',sans-serif;font-size:14px;font-weight:500;cursor:pointer;letter-spacing:2px;margin-bottom:16px;transition:all 0.2s;text-align:center;}
+.post-btn:hover{background:var(--gold);color:var(--white);}
+.post-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.nav-label{font-size:11px;color:var(--ink-muted);letter-spacing:2px;padding:0 10px;margin-bottom:5px;}
+.nav-list{list-style:none;}
+.nav-list li a{display:flex;align-items:center;gap:6px;padding:8px 10px;font-size:15px;color:var(--ink-soft);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s;cursor:pointer;}
+.nav-list li a:hover{color:var(--ink);background:var(--gold-pale);border-left-color:var(--gold-light);}
+.nav-list li.active a{color:var(--ink);background:var(--gold-pale);border-left-color:var(--gold);font-weight:500;}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.d-all{background:var(--gold);}.d-gold{background:#C9A84C;}.d-silver{background:var(--silver);}.d-etf{background:var(--etf);}.d-tech{background:var(--tech);}
+.nav-div{height:1px;background:var(--border);margin:10px 0;}
+
+/* FEED */
+.feed-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.feed-title{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;}
+.feed-sub{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+.search-bar{background:var(--gold-pale);border:1px solid var(--gold-light);padding:7px 12px;margin-bottom:10px;font-size:13px;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center;}
+.search-bar button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:13px;}
+
+/* POST CARD */
+.post-card{background:var(--white);border:1px solid var(--border);padding:12px 14px;margin-bottom:5px;display:flex;gap:10px;align-items:center;cursor:pointer;transition:all 0.15s;}
+.post-card:hover{border-color:var(--gold-light);box-shadow:0 2px 8px rgba(201,168,76,0.08);transform:translateX(2px);}
+.post-thumb{width:58px;height:43px;object-fit:cover;border-radius:2px;flex-shrink:0;}
+.post-thumb-ph{width:58px;height:43px;background:var(--bg);border:1px solid var(--border);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.post-body{flex:1;min-width:0;}
+.title-row{display:flex;align-items:center;gap:5px;margin-bottom:4px;flex-wrap:wrap;}
+.ptitle{font-size:16px;font-weight:500;color:var(--ink);}
+.badge{font-size:11px;padding:1px 5px;border-radius:2px;font-weight:600;}
+.bnew{background:var(--red);color:#fff;}.breply{background:var(--blue);color:#fff;}
+.pmeta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-muted);flex-wrap:wrap;}
+.cat-tag{font-size:11px;padding:2px 7px;border-radius:20px;font-weight:500;}
+.cat-gold{background:#FDF3DC;color:#9A6F2A;}.cat-silver{background:#EEF1F5;color:#5A6E82;}
+.cat-etf{background:#EAF4EF;color:#3A6B52;}.cat-tech{background:#EEF0FA;color:#3A4E8A;}
+.pstats{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;min-width:80px;}
+.stat-row{display:flex;gap:8px;font-size:12px;color:var(--ink-muted);}
+.last-rep{font-size:11px;color:var(--gold);}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;padding-top:12px;border-top:1px solid var(--border);}
+.page-btn{padding:6px 16px;border:1px solid var(--border);background:var(--white);color:var(--ink-soft);font-size:14px;cursor:pointer;border-radius:2px;transition:all 0.15s;font-family:'Noto Sans TC',sans-serif;}
+.page-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);}
+.page-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.page-info{font-size:13px;color:var(--ink-muted);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100;align-items:flex-start;justify-content:center;padding:48px 12px 40px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);width:640px;max-width:100%;border-top:4px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,0.28);animation:sd 0.2s ease;margin-bottom:40px;}
+.modal.wide{width:800px;}
+@keyframes sd{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
+.modal-hd{padding:14px 20px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-title{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:700;}
+.modal-x{background:none;border:none;font-size:19px;cursor:pointer;color:var(--ink-muted);padding:2px 6px;}
+.modal-bd{padding:16px 20px;}
+
+/* FORM */
+.form-group{margin-bottom:12px;}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--ink-soft);margin-bottom:4px;}
+.form-input,.form-select,.form-textarea{width:100%;padding:8px 10px;border:1px solid var(--border);background:var(--white);font-family:'Noto Sans TC',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color 0.15s;border-radius:0;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);}
+.form-textarea{height:120px;resize:vertical;}
+.submit-btn{width:100%;padding:10px;background:var(--gold);border:none;color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:14px;font-weight:500;letter-spacing:2px;cursor:pointer;margin-top:10px;transition:background 0.2s;}
+.submit-btn:hover{background:#b5902e;}
+.submit-btn:disabled{background:#ccc;cursor:not-allowed;}
+.rules-box{background:var(--gold-pale);border:1px solid var(--gold-light);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+
+/* UPLOAD */
+.media-previews{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px;}
+.preview-item{position:relative;width:75px;height:56px;}
+.preview-item img,.preview-item video{width:100%;height:100%;object-fit:cover;border-radius:2px;border:1px solid var(--border);}
+.media-rm{position:absolute;top:-6px;right:-6px;width:17px;height:17px;background:var(--red);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;}
+.upload-area{border:2px dashed var(--border);padding:14px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.upload-area:hover{border-color:var(--gold);background:var(--gold-pale);}
+.upload-label{font-size:13px;color:var(--ink-muted);}
+
+/* DETAIL */
+.detail-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.u-av{width:24px;height:24px;border-radius:50%;border:1px solid var(--border);object-fit:cover;}
+.u-av.sm{width:20px;height:20px;}
+.u-name{font-size:14px;font-weight:500;}
+.dmeta-time{font-size:12px;color:var(--ink-muted);}
+.post-actions{display:flex;gap:7px;margin-bottom:12px;}
+.act-btn{background:none;border:1px solid var(--border);padding:5px 12px;font-size:13px;cursor:pointer;border-radius:2px;font-family:'Noto Sans TC',sans-serif;transition:all 0.15s;}
+.act-btn.edit{color:var(--blue);border-color:var(--blue);}.act-btn.edit:hover{background:var(--blue);color:#fff;}
+.act-btn.del{color:var(--red);border-color:var(--red);}.act-btn.del:hover{background:var(--red);color:#fff;}
+.act-btn.sm{padding:3px 9px;font-size:12px;}
+.detail-content{font-size:16px;line-height:1.9;color:var(--ink-soft);white-space:pre-wrap;word-break:break-word;margin-bottom:14px;}
+.detail-media{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.detail-media img,.detail-media video{max-width:100%;max-height:300px;border-radius:3px;border:1px solid var(--border);cursor:pointer;}
+.replies-hd{font-size:14px;font-weight:600;margin-bottom:9px;color:var(--ink-soft);}
+.reply-card{background:var(--bg);border:1px solid var(--border);padding:10px 13px;margin-bottom:6px;}
+.reply-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.reply-user{display:flex;align-items:center;gap:5px;}
+.reply-num{font-size:12px;color:var(--ink-muted);}
+.reply-time{font-size:12px;color:var(--ink-muted);}
+.reply-content{font-size:15px;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.reply-media{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+.reply-media img,.reply-media video{max-height:140px;border-radius:2px;cursor:pointer;}
+.reply-acts{display:flex;gap:5px;margin-top:6px;}
+.reply-form{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);}
+.rf-title{font-size:14px;font-weight:600;margin-bottom:9px;color:var(--ink-soft);}
+.login-prompt{text-align:center;padding:14px;color:var(--ink-muted);font-size:14px;}
+.no-reply{color:var(--ink-muted);font-size:14px;padding:8px 0;}
+
+/* MISC */
+.loading{text-align:center;padding:50px 0;color:var(--ink-muted);font-size:15px;}
+.empty{text-align:center;padding:46px 0;color:var(--ink-muted);}
+.ei{font-size:34px;margin-bottom:9px;}
+.error-msg{background:#FEF3F3;border:1px solid #FCC;padding:9px 13px;border-radius:2px;color:#c33;font-size:14px;margin-bottom:9px;}
+
+@media(max-width:640px){
+  aside{display:none;}
+  .search-wrap{max-width:none;}
+  .uname{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- 返回主頁連結 -->
+<div class="back-link"><a href="/">← 返回主頁</a></div>
+
+<header>
+  <div class="logo" onclick="goHome()">貴<span>金</span>屬 · 投資討論區</div>
+  <div class="search-wrap">
+    <input type="text" id="headerSearch" placeholder="搜尋標題…">
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div id="headerUser">
+    <button class="btn-google" onclick="loginGoogle()">Google 登入</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <button class="post-btn" id="postBtn" onclick="openPostModal()" disabled title="請先登入">✏ 發文</button>
+    <div class="nav-label">討論分類</div>
+    <ul class="nav-list" id="navList">
+      <li class="active" data-cat="all"><a onclick="filterCat('all',this)"><span class="cdot d-all"></span>全部</a></li>
+      <li data-cat="黃金"><a onclick="filterCat('黃金',this)"><span class="cdot d-gold"></span>黃金</a></li>
+      <li data-cat="白銀"><a onclick="filterCat('白銀',this)"><span class="cdot d-silver"></span>白銀</a></li>
+      <li data-cat="ETF"><a onclick="filterCat('ETF',this)"><span class="cdot d-etf"></span>ETF</a></li>
+      <li data-cat="科技股"><a onclick="filterCat('科技股',this)"><span class="cdot d-tech"></span>科技股</a></li>
+    </ul>
+    <div class="nav-div"></div>
+    <div class="nav-label">資訊</div>
+    <ul class="nav-list">
+      <li><a onclick=""><span class="cdot" style="background:#ccc"></span>公告</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="feed-header">
+      <div>
+        <div class="feed-title" id="feedTitle">全部討論</div>
+        <div class="feed-sub" id="feedSubtitle">顯示所有分類的最新討論</div>
+      </div>
+    </div>
+    <div id="searchBar" class="search-bar" style="display:none">
+      <span id="searchTxt"></span>
+      <button onclick="clearSearch()">✕ 清除</button>
+    </div>
+    <div id="postList"><div class="loading">載入中…</div></div>
+    <div id="paginationArea"></div>
+  </main>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="postModal" onclick="if(event.target.id==='postModal')closeModal('postModal')">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="postModalTitle">發表文章</div>
+      <button class="modal-x" onclick="closeModal('postModal')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="rules-box">
+        <strong>發文規定</strong><br>
+        1. 請勿張貼重複文章、無意義內容或廣告。<br>
+        2. 請勿提供個人聯絡方式。<br>
+        3. 請勿涉及人身攻擊、污衊或違社會善良風俗內容。<br>
+        4. 本討論區有 IP 記錄，禁止張貼違法內容。
+      </div>
+      <div id="postFormErr" class="error-msg" style="display:none"></div>
+      <input type="hidden" id="editPostId">
+      <div class="form-group">
+        <label class="form-label">分類 <span style="color:var(--red)">*</span></label>
+        <select class="form-select" id="f_cat">
+          <option value="">選擇分類</option>
+          <option value="黃金">黃金</option>
+          <option value="白銀">白銀</option>
+          <option value="ETF">ETF</option>
+          <option value="科技股">科技股</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">標題 <span style="color:var(--red)">*</span> <span style="font-weight:300;color:#aaa">（最多50字）</span></label>
+        <input type="text" class="form-input" id="f_title" maxlength="50" placeholder="輸入文章標題">
+      </div>
+      <div class="form-group">
+        <label class="form-label">內容 <span style="color:var(--red)">*</span></label>
+        <textarea class="form-textarea" id="f_content" placeholder="輸入文章內容…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">上傳圖片 / 影片（最多10個）</label>
+        <div class="media-previews" id="postPrev"></div>
+        <div class="upload-area" onclick="document.getElementById('postFileInput').click()">
+          <input type="file" id="postFileInput" multiple accept="image/*,video/*" style="display:none">
+          <span class="upload-label">點擊上傳圖片或影片（單檔上限 5GB，Firebase Storage 免費 5GB）</span>
+        </div>
+      </div>
+      <button class="submit-btn" id="postSubmitBtn" onclick="submitPost()">發　表</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal" onclick="if(event.target.id==='detailModal')closeModal('detailModal')">
+  <div class="modal wide">
+    <div class="modal-hd">
+      <div class="modal-title" id="detailTitle">文章內容</div>
+      <button class="modal-x" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-bd" id="detailBody"><div class="loading">載入中…</div></div>
+  </div>
+</div>
+
+<!-- REPLY EDIT MODAL -->
+<div class="modal-overlay" id="replyEditModal" onclick="if(event.target.id==='replyEditModal')closeModal('replyEditModal')">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">編輯回覆</div>
+      <button class="modal-x" onclick="closeModal('replyEditModal')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div id="replyEditErr" class="error-msg" style="display:none"></div>
+      <input type="hidden" id="editReplyId">
+      <input type="hidden" id="editReplyPostId">
+      <div class="form-group">
+        <textarea class="form-textarea" id="editReplyContent" style="height:100px"></textarea>
+      </div>
+      <button class="submit-btn" id="replyEditBtn" onclick="submitReplyEdit()">儲存回覆</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

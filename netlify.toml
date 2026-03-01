@@ -1,14 +1,13 @@
 [build]
-  functions = "netlify/functions"
   publish = "."
+  functions = "netlify/functions"
 
 [[redirects]]
-  from = "/api/goldprice"
-  to = "/.netlify/functions/goldprice"
+  from = "/forum"
+  to = "/forum/index.html"
   status = 200
 
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
+[[redirects]]
+  from = "/forum/*"
+  to = "/forum/index.html"
+  status = 200
