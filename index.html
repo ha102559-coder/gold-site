@@ -1154,7 +1154,7 @@
       </p>
       <div class="hero-cta">
         <button class="cta-primary" onclick="openModal()">立即加入會員</button>
-        <button class="cta-secondary">瀏覽金價走勢</button>
+        <button class="cta-secondary" onclick="document.getElementById('chartSection').scrollIntoView({behavior:'smooth'})">瀏覽金價走勢</button>
       </div>
     </div>
 
@@ -1179,7 +1179,7 @@
 </section>
 
 <!-- CHART SECTION -->
-<div class="chart-section">
+<div class="chart-section" id="chartSection">
   <div class="chart-inner">
     <div class="chart-header">
       <div>
@@ -1304,57 +1304,27 @@
     </div>
     <a href="/forum" class="section-more">進入討論區 →</a>
   </div>
-  <div class="discussion-list">
-    <div class="discussion-item">
-      <div class="avatar">王</div>
+  <div class="discussion-list" id="hotTopicsList">
+    <!-- 載入中骨架 -->
+    <div class="discussion-item skeleton-item" style="opacity:0.4">
+      <div class="avatar" style="background:var(--dark-4)"></div>
       <div class="discussion-body">
-        <div class="discussion-title">📈 黃金突破3300美元後能否繼續上攻？技術面分析討論</div>
-        <div class="discussion-meta">
-          <span>王大明</span>
-          <span class="discussion-tag">技術分析</span>
-          <span class="discussion-stat">💬 38 回覆</span>
-          <span class="discussion-stat">👁 412 瀏覽</span>
-          <span>2小時前</span>
-        </div>
+        <div style="height:16px;background:var(--dark-4);border-radius:4px;width:70%;margin-bottom:10px"></div>
+        <div style="height:12px;background:var(--dark-4);border-radius:4px;width:40%"></div>
       </div>
     </div>
-    <div class="discussion-item">
-      <div class="avatar">林</div>
+    <div class="discussion-item skeleton-item" style="opacity:0.3">
+      <div class="avatar" style="background:var(--dark-4)"></div>
       <div class="discussion-body">
-        <div class="discussion-title">請問台灣銀行與土地銀行的黃金存摺，哪家手續費比較划算？</div>
-        <div class="discussion-meta">
-          <span>林小玲</span>
-          <span class="discussion-tag">新手提問</span>
-          <span class="discussion-stat">💬 24 回覆</span>
-          <span class="discussion-stat">👁 287 瀏覽</span>
-          <span>5小時前</span>
-        </div>
+        <div style="height:16px;background:var(--dark-4);border-radius:4px;width:80%;margin-bottom:10px"></div>
+        <div style="height:12px;background:var(--dark-4);border-radius:4px;width:35%"></div>
       </div>
     </div>
-    <div class="discussion-item">
-      <div class="avatar">陳</div>
+    <div class="discussion-item skeleton-item" style="opacity:0.2">
+      <div class="avatar" style="background:var(--dark-4)"></div>
       <div class="discussion-body">
-        <div class="discussion-title">分享：定期定額買黃金存摺三年心得，報酬率超過40%</div>
-        <div class="discussion-meta">
-          <span>陳建宏</span>
-          <span class="discussion-tag">經驗分享</span>
-          <span class="discussion-stat">💬 61 回覆</span>
-          <span class="discussion-stat">👁 1,240 瀏覽</span>
-          <span>昨天</span>
-        </div>
-      </div>
-    </div>
-    <div class="discussion-item">
-      <div class="avatar">張</div>
-      <div class="discussion-body">
-        <div class="discussion-title">美元走弱對黃金的影響，以及2025下半年預測整理</div>
-        <div class="discussion-meta">
-          <span>張雅婷</span>
-          <span class="discussion-tag">總體經濟</span>
-          <span class="discussion-stat">💬 19 回覆</span>
-          <span class="discussion-stat">👁 534 瀏覽</span>
-          <span>昨天</span>
-        </div>
+        <div style="height:16px;background:var(--dark-4);border-radius:4px;width:60%;margin-bottom:10px"></div>
+        <div style="height:12px;background:var(--dark-4);border-radius:4px;width:45%"></div>
       </div>
     </div>
   </div>
@@ -1432,6 +1402,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, query, orderBy, limit, getDocs, where }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyB7SY3k0835AyM1fLDtOs0thPrg3cmxifk",
@@ -1444,12 +1416,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 // ── 登入狀態監聽 ──
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // 已登入
     document.getElementById('authButtons').style.display = 'none';
     const menu = document.getElementById('userMenu');
     menu.style.display = 'flex';
@@ -1457,7 +1429,6 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('userName').textContent = user.displayName || user.email;
     closeModal();
   } else {
-    // 未登入
     document.getElementById('authButtons').style.display = 'flex';
     document.getElementById('userMenu').style.display = 'none';
   }
@@ -1467,7 +1438,6 @@ onAuthStateChanged(auth, (user) => {
 window.signInWithGoogle = async function() {
   try {
     await signInWithPopup(auth, provider);
-    // onAuthStateChanged 會自動處理 UI 更新
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
       alert('登入失敗，請稍後再試。\n' + err.message);
@@ -1479,6 +1449,77 @@ window.signInWithGoogle = async function() {
 window.signOutUser = async function() {
   await signOut(auth);
 };
+
+// ── 熱門話題：從 Firestore 抓取回覆數最高的 4 篇 ──
+function timeAgo(date) {
+  if (!date) return '';
+  const now = new Date();
+  const d = date.toDate ? date.toDate() : new Date(date);
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return '剛剛';
+  if (diff < 3600) return `${Math.floor(diff/60)} 分鐘前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)} 小時前`;
+  if (diff < 172800) return '昨天';
+  return `${Math.floor(diff/86400)} 天前`;
+}
+
+function renderHotTopics(posts) {
+  const list = document.getElementById('hotTopicsList');
+  if (!posts.length) {
+    list.innerHTML = `
+      <div style="text-align:center;padding:32px;color:var(--text-dim);font-size:13px;letter-spacing:1px;">
+        討論區尚無話題，<a href="/forum" style="color:var(--gold);text-decoration:none;">立即發起討論 →</a>
+      </div>`;
+    return;
+  }
+  list.innerHTML = posts.map(post => {
+    const name = post.authorName || '匿名';
+    const avatar = name.charAt(0);
+    const replyCount = post.replyCount || 0;
+    const viewCount = post.viewCount || 0;
+    const tag = post.category || post.tag || '討論';
+    return `
+      <a href="/forum" style="text-decoration:none;">
+        <div class="discussion-item">
+          <div class="avatar">${avatar}</div>
+          <div class="discussion-body">
+            <div class="discussion-title">${post.title || '（無標題）'}</div>
+            <div class="discussion-meta">
+              <span>${name}</span>
+              <span class="discussion-tag">${tag}</span>
+              <span class="discussion-stat">💬 ${replyCount} 回覆</span>
+              <span class="discussion-stat">👁 ${viewCount} 瀏覽</span>
+              <span>${timeAgo(post.createdAt)}</span>
+            </div>
+          </div>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+async function fetchHotTopics() {
+  try {
+    const q = query(
+      collection(db, 'posts'),
+      where('isDeleted', '==', false),
+      orderBy('replyCount', 'desc'),
+      limit(4)
+    );
+    const snapshot = await getDocs(q);
+    const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderHotTopics(posts);
+  } catch (err) {
+    console.error('熱門話題載入失敗:', err);
+    // 載入失敗時顯示進入討論區的提示
+    const list = document.getElementById('hotTopicsList');
+    list.innerHTML = `
+      <div style="text-align:center;padding:32px;color:var(--text-dim);font-size:13px;letter-spacing:1px;">
+        <a href="/forum" style="color:var(--gold);text-decoration:none;">前往討論區查看所有話題 →</a>
+      </div>`;
+  }
+}
+
+fetchHotTopics();
 
 </script>
 <script>
@@ -1836,4 +1877,18 @@ function closeInfoModalOutside(e) {
 function switchInfoTab(tab, clickedBtn) {
   const cfg = infoConfig[tab];
   document.getElementById('infoModalIcon').textContent = cfg.icon;
-  docum
+  document.getElementById('infoModalLabel').textContent = cfg.label;
+  document.getElementById('infoModalTitle').textContent = cfg.title;
+  ['about','contact','privacy','terms'].forEach(t => {
+    document.getElementById('info-'+t).classList.toggle('active', t===tab);
+  });
+  document.querySelectorAll('.info-modal-tab').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'"+tab+"'")) {
+      btn.classList.add('active');
+    }
+  });
+}
+</script>
+</body>
+</html>
