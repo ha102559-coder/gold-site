@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃金飾品 · 黃金殿</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-pale: #F5E6B8;
+    --gold-deep: #8B6914;
+    --obsidian: #0D0D0D;
+    --dark: #111111;
+    --dark-2: #1A1A1A;
+    --dark-3: #222222;
+    --dark-4: #2C2C2C;
+    --text: #E8E0D0;
+    --text-muted: #9A9080;
+    --text-dim: #5A5448;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.5);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--obsidian); color:var(--text); font-family:'Noto Sans TC',sans-serif; font-weight:300; overflow-x:hidden; }
+
+  /* ─── TICKER ─── */
+  .ticker-bar { background:linear-gradient(90deg,#4a3200,#6b4a0a,#4a3200); padding:6px 0; overflow:hidden; position:relative; }
+  .ticker-bar::before,.ticker-bar::after { content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; }
+  .ticker-bar::before { left:0; background:linear-gradient(90deg,#4a3200,transparent); }
+  .ticker-bar::after  { right:0; background:linear-gradient(270deg,#4a3200,transparent); }
+  .ticker-track { display:flex; gap:48px; animation:ticker 30s linear infinite; white-space:nowrap; width:max-content; }
+  .ticker-item { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--gold-pale); }
+  .ticker-item .label { color:var(--gold-light); font-weight:500; font-size:11px; letter-spacing:1px; }
+  .ticker-item .price { font-weight:500; font-size:13px; }
+  .ticker-item .change.up { color:#6EE7B7; }
+  .ticker-item .change.down { color:#FCA5A5; }
+  .ticker-sep { color:var(--gold-deep); font-size:16px; }
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ─── HEADER ─── */
+  header { background:var(--dark); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); }
+  .header-inner { max-width:1280px; margin:0 auto; padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px; }
+  .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--gold),var(--gold-deep)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 0 16px rgba(201,168,76,0.4); }
+  .logo-text { font-family:'Noto Serif TC',serif; font-weight:900; font-size:22px; color:var(--gold-light); letter-spacing:2px; }
+  .logo-sub { font-size:10px; color:var(--text-muted); letter-spacing:2px; margin-top:2px; }
+  nav { display:flex; align-items:center; gap:4px; }
+  nav a { text-decoration:none; color:var(--text-muted); font-size:14px; font-weight:400; letter-spacing:1px; padding:8px 18px; border-radius:4px; transition:all 0.25s; position:relative; white-space:nowrap; }
+  nav a::after { content:''; position:absolute; bottom:4px; left:18px; right:18px; height:1px; background:var(--gold); transform:scaleX(0); transition:transform 0.25s; transform-origin:left; }
+  nav a:hover { color:var(--gold-light); }
+  nav a:hover::after { transform:scaleX(1); }
+  nav a.active { color:var(--gold-light); }
+  nav a.active::after { transform:scaleX(1); }
+  .header-actions { display:flex; align-items:center; gap:10px; }
+  .btn-login { background:transparent; border:1px solid var(--border-strong); color:var(--gold); padding:7px 20px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; cursor:pointer; transition:all 0.25s; letter-spacing:1px; }
+  .btn-login:hover { background:rgba(201,168,76,0.1); }
+  .btn-register { background:linear-gradient(135deg,var(--gold),var(--gold-deep)); border:none; color:var(--obsidian); padding:8px 20px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; font-weight:500; cursor:pointer; transition:all 0.25s; letter-spacing:1px; }
+  .btn-register:hover { box-shadow:0 4px 16px rgba(201,168,76,0.4); transform:translateY(-1px); }
+
+  /* ─── PAGE HERO ─── */
+  .page-hero { background:var(--dark-2); border-bottom:1px solid var(--border); padding:56px 0 48px; position:relative; overflow:hidden; }
+  .page-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 50% 120% at 100% 50%,rgba(201,168,76,0.06) 0%,transparent 70%),radial-gradient(ellipse 30% 80% at 0% 100%,rgba(139,105,20,0.05) 0%,transparent 60%); }
+  .hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(201,168,76,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.03) 1px,transparent 1px); background-size:60px 60px; }
+  .page-hero-inner { max-width:1280px; margin:0 auto; padding:0 32px; position:relative; z-index:1; }
+  .breadcrumb { font-size:11px; color:var(--text-dim); letter-spacing:2px; margin-bottom:20px; text-transform:uppercase; }
+  .breadcrumb a { color:var(--text-dim); text-decoration:none; transition:color 0.2s; }
+  .breadcrumb a:hover { color:var(--gold); }
+  .breadcrumb span { margin:0 8px; }
+  .page-label { font-size:11px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:10px; }
+  .page-title { font-family:'Noto Serif TC',serif; font-size:clamp(28px,4vw,42px); font-weight:900; color:var(--text); margin-bottom:14px; line-height:1.2; }
+  .page-title span { background:linear-gradient(135deg,var(--gold-light),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .page-desc { font-size:14px; color:var(--text-muted); line-height:1.8; max-width:560px; }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar { background:var(--dark); border-bottom:1px solid var(--border); position:sticky; top:68px; z-index:90; }
+  .filter-inner { max-width:1280px; margin:0 auto; padding:0 32px; display:flex; align-items:center; justify-content:space-between; gap:16px; height:54px; }
+  .filter-tags { display:flex; gap:6px; flex-wrap:nowrap; overflow-x:auto; }
+  .filter-tag { padding:5px 16px; font-size:12px; color:var(--text-muted); border:1px solid var(--border); background:transparent; border-radius:20px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; }
+  .filter-tag:hover { border-color:var(--border-strong); color:var(--gold); }
+  .filter-tag.active { background:rgba(201,168,76,0.12); border-color:var(--gold); color:var(--gold-light); }
+  .item-count { font-size:11px; color:var(--text-dim); letter-spacing:1px; white-space:nowrap; flex-shrink:0; }
+  .item-count span { color:var(--gold); }
+
+  /* ─── MAIN ─── */
+  .main-wrap { max-width:1280px; margin:0 auto; padding:48px 32px 80px; }
+
+  /* ─── AFFILIATE NOTICE ─── */
+  .affiliate-notice { background:rgba(201,168,76,0.06); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:6px; padding:14px 20px; margin-bottom:36px; font-size:12px; color:var(--text-muted); line-height:1.8; letter-spacing:0.5px; }
+  .affiliate-notice strong { color:var(--gold); }
+
+  /* ─── PRODUCT GRID ─── */
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px; }
+
+  .product-card { background:var(--dark-2); border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:all 0.3s; position:relative; display:flex; flex-direction:column; }
+  .product-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .product-card:hover { border-color:var(--border-strong); transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,0.5); }
+
+  .product-img-wrap { position:relative; aspect-ratio:1/1; background:var(--dark-3); overflow:hidden; }
+  .product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; display:block; }
+  .product-card:hover .product-img-wrap img { transform:scale(1.05); }
+  .product-img-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:56px; background:linear-gradient(135deg,#1a1206,#2a1e08); }
+  .product-badge { position:absolute; top:12px; left:12px; background:var(--gold); color:var(--obsidian); font-size:10px; font-weight:500; letter-spacing:1px; padding:3px 10px; border-radius:2px; z-index:1; text-transform:uppercase; }
+  .product-badge.new { background:var(--gold); }
+  .product-badge.hot { background:#e05a2b; color:#fff; }
+  .product-badge.sale { background:#2b8a3e; color:#fff; }
+
+  .product-body { padding:20px; flex:1; display:flex; flex-direction:column; }
+  .product-cat { font-size:10px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:8px; }
+  .product-name { font-family:'Noto Serif TC',serif; font-size:16px; font-weight:600; color:var(--text); line-height:1.5; margin-bottom:8px; }
+  .product-desc { font-size:12px; color:var(--text-muted); line-height:1.8; margin-bottom:14px; flex:1; }
+  .product-meta { display:flex; align-items:center; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .product-tag { font-size:10px; color:var(--text-dim); border:1px solid rgba(201,168,76,0.15); padding:2px 8px; border-radius:10px; letter-spacing:0.5px; }
+  .product-price { font-size:18px; font-weight:500; color:var(--gold-light); letter-spacing:0.5px; margin-bottom:4px; }
+  .product-price-note { font-size:11px; color:var(--text-dim); margin-bottom:16px; }
+
+  .btn-affiliate { display:block; width:100%; background:linear-gradient(135deg,var(--gold),var(--gold-deep)); border:none; color:var(--obsidian); padding:11px 16px; border-radius:6px; font-size:13px; font-family:'Noto Sans TC',sans-serif; font-weight:500; cursor:pointer; letter-spacing:1px; text-align:center; text-decoration:none; transition:all 0.25s; }
+  .btn-affiliate:hover { box-shadow:0 4px 20px rgba(201,168,76,0.45); transform:translateY(-1px); }
+  .btn-affiliate-out { display:block; width:100%; background:transparent; border:1px solid var(--border-strong); color:var(--gold); padding:10px 16px; border-radius:6px; font-size:13px; font-family:'Noto Sans TC',sans-serif; cursor:pointer; letter-spacing:1px; text-align:center; text-decoration:none; transition:all 0.25s; margin-top:8px; }
+  .btn-affiliate-out:hover { background:rgba(201,168,76,0.08); }
+
+  /* ─── EMPTY / ADD CARD ─── */
+  .add-card { background:var(--dark-2); border:1px dashed rgba(201,168,76,0.25); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; aspect-ratio:auto; min-height:320px; cursor:pointer; transition:all 0.25s; }
+  .add-card:hover { border-color:var(--gold); background:rgba(201,168,76,0.04); }
+  .add-card-icon { font-size:36px; opacity:0.4; }
+  .add-card-text { font-size:13px; color:var(--text-dim); letter-spacing:1px; }
+
+  /* ─── ADMIN PANEL ─── */
+  .admin-bar { background:var(--dark-3); border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin-bottom:40px; }
+  .admin-bar-title { font-size:11px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .admin-bar-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .admin-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+  .field-group { display:flex; flex-direction:column; gap:5px; }
+  .field-label { font-size:11px; color:var(--text-muted); letter-spacing:1px; }
+  .field-input { background:var(--dark-4); border:1px solid var(--border); color:var(--text); padding:9px 12px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; outline:none; transition:border-color 0.2s; }
+  .field-input:focus { border-color:var(--gold); }
+  .field-input::placeholder { color:var(--text-dim); }
+  .field-select { background:var(--dark-4); border:1px solid var(--border); color:var(--text); padding:9px 12px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; outline:none; cursor:pointer; }
+  .field-select:focus { border-color:var(--gold); }
+  .field-select option { background:var(--dark-3); }
+  .admin-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .btn-add { background:linear-gradient(135deg,var(--gold),var(--gold-deep)); border:none; color:var(--obsidian); padding:10px 28px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; font-weight:500; cursor:pointer; letter-spacing:1px; transition:all 0.2s; }
+  .btn-add:hover { box-shadow:0 4px 16px rgba(201,168,76,0.4); }
+  .btn-clear { background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:10px 20px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; cursor:pointer; letter-spacing:1px; transition:all 0.2s; }
+  .btn-clear:hover { border-color:var(--border-strong); color:var(--text); }
+
+  /* image upload preview */
+  .img-upload-wrap { position:relative; }
+  .img-preview { width:100%; height:72px; object-fit:cover; border-radius:4px; margin-top:6px; border:1px solid var(--border); display:none; }
+
+  /* ─── EDIT OVERLAY ─── */
+  .edit-btn { position:absolute; top:8px; right:8px; background:rgba(13,13,13,0.85); border:1px solid var(--border-strong); color:var(--gold); font-size:11px; padding:4px 10px; border-radius:4px; cursor:pointer; z-index:5; display:none; letter-spacing:1px; transition:all 0.2s; }
+  .del-btn { position:absolute; top:8px; right:68px; background:rgba(200,50,50,0.85); border:1px solid rgba(200,50,50,0.6); color:#fff; font-size:11px; padding:4px 10px; border-radius:4px; cursor:pointer; z-index:5; display:none; letter-spacing:1px; transition:all 0.2s; }
+  .product-card:hover .edit-btn,
+  .product-card:hover .del-btn { display:block; }
+
+  /* ─── EDIT MODAL ─── */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--dark-2); border:1px solid var(--border-strong); border-radius:12px; padding:36px; width:100%; max-width:580px; position:relative; animation:modalIn 0.3s ease; max-height:90vh; overflow-y:auto; }
+  @keyframes modalIn { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .modal::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); border-radius:12px 12px 0 0; }
+  .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--text-dim); font-size:24px; cursor:pointer; line-height:1; transition:color 0.2s; }
+  .modal-close:hover { color:var(--text); }
+  .modal-title { font-family:'Noto Serif TC',serif; font-size:20px; color:var(--gold-light); margin-bottom:24px; }
+  .modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .modal-grid .full { grid-column:1/-1; }
+  .modal-label { font-size:11px; color:var(--text-muted); letter-spacing:1px; margin-bottom:5px; display:block; }
+  .modal-input { width:100%; background:var(--dark-3); border:1px solid var(--border); color:var(--text); padding:10px 12px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; outline:none; transition:border-color 0.2s; }
+  .modal-input:focus { border-color:var(--gold); }
+  .modal-input::placeholder { color:var(--text-dim); }
+  .modal-select { width:100%; background:var(--dark-3); border:1px solid var(--border); color:var(--text); padding:10px 12px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; outline:none; cursor:pointer; }
+  .modal-select option { background:var(--dark-3); }
+  .modal-textarea { width:100%; background:var(--dark-3); border:1px solid var(--border); color:var(--text); padding:10px 12px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; outline:none; resize:vertical; min-height:72px; line-height:1.6; }
+  .modal-textarea:focus { border-color:var(--gold); }
+  .modal-actions { display:flex; gap:10px; margin-top:20px; }
+  .btn-save { flex:1; background:linear-gradient(135deg,var(--gold),var(--gold-deep)); border:none; color:var(--obsidian); padding:11px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; font-weight:500; cursor:pointer; letter-spacing:1px; transition:all 0.2s; }
+  .btn-save:hover { box-shadow:0 4px 16px rgba(201,168,76,0.4); }
+  .btn-cancel { background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:11px 24px; border-radius:4px; font-size:13px; font-family:'Noto Sans TC',sans-serif; cursor:pointer; letter-spacing:1px; }
+  .modal-img-preview { width:100%; height:100px; object-fit:cover; border-radius:4px; margin-top:8px; border:1px solid var(--border); display:none; }
+
+  /* ─── FOOTER ─── */
+  footer { background:var(--dark-2); border-top:1px solid var(--border); }
+  .footer-main { max-width:1280px; margin:0 auto; padding:48px 32px 32px; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; }
+  .footer-brand {}
+  .footer-desc { font-size:13px; color:var(--text-dim); line-height:1.8; margin-top:16px; max-width:280px; }
+  .footer-heading { font-size:11px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:16px; }
+  .footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-links a { text-decoration:none; font-size:13px; color:var(--text-dim); transition:color 0.2s; }
+  .footer-links a:hover { color:var(--gold-light); }
+  .footer-bottom { max-width:1280px; margin:0 auto; padding:16px 32px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; font-size:12px; color:var(--text-dim); }
+  .footer-bottom-links { display:flex; gap:24px; }
+  .footer-bottom-links a { color:var(--text-dim); text-decoration:none; transition:color 0.2s; }
+  .footer-bottom-links a:hover { color:var(--gold); }
+
+  /* ─── FADE UP ─── */
+  .fade-up { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity:1; transform:none; }
+
+  /* ─── TOAST ─── */
+  .toast { position:fixed; bottom:32px; right:32px; background:var(--dark-3); border:1px solid var(--border-strong); color:var(--gold-light); padding:14px 20px; border-radius:8px; font-size:13px; letter-spacing:0.5px; z-index:300; transform:translateY(20px); opacity:0; transition:all 0.3s; pointer-events:none; }
+  .toast.show { transform:translateY(0); opacity:1; }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="label">XAU/USD</span><span class="price">$3,456.50</span><span class="change up">▲ +0.52%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">XAG/USD</span><span class="price">$32.84</span><span class="change up">▲ +1.61%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">XPT/USD</span><span class="price">$982.50</span><span class="change down">▼ -0.32%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.14</span><span class="change down">▼ -0.08%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">黃金台幣/克</span><span class="price">NT$3,572</span><span class="change up">▲ +0.44%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">XAU/USD</span><span class="price">$3,456.50</span><span class="change up">▲ +0.52%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">XAG/USD</span><span class="price">$32.84</span><span class="change up">▲ +1.61%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">XPT/USD</span><span class="price">$982.50</span><span class="change down">▼ -0.32%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.14</span><span class="change down">▼ -0.08%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="label">黃金台幣/克</span><span class="price">NT$3,572</span><span class="change up">▲ +0.44%</span></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏛</div>
+      <div>
+        <div class="logo-text">黃金殿</div>
+        <div class="logo-sub">GOLD TEMPLE</div>
+      </div>
+    </a>
+    <nav>
+      <a href="/">首頁</a>
+      <a href="/market">國際金價</a>
+      <a href="/jewelry" class="active">黃金飾品</a>
+      <a href="/news">投資訊息</a>
+      <a href="/forum">討論區</a>
+    </nav>
+    <div class="header-actions">
+      <div id="authButtons" style="display:flex;gap:10px">
+        <button class="btn-login" onclick="signInWithGoogle()">登入</button>
+        <button class="btn-register" onclick="signInWithGoogle()">免費註冊</button>
+      </div>
+      <div id="userMenu" style="display:none;align-items:center;gap:10px">
+        <img id="userAvatar" src="" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);object-fit:cover" />
+        <span id="userName" style="font-size:13px;color:var(--text-muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+        <button class="btn-login" onclick="signOutUser()">登出</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="/">首頁</a><span>›</span>黃金飾品
+    </div>
+    <div class="page-label">精選推薦</div>
+    <h1 class="page-title">黃金飾品<span>精選商城</span></h1>
+    <p class="page-desc">嚴選各大品牌黃金首飾，純金、K金工藝兼備，兼顧投資與美學的黃金配戴首選。</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-tags">
+      <button class="filter-tag active" onclick="filterProducts('all',this)">全部</button>
+      <button class="filter-tag" onclick="filterProducts('項鍊',this)">項鍊</button>
+      <button class="filter-tag" onclick="filterProducts('手鍊',this)">手鍊</button>
+      <button class="filter-tag" onclick="filterProducts('戒指',this)">戒指</button>
+      <button class="filter-tag" onclick="filterProducts('耳環',this)">耳環</button>
+      <button class="filter-tag" onclick="filterProducts('套組',this)">套組</button>
+    </div>
+    <div class="item-count">共 <span id="itemCount">0</span> 件商品</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="admin-bar" style="display:none">
+    <div class="admin-bar-title">✦ 新增商品</div>
+    <div class="admin-fields">
+      <div class="field-group">
+        <div class="field-label">商品名稱 *</div>
+        <input class="field-input" id="f-name" placeholder="例：999純金蛇形項鍊" />
+      </div>
+      <div class="field-group">
+        <div class="field-label">分類 *</div>
+        <select class="field-select" id="f-cat">
+          <option value="項鍊">項鍊</option>
+          <option value="手鍊">手鍊</option>
+          <option value="戒指">戒指</option>
+          <option value="耳環">耳環</option>
+          <option value="套組">套組</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">價格顯示（選填）</div>
+        <input class="field-input" id="f-price" placeholder="例：NT$8,800 起" />
+      </div>
+      <div class="field-group">
+        <div class="field-label">標籤（用逗號分隔）</div>
+        <input class="field-input" id="f-tags" placeholder="例：999純金,40cm,附禮盒" />
+      </div>
+      <div class="field-group">
+        <div class="field-label">徽章</div>
+        <select class="field-select" id="f-badge">
+          <option value="">無</option>
+          <option value="new">NEW</option>
+          <option value="hot">HOT</option>
+          <option value="sale">SALE</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">聯盟連結（主按鈕）*</div>
+        <input class="field-input" id="f-link" placeholder="https://..." />
+      </div>
+      <div class="field-group">
+        <div class="field-label">第二連結（選填）</div>
+        <input class="field-input" id="f-link2" placeholder="https://..." />
+      </div>
+      <div class="field-group">
+        <div class="field-label">第二按鈕文字</div>
+        <input class="field-input" id="f-link2text" placeholder="例：查看更多款式" />
+      </div>
+      <div class="field-group" style="grid-column:1/-1">
+        <div class="field-label">商品描述</div>
+        <input class="field-input" id="f-desc" placeholder="簡短描述商品特色，約30字以內" />
+      </div>
+      <div class="field-group" style="grid-column:1/-1">
+        <div class="field-label">商品圖片 URL（或上傳）</div>
+        <div class="img-upload-wrap">
+          <input class="field-input" id="f-img" placeholder="貼上圖片網址 https://..." style="margin-bottom:6px" />
+          <input type="file" id="f-imgfile" accept="image/*" style="display:none" onchange="previewImg(this,'f-imgpreview','f-img')" />
+          <button class="btn-clear" style="font-size:12px;padding:7px 14px" onclick="document.getElementById('f-imgfile').click()">📁 選擇本機圖片</button>
+          <img id="f-imgpreview" class="img-preview" />
+        </div>
+      </div>
+    </div>
+    <div class="admin-actions">
+      <button class="btn-add" onclick="addProduct()">＋ 新增商品</button>
+      <button class="btn-clear" onclick="clearForm()">清除欄位</button>
+    </div>
+  </div>
+
+  <!-- PRODUCT GRID -->
+  <div class="product-grid" id="productGrid"></div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <span style="font-family:'Noto Serif TC',serif;font-weight:900;font-size:20px;color:var(--gold-light)">黃金殿</span>
+      <p class="footer-desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。本頁部分連結為聯盟行銷連結，點擊購買可能使本站獲得佣金，不影響您的購買價格。</p>
+    </div>
+    <div>
+      <div class="footer-heading">快速連結</div>
+      <ul class="footer-links">
+        <li><a href="/">首頁</a></li>
+        <li><a href="/market">國際金價</a></li>
+        <li><a href="/jewelry">黃金飾品</a></li>
+        <li><a href="/news">投資訊息</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">會員服務</div>
+      <ul class="footer-links">
+        <li><a href="#">免費註冊</a></li>
+        <li><a href="#">會員登入</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">關於</div>
+      <ul class="footer-links">
+        <li><a href="#">關於我們</a></li>
+        <li><a href="#">聯絡我們</a></li>
+        <li><a href="#">隱私政策</a></li>
+        <li><a href="#">服務條款</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 黃金殿 · 貴金屬投資平台 · <span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span>
+    <div class="footer-bottom-links">
+      <a href="#">隱私政策</a>
+      <a href="#">服務條款</a>
+      <a href="/">返回首頁</a>
+    </div>
+  </div>
+</footer>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editOverlay" onclick="closeEditOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEdit()">×</button>
+    <div class="modal-title">✦ 編輯商品</div>
+    <input type="hidden" id="e-id" />
+    <div class="modal-grid">
+      <div class="full">
+        <label class="modal-label">商品名稱 *</label>
+        <input class="modal-input" id="e-name" />
+      </div>
+      <div>
+        <label class="modal-label">分類</label>
+        <select class="modal-select" id="e-cat">
+          <option value="項鍊">項鍊</option>
+          <option value="手鍊">手鍊</option>
+          <option value="戒指">戒指</option>
+          <option value="耳環">耳環</option>
+          <option value="套組">套組</option>
+        </select>
+      </div>
+      <div>
+        <label class="modal-label">徽章</label>
+        <select class="modal-select" id="e-badge">
+          <option value="">無</option>
+          <option value="new">NEW</option>
+          <option value="hot">HOT</option>
+          <option value="sale">SALE</option>
+        </select>
+      </div>
+      <div>
+        <label class="modal-label">價格</label>
+        <input class="modal-input" id="e-price" />
+      </div>
+      <div>
+        <label class="modal-label">標籤（逗號分隔）</label>
+        <input class="modal-input" id="e-tags" />
+      </div>
+      <div class="full">
+        <label class="modal-label">商品描述</label>
+        <textarea class="modal-textarea" id="e-desc"></textarea>
+      </div>
+      <div class="full">
+        <label class="modal-label">聯盟連結（主按鈕）</label>
+        <input class="modal-input" id="e-link" />
+      </div>
+      <div>
+        <label class="modal-label">第二連結</label>
+        <input class="modal-input" id="e-link2" />
+      </div>
+      <div>
+        <label class="modal-label">第二按鈕文字</label>
+        <input class="modal-input" id="e-link2text" />
+      </div>
+      <div class="full">
+        <label class="modal-label">圖片 URL</label>
+        <input class="modal-input" id="e-img" placeholder="https://..." />
+        <input type="file" id="e-imgfile" accept="image/*" style="display:none" onchange="previewImg(this,'e-imgpreview','e-img')" />
+        <button class="btn-clear" style="font-size:12px;padding:6px 12px;margin-top:6px" onclick="document.getElementById('e-imgfile').click()">📁 選擇本機圖片</button>
+        <img id="e-imgpreview" class="modal-img-preview" />
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveEdit()">儲存變更</button>
+      <button class="btn-cancel" onclick="closeEdit()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const ADMIN_EMAIL = 'enzdwllg@gmail.com';
+
+const app = initializeApp({
+  apiKey: "AIzaSyB7SY3k0835AyM1fLDtOs0thPrg3cmxifk",
+  authDomain: "gold-bed6c.firebaseapp.com",
+  projectId: "gold-bed6c",
+  storageBucket: "gold-bed6c.firebasestorage.app",
+  messagingSenderId: "498200351921",
+  appId: "1:498200351921:web:66e590427b3457a43afe90"
+});
+
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// ── 登入狀態監聽 ──
+onAuthStateChanged(auth, user => {
+  const isAdmin = user && user.email === ADMIN_EMAIL;
+  const authButtons = document.getElementById('authButtons');
+  const userMenu    = document.getElementById('userMenu');
+  const adminPanel  = document.getElementById('adminPanel');
+
+  if (user) {
+    authButtons.style.display = 'none';
+    userMenu.style.display = 'flex';
+    document.getElementById('userAvatar').src = user.photoURL || '';
+    document.getElementById('userName').textContent = user.displayName || user.email;
+  } else {
+    authButtons.style.display = 'flex';
+    userMenu.style.display = 'none';
+  }
+
+  // 管理員才顯示後台面板與編輯/刪除按鈕
+  adminPanel.style.display = isAdmin ? 'block' : 'none';
+  window._isAdmin = isAdmin;
+  renderProducts();
+});
+
+window.signInWithGoogle = async () => {
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { if (e.code !== 'auth/popup-closed-by-user') showToast('登入失敗，請稍後再試'); }
+};
+
+window.signOutUser = async () => { await signOut(auth); };
+</script>
+
+<script>
+// ═══════════════════════════════════════
+// 商品資料（localStorage）
+// ═══════════════════════════════════════
+let products = JSON.parse(localStorage.getItem('gd_jewelry') || '[]');
+let currentFilter = 'all';
+let nextId = products.length ? Math.max(...products.map(p=>p.id)) + 1 : 1;
+window._isAdmin = false;
+
+function getFiltered() {
+  return currentFilter === 'all' ? products : products.filter(p => p.cat === currentFilter);
+}
+
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  const filtered = getFiltered();
+  document.getElementById('itemCount').textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = window._isAdmin
+      ? `<div class="add-card"><div class="add-card-icon">💍</div><div class="add-card-text">點擊上方表單新增第一件商品</div></div>`
+      : `<div class="add-card" style="cursor:default"><div class="add-card-icon">💍</div><div class="add-card-text">商品即將上架，敬請期待</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const imgHtml = p.img
+      ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="product-img-placeholder" style="display:none">💍</div>`
+      : `<div class="product-img-placeholder">💍</div>`;
+    const badgeHtml  = p.badge ? `<div class="product-badge ${p.badge}">${p.badge.toUpperCase()}</div>` : '';
+    const tagsHtml   = p.tags  ? p.tags.split(',').map(t=>`<span class="product-tag">${esc(t.trim())}</span>`).join('') : '';
+    const priceHtml  = p.price ? `<div class="product-price">${esc(p.price)}</div><div class="product-price-note">參考售價，實際以商家為準</div>` : '';
+    const btn2Html   = p.link2 ? `<a class="btn-affiliate-out" href="${esc(p.link2)}" target="_blank" rel="noopener sponsored">${esc(p.link2text||'查看更多')}</a>` : '';
+    const adminBtns  = window._isAdmin
+      ? `<button class="del-btn" onclick="deleteProduct(${p.id})">刪除</button><button class="edit-btn" onclick="openEdit(${p.id})">編輯</button>`
+      : '';
+    return `
+      <div class="product-card fade-up" data-id="${p.id}">
+        ${adminBtns}
+        <div class="product-img-wrap">${badgeHtml}${imgHtml}</div>
+        <div class="product-body">
+          <div class="product-cat">${esc(p.cat)}</div>
+          <div class="product-name">${esc(p.name)}</div>
+          ${p.desc ? `<div class="product-desc">${esc(p.desc)}</div>` : ''}
+          ${tagsHtml ? `<div class="product-meta">${tagsHtml}</div>` : ''}
+          ${priceHtml}
+          <a class="btn-affiliate" href="${esc(p.link||'#')}" target="_blank" rel="noopener sponsored">前往購買 →</a>
+          ${btn2Html}
+        </div>
+      </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.fade-up').forEach((el,i) => {
+      setTimeout(() => el.classList.add('visible'), i * 60);
+    });
+  });
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function filterProducts(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function addProduct() {
+  if (!window._isAdmin) return;
+  const name = document.getElementById('f-name').value.trim();
+  const link = document.getElementById('f-link').value.trim();
+  if (!name) { showToast('請填寫商品名稱'); return; }
+  if (!link) { showToast('請填寫聯盟連結'); return; }
+  products.unshift({
+    id: nextId++, name,
+    cat:       document.getElementById('f-cat').value,
+    price:     document.getElementById('f-price').value.trim(),
+    tags:      document.getElementById('f-tags').value.trim(),
+    badge:     document.getElementById('f-badge').value,
+    desc:      document.getElementById('f-desc').value.trim(),
+    link,
+    link2:     document.getElementById('f-link2').value.trim(),
+    link2text: document.getElementById('f-link2text').value.trim(),
+    img:       document.getElementById('f-img').value.trim(),
+  });
+  save(); clearForm(); renderProducts();
+  showToast('✦ 商品已新增');
+}
+
+function clearForm() {
+  ['f-name','f-price','f-tags','f-desc','f-link','f-link2','f-link2text','f-img'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-badge').value = '';
+  document.getElementById('f-cat').value = '項鍊';
+  document.getElementById('f-imgpreview').style.display = 'none';
+}
+
+function deleteProduct(id) {
+  if (!window._isAdmin) return;
+  if (!confirm('確定刪除此商品？')) return;
+  products = products.filter(p => p.id !== id);
+  save(); renderProducts();
+  showToast('商品已刪除');
+}
+
+function openEdit(id) {
+  if (!window._isAdmin) return;
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('e-id').value = id;
+  ['name','cat','badge','price','tags','desc','link','link2','link2text','img'].forEach(k => {
+    document.getElementById('e-'+k).value = p[k] || '';
+  });
+  const prev = document.getElementById('e-imgpreview');
+  if (p.img) { prev.src = p.img; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
+  document.getElementById('editOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function saveEdit() {
+  if (!window._isAdmin) return;
+  const id = parseInt(document.getElementById('e-id').value);
+  const idx = products.findIndex(x => x.id === id);
+  if (idx < 0) return;
+  ['name','cat','badge','price','tags','desc','link','link2','link2text','img'].forEach(k => {
+    products[idx][k] = document.getElementById('e-'+k).value.trim();
+  });
+  save(); closeEdit(); renderProducts();
+  showToast('✦ 商品已更新');
+}
+
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeEditOutside(e) { if (e.target === document.getElementById('editOverlay')) closeEdit(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEdit(); });
+
+function previewImg(input, previewId, urlId) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const prev = document.getElementById(previewId);
+    prev.src = e.target.result; prev.style.display = 'block';
+    document.getElementById(urlId).value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function save() {
+  try { localStorage.setItem('gd_jewelry', JSON.stringify(products)); } catch(e) {}
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// 初始渲染（Firebase 回調前先畫一次）
+renderProducts();
+</script>
+</body>
+</html>
