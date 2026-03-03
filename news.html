@@ -794,6 +794,196 @@
   .pct-bar { flex: 1; height: 6px; background: rgba(201,168,76,0.12); border-radius: 3px; overflow: hidden; min-width: 60px; }
   .pct-fill { height: 100%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
 
+
+  /* ─── INFO MODAL ─── */
+  .info-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 20px;
+    }
+    .info-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .info-modal {
+      background: var(--dark-2);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .info-modal-overlay.open .info-modal {
+      transform: translateY(0) scale(1);
+    }
+    .info-modal::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .info-modal-header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .info-modal-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 16px 32px 0;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .info-modal-tab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .info-modal-tab:hover { border-color: var(--border-strong); color: var(--gold); }
+    .info-modal-tab.active {
+      background: rgba(201,168,76,0.12);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+    .info-modal-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(139,105,20,0.2));
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .info-modal-title-group { flex: 1; }
+    .info-modal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .info-modal-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .info-modal-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .info-modal-close:hover { border-color: var(--gold); color: var(--gold); }
+    .info-modal-body {
+      padding: 28px 32px 32px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .info-modal-body::-webkit-scrollbar { width: 4px; }
+    .info-modal-body::-webkit-scrollbar-track { background: var(--dark-3); }
+    .info-modal-body::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 2px; }
+  
+    .info-section {
+      margin-bottom: 28px;
+    }
+    .info-section:last-child { margin-bottom: 0; }
+    .info-section-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-section p {
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .info-section p:last-child { margin-bottom: 0; }
+    .info-contact-card {
+      background: var(--dark-3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    .info-contact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .info-contact-row:last-child { margin-bottom: 0; }
+    .info-contact-icon {
+      width: 32px; height: 32px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .info-contact-row a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .info-contact-row a:hover { color: var(--gold-light); }
+    .info-highlight {
+      background: rgba(201,168,76,0.06);
+      border-left: 3px solid var(--gold);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin: 12px 0;
+    }
+  
+    /* ─── INFO PANEL hidden/shown ─── */
+    .info-panel { display: none; }
+    .info-panel.active { display: block; }
 </style>
 </head>
 <body>
@@ -945,18 +1135,18 @@
     <div>
       <div class="footer-heading">關於</div>
       <ul class="footer-links">
-        <li><a href="#">關於我們</a></li>
-        <li><a href="/cdn-cgi/l/email-protection#d7b2b9adb3a0bbbbb097b0bab6bebbf9b4b8ba">聯絡我們</a></li>
-        <li><a href="#">隱私政策</a></li>
-        <li><a href="#">服務條款</a></li>
+        <li><a href="#" onclick="openInfoModal('about');return false;">關於我們</a></li>
+        <li><a href="#" onclick="openInfoModal('contact');return false;">聯絡我們</a></li>
+        <li><a href="#" onclick="openInfoModal('privacy');return false;">隱私政策</a></li>
+        <li><a href="#" onclick="openInfoModal('terms');return false;">服務條款</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2025 黃金殿 · 貴金屬投資平台 · <span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span>
     <div class="footer-bottom-links">
-      <a href="#">隱私政策</a>
-      <a href="#">服務條款</a>
+      <a href="#" onclick="openInfoModal('privacy');return false;">隱私政策</a>
+      <a href="#" onclick="openInfoModal('terms');return false;">服務條款</a>
       <a href="/">返回首頁</a>
     </div>
   </div>
@@ -1444,4 +1634,190 @@ onAuthStateChanged(auth, user => {
     document.getElementById('userAvatar').src = user.photoURL || '';
     document.getElementById('userName').textContent = user.displayName || user.email;
   } else {
-    document.getElementById('authButtons').style.display = '
+    document.getElementById('authButtons').style.display = 'flex';
+    document.getElementById('userMenu').style.display = 'none';
+  }
+});
+</script>
+
+
+<!-- INFO MODAL -->
+<div class="info-modal-overlay" id="infoModalOverlay" onclick="closeInfoModalOutside(event)">
+  <div class="info-modal">
+    <div class="info-modal-header">
+      <div style="display:flex;align-items:center;gap:14px;flex:1">
+        <div class="info-modal-icon" id="infoModalIcon">ℹ️</div>
+        <div class="info-modal-title-group">
+          <div class="info-modal-label" id="infoModalLabel">ABOUT</div>
+          <div class="info-modal-title" id="infoModalTitle">關於我們</div>
+        </div>
+      </div>
+      <button class="info-modal-close" onclick="closeInfoModal()">×</button>
+    </div>
+    <div class="info-modal-tabs">
+      <button class="info-modal-tab active" onclick="switchInfoTab('about', this)">關於我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('contact', this)">聯絡我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('privacy', this)">隱私政策</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('terms', this)">服務條款</button>
+    </div>
+    <div class="info-modal-body">
+
+      <!-- 關於我們 -->
+      <div class="info-panel active" id="info-about">
+        <div class="info-section">
+          <div class="info-section-title">我們的使命</div>
+          <p>黃金殿是一個專注於貴金屬投資的資訊平台，致力於為台灣及華語地區投資人提供即時、準確的黃金與貴金屬市場資訊。</p>
+          <p>我們相信，每一位投資人都應該享有專業、透明的市場資訊。從黃金現貨報價到深度投資分析，我們匯聚全球資料，讓您隨時掌握市場動向。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">平台特色</div>
+          <div class="info-highlight">
+            ⚡ 即時金價更新 · 全球主要貴金屬報價每60分鐘同步<br>
+            📊 專業分析工具 · 歷史走勢圖表、技術指標一覽<br>
+            💬 活躍社群討論 · 與數千名投資人交流心得<br>
+            📰 精選投資資訊 · 匯整國內外重要市場新聞
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">免責聲明</div>
+          <p>黃金殿所提供之所有資訊，包含金價行情、分析文章及社群討論內容，均<strong style="color:var(--text)">僅供參考</strong>，不構成任何投資建議或買賣依據。投資貴金屬具有市場風險，請審慎評估自身財務狀況後再作決定。</p>
+        </div>
+      </div>
+
+      <!-- 聯絡我們 -->
+      <div class="info-panel" id="info-contact">
+        <div class="info-section">
+          <div class="info-section-title">與我們聯繫</div>
+          <p>我們非常重視每一位用戶的意見與反饋。無論您有任何建議、問題或合作邀請，歡迎透過以下方式與我們聯繫。</p>
+          <div class="info-contact-card">
+            <div class="info-contact-row">
+              <div class="info-contact-icon">✉️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">客服信箱</div>
+                <a href="mailto:service@goldentemple.tw" style="color:var(--gold)">service@goldentemple.tw</a>
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">🕐</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">服務時間</div>
+                週一至週五 09:00 – 18:00（台灣時間 GMT+8）
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">⏱️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">回覆時效</div>
+                一般查詢通常於 1–3 個工作天內回覆
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">常見聯絡事項</div>
+          <div class="info-highlight">
+            🐛 回報網站問題或錯誤資訊<br>
+            💡 功能建議與改進意見<br>
+            🤝 媒體合作與商業洽談<br>
+            📝 內容授權相關詢問
+          </div>
+        </div>
+      </div>
+
+      <!-- 隱私政策 -->
+      <div class="info-panel" id="info-privacy">
+        <div class="info-section">
+          <div class="info-section-title">資料收集</div>
+          <p>黃金殿（以下稱「本平台」）收集的個人資料包含：您主動提供的帳號資訊（電子郵件、使用者名稱），以及系統自動記錄的瀏覽行為、裝置資訊與 IP 位址等技術資料。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">資料使用目的</div>
+          <p>我們收集的資料用於以下目的：提供並維護平台服務、發送重要服務通知、改善使用者體驗，以及防範詐欺與異常活動。</p>
+          <div class="info-highlight">本平台<strong style="color:var(--text)">不會</strong>將您的個人資料出售給第三方，亦不會用於任何未經授權的商業目的。</div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Cookie 使用</div>
+          <p>本平台使用 Cookie 技術以維持登入狀態、記錄使用偏好，並收集匿名統計數據以改善服務品質。您可透過瀏覽器設定管理或停用 Cookie，但部分功能可能因此受到影響。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">資料安全</div>
+          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="/cdn-cgi/l/email-protection#64010a1e0013080803240309050d084a070b09" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="31545f4b55465d5d5671565c50585d1f525e5c">[email&#160;protected]</span></a>。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">政策更新</div>
+          <p>本隱私政策如有重大變更，我們將於平台顯著位置公告，並寄送通知至您的註冊信箱。繼續使用本平台即視為您同意修訂後之條款。最後更新：2025年1月</p>
+        </div>
+      </div>
+
+      <!-- 服務條款 -->
+      <div class="info-panel" id="info-terms">
+        <div class="info-section">
+          <div class="info-section-title">服務說明</div>
+          <p>黃金殿提供貴金屬市場資訊、投資分析及社群討論等服務。使用本平台即表示您已閱讀並同意以下服務條款。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">會員資格</div>
+          <p>您須年滿 18 歲方可註冊成為本平台會員。每位使用者限申請一個帳號，且須提供真實有效的電子郵件地址。帳號不得轉讓或出借他人使用。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">使用規範</div>
+          <div class="info-highlight">
+            ✅ 允許：分享個人投資經驗、討論市場趨勢、發表合法評論<br>
+            ❌ 禁止：散布虛假資訊、惡意攻擊他人、發布廣告垃圾訊息、從事任何違法行為
+          </div>
+          <p>違反上述規範者，本平台有權在不事先通知的情況下暫停或終止您的帳號。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">免責聲明</div>
+          <p>本平台所有資訊<strong style="color:var(--text)">僅供參考</strong>，不構成投資建議。投資貴金屬具有市場風險，可能導致損失。本平台對因參考本站資訊而產生的任何投資損失不承擔責任。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">智慧財產權</div>
+          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="/cdn-cgi/l/email-protection#87e2e9fde3f0ebebe0c7e0eae6eeeba9e4e8ea" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="35505b4f5142595952755258545c591b565a58">[email&#160;protected]</span></a>。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">條款修訂</div>
+          <p>本平台保留隨時修改服務條款之權利。條款修訂後將於本站公告，請定期查閱。最後更新：2025年1月</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── INFO MODAL ──
+const infoConfig = {
+  about:   { icon: '🏛️', label: 'ABOUT US', title: '關於我們' },
+  contact: { icon: '✉️', label: 'CONTACT',  title: '聯絡我們' },
+  privacy: { icon: '🔒', label: 'PRIVACY',  title: '隱私政策' },
+  terms:   { icon: '📋', label: 'TERMS',    title: '服務條款' },
+};
+function openInfoModal(tab) {
+  switchInfoTab(tab);
+  document.getElementById('infoModalOverlay').classList.add('open');
+}
+function closeInfoModal() {
+  document.getElementById('infoModalOverlay').classList.remove('open');
+}
+function closeInfoModalOutside(e) {
+  if (e.target === document.getElementById('infoModalOverlay')) closeInfoModal();
+}
+function switchInfoTab(tab, clickedBtn) {
+  const cfg = infoConfig[tab];
+  document.getElementById('infoModalIcon').textContent = cfg.icon;
+  document.getElementById('infoModalLabel').textContent = cfg.label;
+  document.getElementById('infoModalTitle').textContent = cfg.title;
+  ['about','contact','privacy','terms'].forEach(t => {
+    document.getElementById('info-'+t).classList.toggle('active', t===tab);
+  });
+  document.querySelectorAll('.info-modal-tab').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'"+tab+"'")) {
+      btn.classList.add('active');
+    }
+  });
+}
+</script>
+</body>
+</html>
