@@ -983,8 +983,186 @@
 // ════════════════════════════════════════
 const articles = [
   {
+    id: 4,
+    title: "黃金地上存量與地下儲藏量全解析：人類迄今共挖出多少黃金？",
+    category: "市場知識",
+    date: "2025.09.07",
+    readTime: "6 分鐘",
+    views: "1.8k",
+    emoji: "🌍",
+    bgColor: "linear-gradient(135deg,#0a0d1a,#141e35,#0a0d1a)",
+    excerpt: "截至2023年底，全球黃金地上存量累計達212,582噸，其中金飾占比最高達45%，央行官方儲備占17%。地下仍埋藏約54,770噸待開採。一文帶您掌握全球黃金存量的完整分佈輪廓。",
+    content: `
+      <p>黃金是地球上最稀有的金屬之一。自數千年前人類首次開採黃金以來，迄今全球累積的<strong>地上存量（Above-Ground Stock）</strong>究竟有多少？這些黃金又分佈在哪些領域？本文根據世界黃金協會（World Gold Council）統計數據，帶您一覽全球黃金的完整存量圖景。</p>
+
+      <h2>地上存量總覽（截至2023年底）</h2>
+      <p>截至2023年底，全球黃金地上存量合計約 <strong>212,582 噸</strong>，涵蓋金飾、投資用金、官方儲備及工業其他用途四大板塊。</p>
+
+      <div style="overflow-x:auto; margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th>板塊</th>
+              <th class="th-num">存量（噸）</th>
+              <th class="th-pct">占比</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd">
+              <td class="td-country">💍 金飾</td>
+              <td class="td-num gold-col">97,149</td>
+              <td class="td-pct">
+                <div class="pct-wrap">
+                  <span class="pct-num">45%</span>
+                  <div class="pct-bar"><div class="pct-fill" style="width:45%"></div></div>
+                </div>
+              </td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">🪙 金條、金幣（含黃金ETF）</td>
+              <td class="td-num gold-col">48,634</td>
+              <td class="td-pct">
+                <div class="pct-wrap">
+                  <span class="pct-num">22%</span>
+                  <div class="pct-bar"><div class="pct-fill" style="width:22%"></div></div>
+                </div>
+              </td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">🏦 官方部門（央行）</td>
+              <td class="td-num gold-col">37,755</td>
+              <td class="td-pct">
+                <div class="pct-wrap">
+                  <span class="pct-num">17%</span>
+                  <div class="pct-bar"><div class="pct-fill" style="width:17%"></div></div>
+                </div>
+              </td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">⚙️ 其他（工業、科技等）</td>
+              <td class="td-num gold-col">32,727</td>
+              <td class="td-pct">
+                <div class="pct-wrap">
+                  <span class="pct-num">15%</span>
+                  <div class="pct-bar"><div class="pct-fill" style="width:15%"></div></div>
+                </div>
+              </td>
+            </tr>
+            <tr class="tr-odd" style="border-top:1px solid rgba(201,168,76,0.3)">
+              <td class="td-country" style="font-weight:700;color:var(--gold-light)">地上存量合計</td>
+              <td class="td-num" style="font-weight:700;color:var(--gold-light)">212,582</td>
+              <td class="td-pct">
+                <div class="pct-wrap">
+                  <span class="pct-num" style="color:var(--gold-light)">100%</span>
+                  <div class="pct-bar"><div class="pct-fill" style="width:100%"></div></div>
+                </div>
+              </td>
+            </tr>
+            <tr style="background:rgba(20,30,53,0.6)">
+              <td class="td-country" style="color:var(--text-muted)">⛏️ 地下儲藏量（待開採）</td>
+              <td class="td-num" style="color:var(--text-muted)">~54,770</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num" style="color:var(--text-dim)">參考值</span><div class="pct-bar"><div class="pct-fill" style="width:20.5%;background:linear-gradient(90deg,#2a3a5a,#4a6a9a)"></div></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>各板塊深度解讀</h2>
+      <p><strong>① 金飾（45%，97,149噸）</strong>——是黃金最大的應用場域，數千年來人類對黃金首飾的喜愛從未消退。印度與中國是全球最大的金飾消費國，兩者合計占全球金飾需求的50%以上。金飾雖為「已使用」狀態，但其高純度特性使其具備極高的回收再利用價值。</p>
+      <p><strong>② 金條與金幣（含ETF，22%，48,634噸）</strong>——代表全球投資人持有的實物與金融化黃金資產。近年黃金ETF的普及大幅降低了投資門檻，使更多散戶投資人得以參與黃金市場，這一板塊的存量在過去二十年間顯著成長。</p>
+      <p><strong>③ 央行官方儲備（17%，37,755噸）</strong>——反映全球各國政府與央行持有的黃金。自2010年起，全球央行由淨賣出轉為淨買入，近年更加速購金，持續強化黃金作為國際儲備貨幣的地位。</p>
+      <p><strong>④ 其他用途（15%，32,727噸）</strong>——主要涵蓋電子、航太、醫療及牙科等工業應用，以及部分難以分類的存量。黃金優異的導電性與抗腐蝕性，使其在高科技產業中扮演不可替代的角色。</p>
+
+      <h2>地下儲藏量：還有多少黃金等待開採？</h2>
+      <p>目前全球已探明的黃金地下儲藏量估計約為 <strong>54,770 噸</strong>。這意味著，若以目前的開採速度持續，全球已知黃金礦藏將在約15至20年內逐漸耗盡，黃金的天然稀缺性將進一步凸顯。值得注意的是，隨著勘探技術進步，新礦藏仍有機會被發現，但高品位礦床的發現難度已大幅提升。</p>
+
+      <div class="highlight">
+        💡 稀缺性是黃金長期價值的核心支撐。地上存量212,582噸加上地下儲藏量約54,770噸，代表人類可掌握的黃金總量上限約為267,000噸——若全部熔鑄，僅能填滿約3.5座奧運標準游泳池。本文所有內容均<strong>僅供參考</strong>，不構成任何投資建議。
+      </div>
+    `
+  },
+  {
+    id: 3,
+    title: "全球黃金供應與需求",
+    category: "數據報告",
+    date: "2025.09.07",
+    readTime: "10 分鐘",
+    views: "2.1k",
+    emoji: "⚖️",
+    bgColor: "linear-gradient(135deg,#1a0d06,#2e1a00,#1a0d06)",
+    excerpt: "世界黃金協會最新數據顯示，2025年三季度黃金總供應量達1,313噸，年增3%；總需求同步攀升至1,314噸，投資需求年增高達47%，ETF淨流入更較去年同期暴增134%。倫敦金均價報3,456美元，年漲40%。",
+    content: `
+      <p>根據世界黃金協會（World Gold Council）最新發布的季度報告，2025年第三季度全球黃金市場供需兩端同步擴張，在高金價環境下，投資需求成為最強勁的成長動能，而金飾需求則因價格壓力出現明顯回落。本文彙整完整數據，供投資人全面掌握市場脈絡。</p>
+
+      <div class="highlight">
+        💡 數據說明：本表數據來源為世界黃金協會季度供需統計，單位為公噸（噸）。季度環比為2025年三季度相較二季度之變化；年度同比為2025年三季度相較2024年三季度之變化。本文所有內容均<strong>僅供參考</strong>，不構成任何投資建議。
+      </div>
+
+      <h2>表1：全球黃金季度供需各板塊情況（單位：噸）</h2>
+
+      <div style="overflow-x:auto; margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:160px">項目</th>
+              <th class="th-num">2024<br>三季度</th>
+              <th class="th-num">2024<br>四季度</th>
+              <th class="th-num">2025<br>一季度</th>
+              <th class="th-num">2025<br>二季度</th>
+              <th class="th-num">2025<br>三季度</th>
+              <th class="th-num" style="color:var(--gold-light)">季度環比<br>(%)</th>
+              <th class="th-num" style="color:var(--gold-light)">年度同比<br>(%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="8" style="background:linear-gradient(90deg,#1a1206,#2a1e08);color:var(--gold);font-size:11px;letter-spacing:2px;padding:10px 14px;font-weight:500;">▌ 黃金供應量</td></tr>
+            <tr class="tr-odd"><td class="td-country">金礦產量</td><td class="td-num">957.6</td><td class="td-num">957.6</td><td class="td-num">835.9</td><td class="td-num">904.3</td><td class="td-num gold-col">976.6</td><td class="td-num">8</td><td class="td-num">2</td></tr>
+            <tr class="tr-even"><td class="td-country">生產商淨套保量</td><td class="td-num">-6.5</td><td class="td-num">-18.5</td><td class="td-num">-7.1</td><td class="td-num">-24.8</td><td class="td-num gold-col">-8.0</td><td class="td-num td-dim">—</td><td class="td-num td-dim">—</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="font-weight:600">金礦總供應量</td><td class="td-num">951.1</td><td class="td-num">926.4</td><td class="td-num">828.8</td><td class="td-num">879.4</td><td class="td-num gold-col">968.6</td><td class="td-num">10</td><td class="td-num">2</td></tr>
+            <tr class="tr-even"><td class="td-country">回收金</td><td class="td-num">324.8</td><td class="td-num">358.1</td><td class="td-num">348.7</td><td class="td-num">347.4</td><td class="td-num gold-col">344.4</td><td class="td-num">-1</td><td class="td-num">6</td></tr>
+            <tr class="tr-odd" style="border-top:1px solid rgba(201,168,76,0.3)"><td class="td-country" style="font-weight:700;color:var(--gold-light)">總供應量</td><td class="td-num">1,275.9</td><td class="td-num">1,284.4</td><td class="td-num">1,177.5</td><td class="td-num">1,226.8</td><td class="td-num gold-col">1,313.1</td><td class="td-num">7</td><td class="td-num">3</td></tr>
+
+            <tr><td colspan="8" style="background:linear-gradient(90deg,#1a1206,#2a1e08);color:var(--gold);font-size:11px;letter-spacing:2px;padding:10px 14px;font-weight:500;">▌ 黃金需求量</td></tr>
+            <tr class="tr-even"><td class="td-country">金飾製造</td><td class="td-num">546.5</td><td class="td-num">524.3</td><td class="td-num">424.4</td><td class="td-num">355.6</td><td class="td-num gold-col">419.2</td><td class="td-num">18</td><td class="td-num" style="color:#FCA5A5">-23</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 金飾消費</td><td class="td-num">460.0</td><td class="td-num">548.7</td><td class="td-num">382.4</td><td class="td-num">341.2</td><td class="td-num gold-col">371.3</td><td class="td-num">9</td><td class="td-num" style="color:#FCA5A5">-19</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 金飾庫存</td><td class="td-num">86.6</td><td class="td-num">-24.4</td><td class="td-num">42.0</td><td class="td-num">14.4</td><td class="td-num gold-col">47.8</td><td class="td-num">232</td><td class="td-num" style="color:#FCA5A5">-45</td></tr>
+            <tr class="tr-odd"><td class="td-country">科技用金</td><td class="td-num">82.9</td><td class="td-num">82.8</td><td class="td-num">80.4</td><td class="td-num">78.6</td><td class="td-num gold-col">81.7</td><td class="td-num">4</td><td class="td-num" style="color:#FCA5A5">-2</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 電子用金</td><td class="td-num">69.1</td><td class="td-num">68.8</td><td class="td-num">67.0</td><td class="td-num">65.8</td><td class="td-num gold-col">68.5</td><td class="td-num">4</td><td class="td-num" style="color:#FCA5A5">-1</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 其他工業用金</td><td class="td-num">11.6</td><td class="td-num">11.9</td><td class="td-num">11.3</td><td class="td-num">10.8</td><td class="td-num gold-col">11.1</td><td class="td-num">3</td><td class="td-num" style="color:#FCA5A5">-5</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 牙科用金</td><td class="td-num">2.2</td><td class="td-num">2.1</td><td class="td-num">2.1</td><td class="td-num">2.1</td><td class="td-num gold-col">2.0</td><td class="td-num">-1</td><td class="td-num" style="color:#FCA5A5">-7</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="font-weight:600">投資需求</td><td class="td-num">364.8</td><td class="td-num">343.4</td><td class="td-num">551.5</td><td class="td-num">477.5</td><td class="td-num gold-col">537.2</td><td class="td-num" style="color:#6EE7B7">13</td><td class="td-num" style="color:#6EE7B7">47</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 金條與金幣總需求</td><td class="td-num">270.1</td><td class="td-num">324.7</td><td class="td-num">324.9</td><td class="td-num">307.0</td><td class="td-num gold-col">315.5</td><td class="td-num">3</td><td class="td-num" style="color:#6EE7B7">17</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:44px;font-size:11px;color:var(--text-dim)">金條</td><td class="td-num">198.8</td><td class="td-num">236.4</td><td class="td-num">258.0</td><td class="td-num">243.3</td><td class="td-num gold-col">237.1</td><td class="td-num">-3</td><td class="td-num" style="color:#6EE7B7">19</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:44px;font-size:11px;color:var(--text-dim)">官方金幣</td><td class="td-num">31.6</td><td class="td-num">52.5</td><td class="td-num">44.3</td><td class="td-num">38.9</td><td class="td-num gold-col">31.7</td><td class="td-num">-18</td><td class="td-num">0</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:44px;font-size:11px;color:var(--text-dim)">獎章／仿製金幣</td><td class="td-num">39.8</td><td class="td-num">35.8</td><td class="td-num">22.7</td><td class="td-num">24.8</td><td class="td-num gold-col">46.7</td><td class="td-num" style="color:#6EE7B7">89</td><td class="td-num" style="color:#6EE7B7">17</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:28px;font-size:12px;color:var(--text-muted)">└ 黃金ETF及類似產品</td><td class="td-num">94.7</td><td class="td-num">18.7</td><td class="td-num">226.6</td><td class="td-num">170.5</td><td class="td-num gold-col">221.7</td><td class="td-num" style="color:#6EE7B7">30</td><td class="td-num" style="color:#6EE7B7">134</td></tr>
+            <tr class="tr-odd"><td class="td-country">各經濟體央行及其他機構</td><td class="td-num">199.5</td><td class="td-num">365.1</td><td class="td-num">241.7</td><td class="td-num">172.0</td><td class="td-num gold-col">219.9</td><td class="td-num" style="color:#6EE7B7">28</td><td class="td-num" style="color:#6EE7B7">10</td></tr>
+            <tr class="tr-even"><td class="td-country" style="font-weight:600">黃金需求</td><td class="td-num">1,193.8</td><td class="td-num">1,315.6</td><td class="td-num">1,298.0</td><td class="td-num">1,083.8</td><td class="td-num gold-col">1,257.9</td><td class="td-num" style="color:#6EE7B7">16</td><td class="td-num" style="color:#6EE7B7">5</td></tr>
+            <tr class="tr-odd"><td class="td-country">場外交易及其他需求</td><td class="td-num">82.3</td><td class="td-num">-31.2</td><td class="td-num">-120.5</td><td class="td-num">143.1</td><td class="td-num gold-col">55.2</td><td class="td-num">-61</td><td class="td-num" style="color:#FCA5A5">-33</td></tr>
+            <tr class="tr-even" style="border-top:1px solid rgba(201,168,76,0.3)"><td class="td-country" style="font-weight:700;color:var(--gold-light)">總需求量</td><td class="td-num">1,275.9</td><td class="td-num">1,284.4</td><td class="td-num">1,177.5</td><td class="td-num">1,226.8</td><td class="td-num gold-col">1,313.1</td><td class="td-num">7</td><td class="td-num">3</td></tr>
+
+            <tr><td colspan="8" style="background:linear-gradient(90deg,#1a1206,#2a1e08);color:var(--gold);font-size:11px;letter-spacing:2px;padding:10px 14px;font-weight:500;">▌ 金價參考</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="font-weight:600">倫敦金（LBMA）價格<br><span style="font-size:11px;font-weight:400;color:var(--text-dim)">美元／盎司</span></td><td class="td-num">2,474.3</td><td class="td-num">2,663.4</td><td class="td-num">2,859.6</td><td class="td-num">3,280.4</td><td class="td-num gold-col" style="font-size:15px;font-weight:700">3,456.5</td><td class="td-num" style="color:#6EE7B7">5</td><td class="td-num" style="color:#6EE7B7;font-weight:600">40</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>三大關鍵趨勢解讀</h2>
+      <p><strong>① 投資需求成為最大亮點。</strong>2025年三季度投資需求達537噸，年增47%，其中黃金ETF淨流入221.7噸，較去年同期暴增134%，顯示機構與散戶投資人在高金價環境下仍持續加碼布局。</p>
+      <p><strong>② 金飾需求承壓明顯。</strong>金飾製造量年減23%，消費端降至371噸，反映金價攀升至3,456美元後，消費者對實物黃金的購買意願受到顯著抑制，尤以印度、中國市場反應最為敏感。</p>
+      <p><strong>③ 央行購金維持積極步調。</strong>各經濟體央行本季購入220噸，年增10%，延續近年來的持續增持趨勢，顯示各國對黃金作為儲備資產的長期信心並未因高金價而動搖。</p>
+
+      <h2>金價展望</h2>
+      <p>倫敦金本季均價報3,456.5美元，較去年同期大幅上漲40%。在聯準會降息預期、地緣政治風險與央行持續購金的三重支撐下，市場普遍看好黃金後市，部分機構已將年底目標價上調至3,600至3,800美元區間。然而，若全球風險情緒顯著改善或美元大幅走強，則需留意短線修正壓力。</p>
+
+      <div class="highlight">
+        ⚠️ 風險提示：黃金投資涉及價格波動風險，過去表現不代表未來結果。本報告所有數據及分析內容均<strong>僅供參考</strong>，不構成任何形式之投資建議。投資前請評估自身風險承受能力。
+      </div>
+    `
+  },
+  {
     id: 2,
-    title: "全球央行黃金儲備完整數據：48國持有量、占比一次看清",
+    title: "全球央行黃金儲備",
     category: "數據報告",
     date: "2025.03.03",
     readTime: "8 分鐘",
