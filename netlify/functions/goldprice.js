@@ -1,7 +1,7 @@
 exports.handler = async function(event, context) {
   try {
     const TWELVE_KEY = 'b6fd78d95ff449908dfb3775e05700fc';
-    const METALS_KEY = 'YGJ3VJ488NUZMFTMFI58685TMFI58';
+    const METALS_KEY = 'JYZDGVVUENM3J9IQQWNU130IQQWNU';
 
     const [resGold, resSilver] = await Promise.all([
       fetch(`https://api.twelvedata.com/price?symbol=XAU/USD&apikey=${TWELVE_KEY}`),
