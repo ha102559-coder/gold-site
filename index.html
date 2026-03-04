@@ -1695,9 +1695,10 @@ function renderPrice(data) {
 
 async function fetchGoldPrice() {
   try {
-    const res = await fetch('/.netlify/functions/goldprice');
+    const res = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
+    const raw = await res.json();
+    const data = { metals: { XAU: raw.items[0].xauPrice, XAG: raw.items[0].xagPrice, XPT: raw.items[0].xauPrice * 0.92, XPD: raw.items[0].xauPrice * 0.60 } };
     renderPrice(data);
   } catch(err) {
     console.error('金價API錯誤:', err);
