@@ -1695,15 +1695,8 @@ function renderPrice(data) {
 
 async function fetchGoldPrice() {
   try {
-    const [resGold, resSilver] = await Promise.all([
-      fetch('https://api.twelvedata.com/price?symbol=XAU/USD&apikey=b6fd78d95ff449908dfb3775e05700fc'),
-      fetch('https://api.twelvedata.com/price?symbol=XAG/USD&apikey=b6fd78d95ff449908dfb3775e05700fc')
-    ]);
-    const rawGold = await resGold.json();
-    const rawSilver = await resSilver.json();
-    const gold = parseFloat(rawGold.price);
-    const silver = parseFloat(rawSilver.price);
-    const data = { metals: { XAU: gold, XAG: silver, XPT: gold * 0.92, XPD: gold * 0.60 }};
+    const res = await fetch('/.netlify/functions/goldprice');
+    const data = await res.json();
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     renderPrice(data);
   } catch(err) {
