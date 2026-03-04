@@ -12,7 +12,7 @@ exports.handler = async function(event, context) {
     const rawSilver = await resSilver.json();
 
     const gold = parseFloat(rawGold.price);
-    const silver = rawSilver.metals?.XAG || rawSilver.metals?.silver;
+    const silver = rawSilver.metals.XAG;
 
     return {
       statusCode: 200,
