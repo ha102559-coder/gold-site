@@ -807,10 +807,11 @@ function renderMarketPrice(data) {
 
 async function fetchMarketPrice() {
   try {
-    const res = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const res = await fetch('https://api.twelvedata.com/price?symbol=XAU/USD&apikey=b6fd78d95ff449908dfb3775e05700fc');
     const raw = await res.json();
-    const data = { metals: { XAU: raw.items[0].xauPrice, XAG: raw.items[0].xagPrice } };
+    const gold = parseFloat(raw.price);
+    const data = { metals: { XAU: gold, XAG: gold * 0.013 }};
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     renderMarketPrice(data);
   } catch(err) {
     console.error('金價API錯誤:', err);
