@@ -13,6 +13,8 @@ exports.handler = async function(event, context) {
 
     const gold = parseFloat(rawGold.price);
     const silver = rawSilver.metals.XAG;
+    const platinum = rawSilver.metals.XPT;
+    const palladium = rawSilver.metals.XPD;
 
     return {
       statusCode: 200,
@@ -25,8 +27,8 @@ exports.handler = async function(event, context) {
         metals: {
           XAU: gold,
           XAG: silver,
-          XPT: gold * 0.92,
-          XPD: gold * 0.60
+          XPT: platinum,
+          XPD: palladium
         }
       })
     };
