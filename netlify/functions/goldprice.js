@@ -16,7 +16,7 @@ exports.handler = async function(event, context) {
     );
     const rawSilver = await resSilver.json();
     console.log('Silver response:', JSON.stringify(rawSilver));
-    const silver = parseFloat(rawSilver.XAG);
+    const silver = parseFloat(rawSilver.metals.silver);
     return {
       statusCode: 200,
       headers: {
