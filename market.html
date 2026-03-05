@@ -124,6 +124,36 @@
   nav a.active { color: var(--gold-light); }
   nav a.active::after { transform: scaleX(1); }
 
+  /* ─── LANG SWITCHER ─── */
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+    margin-right: 10px;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 11px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color: var(--obsidian);
+  }
+  .lang-btn:hover:not(.active) { color: var(--gold); }
+
   .btn-back {
     background: transparent;
     border: 1px solid var(--border-strong);
@@ -434,13 +464,19 @@
       </div>
     </a>
     <nav>
-      <a href="/" >國際金價</a>
-      <a href="#" class="active">完整行情</a>
-      <a href="/jewelry.html">黃金飾品</a>
-      <a href="/market.html">投資訊息</a>
-      <a href="/forum">討論區</a>
+      <a href="/" data-i18n="nav_price">國際金價</a>
+      <a href="#" class="active" data-i18n="nav_market">完整行情</a>
+      <a href="/jewelry.html" data-i18n="nav_jewelry">黃金飾品</a>
+      <a href="/news.html" data-i18n="nav_news">投資訊息</a>
+      <a href="/forum" data-i18n="nav_forum">討論區</a>
     </nav>
-    <a href="/" class="btn-back">← 返回首頁</a>
+    <div style="display:flex;align-items:center;">
+      <div class="lang-switcher">
+        <button class="lang-btn active" id="langZH" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" id="langEN" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="/" class="btn-back" data-i18n="btn_back">← 返回首頁</a>
+    </div>
   </div>
 </header>
 
@@ -448,14 +484,14 @@
 <div class="page-hero">
   <div class="page-hero-inner">
     <div class="page-breadcrumb">
-      <a href="/">黃金殿</a> &nbsp;/&nbsp; 完整行情
+      <a href="/" data-i18n="breadcrumb_home">黃金殿</a> &nbsp;/&nbsp; <span data-i18n="nav_market">完整行情</span>
     </div>
     <div class="page-title-row">
       <div>
         <div class="page-label">MARKET DATA</div>
-        <div class="page-title">貴金屬完整行情</div>
+        <div class="page-title" data-i18n="page_title">貴金屬完整行情</div>
       </div>
-      <div style="font-size:11px;color:var(--text-dim);letter-spacing:1px;" id="lastUpdate">資料載入中…</div>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:1px;" id="lastUpdate" data-i18n="loading">資料載入中…</div>
     </div>
 
     <!-- 金屬選擇分頁 -->
@@ -463,14 +499,14 @@
       <button class="metal-tab active" id="tab-gold" onclick="switchMetal('gold')">
         <div class="metal-tab-icon" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#000;">Au</div>
         <div>
-          <div>黃金 XAU/USD</div>
+          <div data-i18n="tab_gold">黃金 XAU/USD</div>
           <div class="metal-tab-price" id="tab-gold-price">$3,285.40</div>
         </div>
       </button>
       <button class="metal-tab" id="tab-silver" onclick="switchMetal('silver')">
         <div class="metal-tab-icon" style="background:linear-gradient(135deg,#C0C0C0,#808080);color:#111;">Ag</div>
         <div>
-          <div>白銀 XAG/USD</div>
+          <div data-i18n="tab_silver">白銀 XAG/USD</div>
           <div class="metal-tab-price" id="tab-silver-price">$32.84</div>
         </div>
       </button>
@@ -487,29 +523,29 @@
     <!-- 統計卡 -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-label">現貨價格</div>
+        <div class="stat-label" data-i18n="stat_spot">現貨價格</div>
         <div class="stat-value" id="g-price">3,285.40</div>
-        <div class="stat-sub">USD / 盎司</div>
+        <div class="stat-sub" data-i18n="stat_usd_oz">USD / 盎司</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">今日漲跌</div>
+        <div class="stat-label" data-i18n="stat_change">今日漲跌</div>
         <div class="stat-value up" id="g-change">▲ +12.30</div>
         <div class="stat-sub" id="g-changepct">(+0.38%)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">今日最高</div>
+        <div class="stat-label" data-i18n="stat_high">今日最高</div>
         <div class="stat-value" id="g-high">3,298.70</div>
-        <div class="stat-sub">USD / 盎司</div>
+        <div class="stat-sub" data-i18n="stat_usd_oz">USD / 盎司</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">今日最低</div>
+        <div class="stat-label" data-i18n="stat_low">今日最低</div>
         <div class="stat-value" id="g-low">3,270.20</div>
-        <div class="stat-sub">USD / 盎司</div>
+        <div class="stat-sub" data-i18n="stat_usd_oz">USD / 盎司</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">台灣牌價</div>
+        <div class="stat-label" data-i18n="stat_tw_price">台灣牌價</div>
         <div class="stat-value" style="font-size:18px;">NT$3,371</div>
-        <div class="stat-sub">每公克</div>
+        <div class="stat-sub" data-i18n="stat_per_gram">每公克</div>
       </div>
     </div>
 
@@ -517,41 +553,41 @@
     <div class="chart-block">
       <div class="chart-block-header">
         <div>
-          <div class="chart-block-title">黃金 XAU/USD 走勢圖</div>
-          <div class="chart-block-sub">OANDA · 即時報價 · 台北時區</div>
+          <div class="chart-block-title" data-i18n="gold_chart_title">黃金 XAU/USD 走勢圖</div>
+          <div class="chart-block-sub" data-i18n="chart_sub">OANDA · 即時報價 · 台北時區</div>
         </div>
         <div class="period-tabs" id="gold-period-tabs">
-          <button class="period-tab active" onclick="setGoldPeriod('1D','15',this)">1日</button>
-          <button class="period-tab" onclick="setGoldPeriod('1W','60',this)">1週</button>
-          <button class="period-tab" onclick="setGoldPeriod('1M','240',this)">1個月</button>
-          <button class="period-tab" onclick="setGoldPeriod('3M','D',this)">3個月</button>
-          <button class="period-tab" onclick="setGoldPeriod('12M','W',this)">1年</button>
-          <button class="period-tab" onclick="setGoldPeriod('60M','M',this)">5年</button>
+          <button class="period-tab active" onclick="setGoldPeriod('1D','15',this)" data-i18n="p1d">1日</button>
+          <button class="period-tab" onclick="setGoldPeriod('1W','60',this)" data-i18n="p1w">1週</button>
+          <button class="period-tab" onclick="setGoldPeriod('1M','240',this)" data-i18n="p1m">1個月</button>
+          <button class="period-tab" onclick="setGoldPeriod('3M','D',this)" data-i18n="p3m">3個月</button>
+          <button class="period-tab" onclick="setGoldPeriod('12M','W',this)" data-i18n="p1y">1年</button>
+          <button class="period-tab" onclick="setGoldPeriod('60M','M',this)" data-i18n="p5y">5年</button>
         </div>
       </div>
       <div class="chart-embed">
         <div id="tv-gold"></div>
       </div>
-      <div class="chart-footer">圖表數據由 <a href="https://www.tradingview.com/" target="_blank">TradingView</a> 提供 · 僅供參考</div>
+      <div class="chart-footer" data-i18n="chart_footer">圖表數據由 <a href="https://www.tradingview.com/" target="_blank">TradingView</a> 提供 · 僅供參考</div>
     </div>
 
     <!-- 基本資訊 -->
     <div class="info-grid">
       <div class="info-card">
-        <div class="info-card-title">黃金基本資訊</div>
-        <div class="info-row"><span class="info-row-label">交易代號</span><span class="info-row-val">XAU/USD</span></div>
-        <div class="info-row"><span class="info-row-label">計價單位</span><span class="info-row-val">美元 / 金衡盎司</span></div>
-        <div class="info-row"><span class="info-row-label">1盎司 = </span><span class="info-row-val">31.1035 公克</span></div>
-        <div class="info-row"><span class="info-row-label">主要交易所</span><span class="info-row-val">COMEX · LBMA</span></div>
-        <div class="info-row"><span class="info-row-label">交易時間</span><span class="info-row-val">週一至週五 24小時</span></div>
+        <div class="info-card-title" data-i18n="gold_info_title">黃金基本資訊</div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_ticker">交易代號</span><span class="info-row-val">XAU/USD</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_unit">計價單位</span><span class="info-row-val" data-i18n="info_unit_val_gold">美元 / 金衡盎司</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_1oz">1盎司 = </span><span class="info-row-val">31.1035 <span data-i18n="info_gram">公克</span></span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_exchange">主要交易所</span><span class="info-row-val">COMEX · LBMA</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_hours">交易時間</span><span class="info-row-val" data-i18n="info_hours_val">週一至週五 24小時</span></div>
       </div>
       <div class="info-card">
-        <div class="info-card-title">台灣黃金投資管道</div>
-        <div class="info-row"><span class="info-row-label">黃金存摺</span><span class="info-row-val">台銀、土銀、兆豐等</span></div>
+        <div class="info-card-title" data-i18n="gold_invest_title">台灣黃金投資管道</div>
+        <div class="info-row"><span class="info-row-label" data-i18n="gold_passbook">黃金存摺</span><span class="info-row-val" data-i18n="gold_passbook_val">台銀、土銀、兆豐等</span></div>
         <div class="info-row"><span class="info-row-label">黃金ETF</span><span class="info-row-val">00635U（元大黃金）</span></div>
-        <div class="info-row"><span class="info-row-label">實體黃金</span><span class="info-row-val">金條、金幣、金飾</span></div>
-        <div class="info-row"><span class="info-row-label">黃金期貨</span><span class="info-row-val">台灣期交所 TGF</span></div>
-        <div class="info-row"><span class="info-row-label">海外ETF</span><span class="info-row-val">GLD · IAU（美股）</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="gold_physical">實體黃金</span><span class="info-row-val" data-i18n="gold_physical_val">金條、金幣、金飾</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="gold_futures">黃金期貨</span><span class="info-row-val" data-i18n="gold_futures_val">台灣期交所 TGF</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="gold_overseas_etf">海外ETF</span><span class="info-row-val">GLD · IAU（美股）</span></div>
       </div>
     </div>
 
@@ -563,29 +599,29 @@
     <!-- 統計卡 -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-label">現貨價格</div>
+        <div class="stat-label" data-i18n="stat_spot">現貨價格</div>
         <div class="stat-value" id="s-price">32.84</div>
-        <div class="stat-sub">USD / 盎司</div>
+        <div class="stat-sub" data-i18n="stat_usd_oz">USD / 盎司</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">今日漲跌</div>
+        <div class="stat-label" data-i18n="stat_change">今日漲跌</div>
         <div class="stat-value up" id="s-change">▲ +0.52</div>
         <div class="stat-sub" id="s-changepct">(+1.61%)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">今日最高</div>
+        <div class="stat-label" data-i18n="stat_high">今日最高</div>
         <div class="stat-value" id="s-high">33.10</div>
-        <div class="stat-sub">USD / 盎司</div>
+        <div class="stat-sub" data-i18n="stat_usd_oz">USD / 盎司</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">今日最低</div>
+        <div class="stat-label" data-i18n="stat_low">今日最低</div>
         <div class="stat-value" id="s-low">32.45</div>
-        <div class="stat-sub">USD / 盎司</div>
+        <div class="stat-sub" data-i18n="stat_usd_oz">USD / 盎司</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">金銀比</div>
+        <div class="stat-label" data-i18n="stat_ratio">金銀比</div>
         <div class="stat-value" style="font-size:18px;" id="gold-silver-ratio">—</div>
-        <div class="stat-sub">黃金 ÷ 白銀</div>
+        <div class="stat-sub" data-i18n="stat_ratio_sub">黃金 ÷ 白銀</div>
       </div>
     </div>
 
@@ -593,56 +629,144 @@
     <div class="chart-block">
       <div class="chart-block-header">
         <div>
-          <div class="chart-block-title">白銀 XAG/USD 走勢圖</div>
-          <div class="chart-block-sub">OANDA · 即時報價 · 台北時區</div>
+          <div class="chart-block-title" data-i18n="silver_chart_title">白銀 XAG/USD 走勢圖</div>
+          <div class="chart-block-sub" data-i18n="chart_sub">OANDA · 即時報價 · 台北時區</div>
         </div>
         <div class="period-tabs" id="silver-period-tabs">
-          <button class="period-tab active" onclick="setSilverPeriod('1D','15',this)">1日</button>
-          <button class="period-tab" onclick="setSilverPeriod('1W','60',this)">1週</button>
-          <button class="period-tab" onclick="setSilverPeriod('1M','240',this)">1個月</button>
-          <button class="period-tab" onclick="setSilverPeriod('3M','D',this)">3個月</button>
-          <button class="period-tab" onclick="setSilverPeriod('12M','W',this)">1年</button>
-          <button class="period-tab" onclick="setSilverPeriod('60M','M',this)">5年</button>
+          <button class="period-tab active" onclick="setSilverPeriod('1D','15',this)" data-i18n="p1d">1日</button>
+          <button class="period-tab" onclick="setSilverPeriod('1W','60',this)" data-i18n="p1w">1週</button>
+          <button class="period-tab" onclick="setSilverPeriod('1M','240',this)" data-i18n="p1m">1個月</button>
+          <button class="period-tab" onclick="setSilverPeriod('3M','D',this)" data-i18n="p3m">3個月</button>
+          <button class="period-tab" onclick="setSilverPeriod('12M','W',this)" data-i18n="p1y">1年</button>
+          <button class="period-tab" onclick="setSilverPeriod('60M','M',this)" data-i18n="p5y">5年</button>
         </div>
       </div>
       <div class="chart-embed">
         <div id="tv-silver"></div>
       </div>
-      <div class="chart-footer">圖表數據由 <a href="https://www.tradingview.com/" target="_blank">TradingView</a> 提供 · 僅供參考</div>
+      <div class="chart-footer" data-i18n="chart_footer">圖表數據由 <a href="https://www.tradingview.com/" target="_blank">TradingView</a> 提供 · 僅供參考</div>
     </div>
 
     <!-- 基本資訊 -->
     <div class="info-grid">
       <div class="info-card">
-        <div class="info-card-title">白銀基本資訊</div>
-        <div class="info-row"><span class="info-row-label">交易代號</span><span class="info-row-val">XAG/USD</span></div>
-        <div class="info-row"><span class="info-row-label">計價單位</span><span class="info-row-val">美元 / 金衡盎司</span></div>
-        <div class="info-row"><span class="info-row-label">工業用途佔比</span><span class="info-row-val">約 60%</span></div>
-        <div class="info-row"><span class="info-row-label">主要交易所</span><span class="info-row-val">COMEX · LBMA</span></div>
-        <div class="info-row"><span class="info-row-label">交易時間</span><span class="info-row-val">週一至週五 24小時</span></div>
+        <div class="info-card-title" data-i18n="silver_info_title">白銀基本資訊</div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_ticker">交易代號</span><span class="info-row-val">XAG/USD</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_unit">計價單位</span><span class="info-row-val" data-i18n="info_unit_val_gold">美元 / 金衡盎司</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_industrial">工業用途佔比</span><span class="info-row-val" data-i18n="info_industrial_val">約 60%</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_exchange">主要交易所</span><span class="info-row-val">COMEX · LBMA</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="info_hours">交易時間</span><span class="info-row-val" data-i18n="info_hours_val">週一至週五 24小時</span></div>
       </div>
       <div class="info-card">
-        <div class="info-card-title">台灣白銀投資管道</div>
-        <div class="info-row"><span class="info-row-label">白銀存摺</span><span class="info-row-val">台灣銀行</span></div>
-        <div class="info-row"><span class="info-row-label">實體白銀</span><span class="info-row-val">銀條、銀幣</span></div>
-        <div class="info-row"><span class="info-row-label">海外ETF</span><span class="info-row-val">SLV · SIVR（美股）</span></div>
-        <div class="info-row"><span class="info-row-label">期貨</span><span class="info-row-val">COMEX 白銀期貨 SI</span></div>
-        <div class="info-row"><span class="info-row-label">特性</span><span class="info-row-val">波動較黃金大</span></div>
+        <div class="info-card-title" data-i18n="silver_invest_title">台灣白銀投資管道</div>
+        <div class="info-row"><span class="info-row-label" data-i18n="silver_passbook">白銀存摺</span><span class="info-row-val" data-i18n="silver_passbook_val">台灣銀行</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="silver_physical">實體白銀</span><span class="info-row-val" data-i18n="silver_physical_val">銀條、銀幣</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="gold_overseas_etf">海外ETF</span><span class="info-row-val">SLV · SIVR（美股）</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="silver_futures">期貨</span><span class="info-row-val" data-i18n="silver_futures_val">COMEX 白銀期貨 SI</span></div>
+        <div class="info-row"><span class="info-row-label" data-i18n="silver_char">特性</span><span class="info-row-val" data-i18n="silver_char_val">波動較黃金大</span></div>
       </div>
     </div>
 
   </div>
 
   <!-- 免責聲明 -->
-  <div class="disclaimer">
+  <div class="disclaimer" data-i18n="disclaimer">
     ⚠️ 本頁所有資訊僅供參考，不構成任何投資建議或買賣依據。貴金屬投資具有市場風險，價格可能大幅波動，投資前請審慎評估自身財務狀況與風險承受能力。
   </div>
 
 </div>
 
-<div class="page-footer">
+<div class="page-footer" data-i18n="page_footer">
   © 2025 黃金殿 · 貴金屬投資平台 &nbsp;·&nbsp; 資料僅供參考，不構成投資建議
 </div>
+
+<script>
+// ── 多語言 i18n ──
+const i18n = {
+  zh: {
+    nav_price:'國際金價', nav_market:'完整行情', nav_jewelry:'黃金飾品', nav_news:'投資訊息', nav_forum:'討論區',
+    btn_back:'← 返回首頁',
+    breadcrumb_home:'黃金殿',
+    page_title:'貴金屬完整行情',
+    loading:'資料載入中…',
+    tab_gold:'黃金 XAU/USD', tab_silver:'白銀 XAG/USD',
+    stat_spot:'現貨價格', stat_change:'今日漲跌', stat_high:'今日最高', stat_low:'今日最低',
+    stat_usd_oz:'USD / 盎司', stat_per_gram:'每公克',
+    stat_tw_price:'台灣牌價', stat_ratio:'金銀比', stat_ratio_sub:'黃金 ÷ 白銀',
+    gold_chart_title:'黃金 XAU/USD 走勢圖', silver_chart_title:'白銀 XAG/USD 走勢圖',
+    chart_sub:'OANDA · 即時報價 · 台北時區',
+    chart_footer:'圖表數據由 <a href="https://www.tradingview.com/" target="_blank">TradingView</a> 提供 · 僅供參考',
+    p1d:'1日', p1w:'1週', p1m:'1個月', p3m:'3個月', p1y:'1年', p5y:'5年',
+    gold_info_title:'黃金基本資訊', gold_invest_title:'台灣黃金投資管道',
+    silver_info_title:'白銀基本資訊', silver_invest_title:'台灣白銀投資管道',
+    info_ticker:'交易代號', info_unit:'計價單位', info_unit_val_gold:'美元 / 金衡盎司',
+    info_1oz:'1盎司 = ', info_gram:'公克', info_exchange:'主要交易所',
+    info_hours:'交易時間', info_hours_val:'週一至週五 24小時',
+    info_industrial:'工業用途佔比', info_industrial_val:'約 60%',
+    gold_passbook:'黃金存摺', gold_passbook_val:'台銀、土銀、兆豐等',
+    gold_physical:'實體黃金', gold_physical_val:'金條、金幣、金飾',
+    gold_futures:'黃金期貨', gold_futures_val:'台灣期交所 TGF',
+    gold_overseas_etf:'海外ETF',
+    silver_passbook:'白銀存摺', silver_passbook_val:'台灣銀行',
+    silver_physical:'實體白銀', silver_physical_val:'銀條、銀幣',
+    silver_futures:'期貨', silver_futures_val:'COMEX 白銀期貨 SI',
+    silver_char:'特性', silver_char_val:'波動較黃金大',
+    disclaimer:'⚠️ 本頁所有資訊僅供參考，不構成任何投資建議或買賣依據。貴金屬投資具有市場風險，價格可能大幅波動，投資前請審慎評估自身財務狀況與風險承受能力。',
+    page_footer:'© 2025 黃金殿 · 貴金屬投資平台 &nbsp;·&nbsp; 資料僅供參考，不構成投資建議',
+  },
+  en: {
+    nav_price:'Gold Price', nav_market:'Full Market', nav_jewelry:'Jewelry', nav_news:'News', nav_forum:'Forum',
+    btn_back:'← Back to Home',
+    breadcrumb_home:'Gold Palace',
+    page_title:'Precious Metals Market',
+    loading:'Loading data…',
+    tab_gold:'Gold XAU/USD', tab_silver:'Silver XAG/USD',
+    stat_spot:'Spot Price', stat_change:"Today's Change", stat_high:"Today's High", stat_low:"Today's Low",
+    stat_usd_oz:'USD / Troy Oz', stat_per_gram:'per gram',
+    stat_tw_price:'TW Listed Price', stat_ratio:'Gold/Silver Ratio', stat_ratio_sub:'Gold ÷ Silver',
+    gold_chart_title:'Gold XAU/USD Chart', silver_chart_title:'Silver XAG/USD Chart',
+    chart_sub:'OANDA · Live Quote · Taipei Timezone',
+    chart_footer:'Chart data provided by <a href="https://www.tradingview.com/" target="_blank">TradingView</a> · For reference only',
+    p1d:'1D', p1w:'1W', p1m:'1M', p3m:'3M', p1y:'1Y', p5y:'5Y',
+    gold_info_title:'Gold Basics', gold_invest_title:'Gold Investment in Taiwan',
+    silver_info_title:'Silver Basics', silver_invest_title:'Silver Investment in Taiwan',
+    info_ticker:'Symbol', info_unit:'Pricing Unit', info_unit_val_gold:'USD / Troy Ounce',
+    info_1oz:'1 oz = ', info_gram:'grams', info_exchange:'Major Exchanges',
+    info_hours:'Trading Hours', info_hours_val:'Mon–Fri, 24 hours',
+    info_industrial:'Industrial Use', info_industrial_val:'~60%',
+    gold_passbook:'Gold Passbook', gold_passbook_val:'Bank of Taiwan, Land Bank, etc.',
+    gold_physical:'Physical Gold', gold_physical_val:'Bars, Coins, Jewelry',
+    gold_futures:'Gold Futures', gold_futures_val:'TAIFEX TGF',
+    gold_overseas_etf:'Overseas ETF',
+    silver_passbook:'Silver Passbook', silver_passbook_val:'Bank of Taiwan',
+    silver_physical:'Physical Silver', silver_physical_val:'Bars, Coins',
+    silver_futures:'Futures', silver_futures_val:'COMEX Silver Futures SI',
+    silver_char:'Characteristic', silver_char_val:'More volatile than gold',
+    disclaimer:'⚠️ All information on this page is for reference only and does not constitute investment advice. Precious metals investments carry market risk and prices may fluctuate significantly. Please assess your financial situation and risk tolerance before investing.',
+    page_footer:'© 2025 Gold Palace · Precious Metals Platform &nbsp;·&nbsp; For reference only, not investment advice',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'zh';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('langZH').classList.toggle('active', lang === 'zh');
+  document.getElementById('langEN').classList.toggle('active', lang === 'en');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+  });
+  // 重新載入已初始化的 TradingView 圖表（套用新語言）
+  if (typeof TradingView !== 'undefined') {
+    if (goldChartInit)   initGoldChart(activeGoldRange, activeGoldInterval);
+    if (silverChartInit) initSilverChart(activeSilverRange, activeSilverInterval);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
+</script>
 
 <script>
 // ── 金屬分頁切換 ──
@@ -651,7 +775,6 @@ function switchMetal(metal) {
     document.getElementById('tab-' + m).classList.toggle('active', m === metal);
     document.getElementById('panel-' + m).classList.toggle('active', m === metal);
   });
-  // 初始化對應圖表（若尚未載入）
   if (metal === 'gold' && !goldChartInit) initGoldChart('1D', '15');
   if (metal === 'silver' && !silverChartInit) initSilverChart('1D', '15');
 }
@@ -660,10 +783,13 @@ function switchMetal(metal) {
 let goldChartInit = false;
 let silverChartInit = false;
 let tvLoaded = false;
+let activeGoldRange = '1D', activeGoldInterval = '15';
+let activeSilverRange = '1D', activeSilverInterval = '15';
 
 function buildWidget(containerId, symbol, interval, range) {
   const el = document.getElementById(containerId);
   el.innerHTML = '';
+  const tvLocale = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'en' : 'zh_TW';
   return new TradingView.widget({
     container_id: containerId,
     symbol: symbol,
@@ -672,7 +798,7 @@ function buildWidget(containerId, symbol, interval, range) {
     timezone: 'Asia/Taipei',
     theme: 'dark',
     style: '1',
-    locale: 'zh_TW',
+    locale: tvLocale,
     toolbar_bg: '#1A1A1A',
     backgroundColor: '#111111',
     gridColor: 'rgba(201,168,76,0.05)',
@@ -695,11 +821,13 @@ function buildWidget(containerId, symbol, interval, range) {
 }
 
 function initGoldChart(range, interval) {
+  activeGoldRange = range; activeGoldInterval = interval;
   buildWidget('tv-gold', 'OANDA:XAUUSD', interval, range);
   goldChartInit = true;
 }
 
 function initSilverChart(range, interval) {
+  activeSilverRange = range; activeSilverInterval = interval;
   buildWidget('tv-silver', 'OANDA:XAGUSD', interval, range);
   silverChartInit = true;
 }
@@ -723,7 +851,7 @@ function setSilverPeriod(range, interval, el) {
   s.async = true;
   s.onload = function() {
     tvLoaded = true;
-    initGoldChart('1D', '15'); // 預設載入黃金圖表
+    initGoldChart('1D', '15');
   };
   document.head.appendChild(s);
 })();
@@ -797,8 +925,11 @@ function renderMarketPrice(data) {
 
     // ── 更新時間 ──
     const now = new Date();
-    document.getElementById('lastUpdate').textContent =
-      `資料每60分鐘更新 · 最後更新：${now.toLocaleTimeString('zh-TW')}`;
+    const timeStr = now.toLocaleTimeString(currentLang === 'en' ? 'en-US' : 'zh-TW');
+    const updateLabel = currentLang === 'en'
+      ? `Data updates every 60 min · Last updated: ${timeStr}`
+      : `資料每60分鐘更新 · 最後更新：${timeStr}`;
+    document.getElementById('lastUpdate').textContent = updateLabel;
 
   } catch(e) {
     console.error('Market price render error:', e);
@@ -815,7 +946,7 @@ async function fetchMarketPrice() {
     console.error('金價API錯誤:', err);
     const now = new Date();
     const el = document.getElementById('lastUpdate');
-    if (el) el.textContent = `連線中… · ${now.toLocaleTimeString('zh-TW')}`;
+    if (el) el.textContent = currentLang === 'en' ? `Connecting… · ${now.toLocaleTimeString('en-US')}` : `連線中… · ${now.toLocaleTimeString('zh-TW')}`;
   }
 }
 

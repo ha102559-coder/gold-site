@@ -1458,7 +1458,7 @@ const i18n = {
     feature1: '✦ 參與討論區發文與留言', feature2: '✦ 收藏金價走勢與文章', feature3: '✦ 接收重要市場通知',
   },
   en: {
-    nav_price: 'Gold Price', nav_jewelry: 'Jewelry', nav_market: 'Market', nav_forum: 'Forum',
+    nav_price: 'Gold Price', nav_jewelry: 'Jewelry', nav_news: 'News', nav_forum: 'Forum',
     btn_login: 'Login', btn_register: 'Sign Up Free', btn_logout: 'Logout',
     hero_badge: 'Live Gold Price Updates',
     hero_title: 'Master the<span> Gold Market</span><br>Invest with Precision',
@@ -1495,13 +1495,30 @@ function setLang(lang) {
       el.innerHTML = i18n[lang][key];
     }
   });
-  // 同步更新 Info Modal 標題與內容（如果已開啟）
+  // 同步更新 Info Modal 標題與內容
   if (typeof _currentInfoTab !== 'undefined') {
     const cfg = infoContent[lang][_currentInfoTab];
     document.getElementById('infoModalIcon').textContent = cfg.icon;
     document.getElementById('infoModalLabel').textContent = cfg.label;
     document.getElementById('infoModalTitle').textContent = cfg.title;
     document.getElementById('infoModalBody').innerHTML = infoContent[lang].panels[_currentInfoTab];
+  }
+  // 更新圖表時間區間按鈕文字
+  const tabLabels = {
+    zh: ['1日','1週','1個月','3個月','1年','5年'],
+    en: ['1D','1W','1M','3M','1Y','5Y']
+  };
+  document.querySelectorAll('.chart-tab').forEach((btn, i) => {
+    btn.textContent = tabLabels[lang][i];
+  });
+  // 重新載入 TradingView 圖表（以套用新語言）
+  if (typeof TradingView !== 'undefined') {
+    const activeTab = document.querySelector('.chart-tab.active');
+    const rangeKeys = ['1D','1W','1M','3M','12M','60M'];
+    const tabs = document.querySelectorAll('.chart-tab');
+    let activeKey = '1D';
+    tabs.forEach((t, i) => { if (t.classList.contains('active')) activeKey = rangeKeys[i]; });
+    initTVChart(activeKey);
   }
 }
 
@@ -1662,6 +1679,7 @@ function initTVChart(rangeKey) {
   const container = document.getElementById('tradingview_xauusd');
   container.innerHTML = '';
   const cfg = tvRangeMap[rangeKey] || tvRangeMap['1D'];
+  const tvLocale = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'en' : 'zh_TW';
   tvWidget = new TradingView.widget({
     container_id: 'tradingview_xauusd',
     symbol: 'OANDA:XAUUSD',
@@ -1670,7 +1688,7 @@ function initTVChart(rangeKey) {
     timezone: 'Asia/Taipei',
     theme: 'dark',
     style: '1',
-    locale: 'zh_TW',
+    locale: tvLocale,
     toolbar_bg: '#1A1A1A',
     enable_publishing: false,
     hide_top_toolbar: false,
