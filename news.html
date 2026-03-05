@@ -121,6 +121,10 @@
   nav a:hover::after { transform: scaleX(1); }
   nav a.active { color: var(--gold-light); }
   nav a.active::after { transform: scaleX(1); }
+  .lang-switcher{display:flex;align-items:center;background:var(--dark-3);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px;margin-right:8px}
+  .lang-btn{background:none;border:none;color:var(--text-dim);font-size:11px;font-family:'Noto Sans TC',sans-serif;font-weight:500;letter-spacing:1px;padding:4px 10px;border-radius:16px;cursor:pointer;transition:all .2s}
+  .lang-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:var(--obsidian)}
+  .lang-btn:hover:not(.active){color:var(--gold)}
 
   .header-actions { display: flex; align-items: center; gap: 10px; }
   .btn-login {
@@ -1001,21 +1005,22 @@
       </div>
     </a>
     <nav>
-      <a href="/">國際金價</a>
-      <a href="/market">完整行情</a>
-      <a href="/jewelry.html">黃金飾品</a>
-      <a href="/news" class="active">投資訊息</a>
-      <a href="/forum">討論區</a>
+      <a href="/" data-i18n="nav_price">國際金價</a>
+      <a href="/market" data-i18n="nav_market">完整行情</a>
+      <a href="/jewelry.html" data-i18n="nav_jewelry">黃金飾品</a>
+      <a href="/news" class="active" data-i18n="nav_news">投資訊息</a>
+      <a href="/forum" data-i18n="nav_forum">討論區</a>
     </nav>
     <div class="header-actions" id="headerActions">
+      <div class="lang-switcher"><button class="lang-btn active" id="langZH" onclick="setLang('zh')">中文</button><button class="lang-btn" id="langEN" onclick="setLang('en')">EN</button></div>
       <div id="authButtons" style="display:flex;gap:10px;">
-        <button class="btn-login" onclick="openAuthModal()">登入</button>
-        <button class="btn-register" onclick="openAuthModal()">免費註冊</button>
+        <button class="btn-login" onclick="openAuthModal()" data-i18n="btn_login">登入</button>
+        <button class="btn-register" onclick="openAuthModal()" data-i18n="btn_register">免費註冊</button>
       </div>
       <div id="userMenu" style="display:none;align-items:center;gap:10px;">
         <img id="userAvatar" src="" alt="" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;">
         <span id="userName" style="font-size:13px;color:var(--gold-light);letter-spacing:1px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-        <button class="btn-login" onclick="signOutUser()">登出</button>
+        <button class="btn-login" onclick="signOutUser()" data-i18n="btn_logout">登出</button>
       </div>
     </div>
   </div>
@@ -1026,11 +1031,11 @@
   <div class="hero-grid"></div>
   <div class="page-hero-inner">
     <div class="breadcrumb">
-      <a href="/">黃金殿</a><span>/</span>投資訊息
+      <a href="/" data-i18n="breadcrumb_home">黃金殿</a><span>/</span><span data-i18n="nav_news">投資訊息</span>
     </div>
     <div class="page-label">INVESTMENT NEWS</div>
-    <h1 class="page-title">投資訊息<span>精選</span></h1>
-    <p class="page-desc">匯整國內外貴金屬市場最新動態、深度分析與投資教學，助您掌握每一個關鍵機會。</p>
+    <h1 class="page-title" data-i18n="page_title">投資訊息<span>精選</span></h1>
+    <p class="page-desc" data-i18n="page_desc">匯整國內外貴金屬市場最新動態、深度分析與投資教學，助您掌握每一個關鍵機會。</p>
   </div>
 </div>
 
@@ -1038,14 +1043,14 @@
 <div class="filter-bar">
   <div class="filter-inner">
     <div class="filter-tags" id="filterTags">
-      <button class="filter-tag active" onclick="filterArticles('all', this)">全部</button>
-      <button class="filter-tag" onclick="filterArticles('市場分析', this)">市場分析</button>
-      <button class="filter-tag" onclick="filterArticles('投資教學', this)">投資教學</button>
-      <button class="filter-tag" onclick="filterArticles('國際情勢', this)">國際情勢</button>
-      <button class="filter-tag" onclick="filterArticles('台灣市場', this)">台灣市場</button>
-      <button class="filter-tag" onclick="filterArticles('總體經濟', this)">總體經濟</button>
+      <button class="filter-tag active" onclick="filterArticles('all', this)" data-i18n="tag_all">全部</button>
+      <button class="filter-tag" onclick="filterArticles('市場分析', this)" data-i18n="tag_market">市場分析</button>
+      <button class="filter-tag" onclick="filterArticles('投資教學', this)" data-i18n="tag_edu">投資教學</button>
+      <button class="filter-tag" onclick="filterArticles('國際情勢', this)" data-i18n="tag_global">國際情勢</button>
+      <button class="filter-tag" onclick="filterArticles('台灣市場', this)" data-i18n="tag_tw">台灣市場</button>
+      <button class="filter-tag" onclick="filterArticles('總體經濟', this)" data-i18n="tag_macro">總體經濟</button>
     </div>
-    <div class="article-count">共 <span id="articleCountNum">0</span> 篇文章</div>
+    <div class="article-count" id="articleCount">共 <span id="articleCountNum">0</span> 篇文章</div>
   </div>
 </div>
 
@@ -1065,14 +1070,14 @@
     <div class="articles-grid" id="emptyState" style="display:none;">
       <div class="empty-state">
         <div class="empty-icon">📭</div>
-        <div class="empty-title">目前尚無文章</div>
-        <div class="empty-desc">文章即將上線，敬請期待。<br>您可以先瀏覽其他分類或前往討論區。</div>
+        <div class="empty-title" data-i18n="empty_title">目前尚無文章</div>
+        <div class="empty-desc" data-i18n="empty_desc">文章即將上線，敬請期待。<br>您可以先瀏覽其他分類或前往討論區。</div>
       </div>
     </div>
 
     <!-- 載入更多 -->
     <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
-      <button class="btn-load-more" id="loadMoreBtn" onclick="loadMore()">載入更多文章</button>
+      <button class="btn-load-more" id="loadMoreBtn" onclick="loadMore()" data-i18n="load_more">載入更多文章</button>
     </div>
 
   </div>
@@ -1082,27 +1087,27 @@
 
     <!-- 熱門標籤 -->
     <div class="sidebar-card fade-up delay-2">
-      <div class="sidebar-heading">熱門標籤</div>
+      <div class="sidebar-heading" data-i18n="sidebar_tags">熱門標籤</div>
       <div class="tag-cloud">
-        <button class="tag-pill" onclick="filterArticles('市場分析',null)">市場分析</button>
-        <button class="tag-pill" onclick="filterArticles('投資教學',null)">投資教學</button>
-        <button class="tag-pill" onclick="filterArticles('國際情勢',null)">國際情勢</button>
-        <button class="tag-pill" onclick="filterArticles('台灣市場',null)">台灣市場</button>
-        <button class="tag-pill" onclick="filterArticles('總體經濟',null)">總體經濟</button>
-        <button class="tag-pill">黃金ETF</button>
-        <button class="tag-pill">央行購金</button>
-        <button class="tag-pill">技術分析</button>
-        <button class="tag-pill">白銀</button>
-        <button class="tag-pill">通膨</button>
+        <button class="tag-pill" onclick="filterArticles('市場分析',null)" data-i18n="tag_market">市場分析</button>
+        <button class="tag-pill" onclick="filterArticles('投資教學',null)" data-i18n="tag_edu">投資教學</button>
+        <button class="tag-pill" onclick="filterArticles('國際情勢',null)" data-i18n="tag_global">國際情勢</button>
+        <button class="tag-pill" onclick="filterArticles('台灣市場',null)" data-i18n="tag_tw">台灣市場</button>
+        <button class="tag-pill" onclick="filterArticles('總體經濟',null)" data-i18n="tag_macro">總體經濟</button>
+        <button class="tag-pill" data-i18n="tag_etf">黃金ETF</button>
+        <button class="tag-pill" data-i18n="tag_cb">央行購金</button>
+        <button class="tag-pill" data-i18n="tag_ta">技術分析</button>
+        <button class="tag-pill" data-i18n="tag_silver">白銀</button>
+        <button class="tag-pill" data-i18n="tag_inflation">通膨</button>
       </div>
     </div>
 
     <!-- 關於本站 -->
     <div class="sidebar-card fade-up delay-3">
-      <div class="sidebar-heading">關於黃金殿</div>
+      <div class="sidebar-heading" data-i18n="sidebar_about_title">關於黃金殿</div>
       <div class="about-mini">
-        <p>黃金殿是專注於貴金屬投資的資訊平台，提供即時金價、市場分析與社群討論服務。</p>
-        <a href="/">前往首頁查看即時金價 →</a>
+        <p data-i18n="sidebar_about_desc">黃金殿是專注於貴金屬投資的資訊平台，提供即時金價、市場分析與社群討論服務。</p>
+        <a href="/" data-i18n="sidebar_about_link">前往首頁查看即時金價 →</a>
       </div>
     </div>
 
@@ -1114,40 +1119,11 @@
   <div class="footer-main">
     <div>
       <span class="logo-text" style="font-family:'Noto Serif TC',serif;color:var(--gold-light)">黃金殿</span>
-      <p class="footer-desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。</p>
+      <p class="footer-desc" data-i18n="footer_desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。</p>
     </div>
-    <div>
-      <div class="footer-heading">快速連結</div>
-      <ul class="footer-links">
-        <li><a href="/">國際金價</a></li>
-        <li><a href="/market">完整行情</a></li>
-        <li><a href="/news">投資訊息</a></li>
-        <li><a href="/forum">討論區</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-heading">會員服務</div>
-      <ul class="footer-links">
-        <li><a href="#" onclick="openAuthModal();return false;">免費註冊</a></li>
-        <li><a href="#" onclick="openAuthModal();return false;">會員登入</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-heading">關於</div>
-      <ul class="footer-links">
-        <li><a href="#" onclick="openInfoModal('about');return false;">關於我們</a></li>
-        <li><a href="#" onclick="openInfoModal('contact');return false;">聯絡我們</a></li>
-        <li><a href="#" onclick="openInfoModal('privacy');return false;">隱私政策</a></li>
-        <li><a href="#" onclick="openInfoModal('terms');return false;">服務條款</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2025 黃金殿 · 貴金屬投資平台 · <span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span>
+    <span><span data-i18n="footer_copy">© 2025 黃金殿 · 貴金屬投資平台 · <span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span></span>
     <div class="footer-bottom-links">
-      <a href="#" onclick="openInfoModal('privacy');return false;">隱私政策</a>
-      <a href="#" onclick="openInfoModal('terms');return false;">服務條款</a>
-      <a href="/">返回首頁</a>
+      <a href="/" data-i18n="footer_back">返回首頁</a>
     </div>
   </div>
 </footer>
@@ -1162,6 +1138,36 @@
       <div class="article-modal-title" id="modalTitle"></div>
       <div class="article-modal-meta" id="modalMeta"></div>
       <div class="article-modal-content" id="modalContent"></div>
+      <!-- EN panels -->
+      <div class="info-panel lang-en" id="info-about-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Our Mission</div><p>Gold Palace is a precious metals investment platform dedicated to providing real-time, accurate market data to investors in Taiwan and the Chinese-speaking world.</p></div>
+        <div class="info-section"><div class="info-section-title">Platform Features</div><div class="info-highlight">⚡ Live Prices · All major metals updated every 60 min<br>📊 Pro Tools · Historical charts &amp; technical indicators<br>💬 Community · Thousands of active investors<br>📰 Curated News · Global market coverage</div></div>
+        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All information is <strong style="color:var(--text)">for reference only</strong> and does not constitute investment advice.</p></div>
+      </div>
+      <div class="info-panel lang-en" id="info-contact-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Get in Touch</div><p>We value every user's feedback. Reach us for suggestions, questions, or partnership inquiries.</p>
+          <div class="info-contact-card">
+            <div class="info-contact-row"><div class="info-contact-icon">✉️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">EMAIL</div><a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a></div></div>
+            <div class="info-contact-row"><div class="info-contact-icon">🕐</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">HOURS</div>Mon–Fri 09:00–18:00 (GMT+8)</div></div>
+            <div class="info-contact-row"><div class="info-contact-icon">⏱️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">RESPONSE</div>Within 1–3 business days</div></div>
+          </div>
+        </div>
+        <div class="info-section"><div class="info-section-title">Common Inquiries</div><div class="info-highlight">🐛 Report bugs or incorrect data<br>💡 Feature suggestions<br>🤝 Media &amp; business partnerships<br>📝 Content licensing</div></div>
+      </div>
+      <div class="info-panel lang-en" id="info-privacy-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Data Collection</div><p>We collect account info (email, username) and technical data (browsing behavior, device info, IP address).</p></div>
+        <div class="info-section"><div class="info-section-title">Purpose</div><p>Data is used to provide services, send notifications, improve UX, and prevent fraud.</p><div class="info-highlight">We will <strong style="color:var(--text)">never</strong> sell your data to third parties.</div></div>
+        <div class="info-section"><div class="info-section-title">Cookies</div><p>We use cookies to maintain sessions and collect anonymous stats. Manage via browser settings.</p></div>
+        <div class="info-section"><div class="info-section-title">Security</div><p>Industry-standard encryption protects your data. Questions? <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+      </div>
+      <div class="info-panel lang-en" id="info-terms-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Service</div><p>Gold Palace provides precious metals market info, analysis, and community discussions. By using this platform, you agree to these terms.</p></div>
+        <div class="info-section"><div class="info-section-title">Membership</div><p>Must be 18+. One account per user. Accounts are non-transferable.</p></div>
+        <div class="info-section"><div class="info-section-title">Conduct</div><div class="info-highlight">✅ Allowed: Share experiences, discuss markets, lawful comments<br>❌ Prohibited: Misinformation, harassment, spam, illegal activity</div></div>
+        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All content is <strong style="color:var(--text)">for reference only</strong>. We are not liable for investment losses. IP protected. <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+      </div>
+
+
     </div>
   </div>
 </div>
@@ -1175,6 +1181,7 @@ const articles = [
   {
     id: 6,
     title: "金豆、金條、金幣怎麼選？三種實體黃金完整優缺點比較",
+    titleEn: "Gold Beans, Bars or Coins? A Complete Comparison of 3 Physical Gold Types",
     category: "投資教學",
     date: "2025.09.07",
     readTime: "7 分鐘",
@@ -1182,6 +1189,8 @@ const articles = [
     emoji: "🪙",
     bgColor: "linear-gradient(135deg,#1a1000,#2e1e00,#1a1000)",
     excerpt: "同樣是實體黃金，金豆、金條、金幣各有不同的重量規格、溢價幅度與保存難度。本文詳解三種形式的優缺點，幫您依預算與目的做出最聰明的選擇。",
+    excerptEn: "Same gold, very different products. Gold beans, bars, and coins each have unique weight specs, premiums, and storage needs. This guide breaks down the pros and cons to help you choose wisely.",
+    readTimeEn: "7 min",
     content: `
       <p>決定購買實體黃金之後，下一個問題往往是：「要買金豆、金條還是金幣？」三者本質上都是高純度黃金，但在重量規格、購買溢價、流通性與保存方式上各有差異。本文逐一拆解，幫助您做出最符合需求的選擇。</p>
 
@@ -1271,11 +1280,102 @@ const articles = [
       <div class="highlight">
         ⚠️ 風險提示：實體黃金需自行承擔保管與保險成本，且買賣均有價差損耗。以上分析均<strong>僅供參考</strong>，不構成任何投資建議，投資前請評估自身狀況。
       </div>
+    `,
+    contentEn: `
+      <p>Once you've decided to buy physical gold, the next question is usually: "Gold beans, bars, or coins?" All three are high-purity gold, but they differ meaningfully in weight specifications, purchase premiums, liquidity, and storage requirements. This guide breaks each one down to help you make the smartest choice for your needs.</p>
+
+      <h2>I. Quick Comparison of the Three Types</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:110px">Criteria</th>
+              <th class="th-num" style="min-width:110px">🫘 Gold Beans</th>
+              <th class="th-num" style="min-width:110px">🟨 Gold Bars</th>
+              <th class="th-num" style="min-width:110px">🪙 Gold Coins</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd">
+              <td class="td-country">Common Weights</td>
+              <td class="td-num">0.1g – 1g</td>
+              <td class="td-num">1g – 1kg</td>
+              <td class="td-num">1/10oz – 1oz</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">Purchase Premium</td>
+              <td class="td-num" style="color:#FCA5A5">High<br><span style="font-size:11px;color:var(--text-dim)">~10–20%</span></td>
+              <td class="td-num gold-col">Low–Medium<br><span style="font-size:11px;color:var(--text-dim)">~2–6%</span></td>
+              <td class="td-num">Medium–High<br><span style="font-size:11px;color:var(--text-dim)">~5–15%</span></td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">Entry Threshold</td>
+              <td class="td-num gold-col">Lowest<br><span style="font-size:11px;color:var(--text-dim)">From a few hundred TWD</span></td>
+              <td class="td-num">Medium<br><span style="font-size:11px;color:var(--text-dim)">From ~NT$1,000</span></td>
+              <td class="td-num">Medium<br><span style="font-size:11px;color:var(--text-dim)">From a few thousand TWD</span></td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">Purity</td>
+              <td class="td-num">999–9999</td>
+              <td class="td-num gold-col">9999 (most common)</td>
+              <td class="td-num">916–9999</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">Liquidity</td>
+              <td class="td-num">Medium<br><span style="font-size:11px;color:var(--text-dim)">Certification required</span></td>
+              <td class="td-num gold-col">High<br><span style="font-size:11px;color:var(--text-dim)">Accepted by banks &amp; dealers</span></td>
+              <td class="td-num">High<br><span style="font-size:11px;color:var(--text-dim)">Better from major mints</span></td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">Collectible Value</td>
+              <td class="td-num" style="color:var(--text-dim)">Low</td>
+              <td class="td-num" style="color:var(--text-dim)">Low</td>
+              <td class="td-num gold-col">High<br><span style="font-size:11px;color:var(--text-dim)">Limited editions command premiums</span></td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">Storage Difficulty</td>
+              <td class="td-num" style="color:#FCA5A5">High<br><span style="font-size:11px;color:var(--text-dim)">Small, easily lost</span></td>
+              <td class="td-num gold-col">Low<br><span style="font-size:11px;color:var(--text-dim)">Sealed card, easy to store</span></td>
+              <td class="td-num">Low<br><span style="font-size:11px;color:var(--text-dim)">Comes in protective box</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>II. Gold Beans: Lowest Barrier, Highest Premium</h2>
+      <p>Gold beans have surged in popularity in recent years. Extremely lightweight (commonly 0.5g or 1g), they're affordable and ideal for beginners with limited budgets or anyone wanting to accumulate gold gradually. They're widely available at e-commerce platforms, banks, and jewelry stores.</p>
+      <p>The main drawback is a <strong>high premium</strong> — you pay 10–20% more in fabrication and distribution costs per gram compared to bars. Over time, this significantly erodes returns. Their tiny size also makes them easy to lose without proper storage.</p>
+      <div class="highlight">
+        💡 Best for: Beginners spending NT$500–2,000 per purchase who want physical gold; or as gifts where the premium is an acceptable trade-off.
+      </div>
+
+      <h2>III. Gold Bars: The Most Investment-Efficient Choice</h2>
+      <p>Gold bars are the purest form of gold investment. Common sizes range from 1g to 1kg, available at Bank of Taiwan, Land Bank, CTBC, and others. Most are 9999 purity (99.99%) and come with a quality certificate and stamped serial number.</p>
+      <p>Bars carry the <strong>lowest premium</strong> of the three. Large bars (100g, 1kg) may carry premiums as low as 1–2%, making them the most cost-efficient way to own gold by weight. Banks and dealers accept them back without issue.</p>
+      <p>The one caveat: larger bars mean lower premiums but higher upfront capital requirements. If budget is limited, start with 5g or 10g bars — a good balance of premium and liquidity.</p>
+      <div class="highlight">
+        💡 Best for: Investors focused on investment returns, with sufficient capital (NT$5,000+ per purchase), who prioritize low transaction costs.
+      </div>
+
+      <h2>IV. Gold Coins: Investment Meets Collectibility</h2>
+      <p>Gold coins are issued by official government mints worldwide. Popular options include the Canadian Maple Leaf (9999 purity), South African Krugerrand, American Eagle (916 purity), and Australian Kangaroo. Backed by sovereign credit, they're recognized and purchased by dealers globally.</p>
+      <p>Premiums fall between beans and bars — standard investment coins run about 5–10%. Limited editions or special commemorative years can command far higher collectible premiums. This is gold coins' unique edge: value beyond the metal itself, potentially amplified by scarcity.</p>
+      <div class="highlight">
+        💡 Best for: Investors who want both investment and collectible exposure, have brand preferences for specific mints, or plan to liquidate overseas.
+      </div>
+
+      <h2>V. Which Is the Best Value?</h2>
+      <p>If your goal is <strong>pure gold accumulation at minimal cost</strong>, the priority order is: <strong>Bars &gt; Coins &gt; Beans</strong>. On a tight budget? Gold beans, despite their high premium, remain the lowest-barrier way to physically own gold. Want some collectible enjoyment too? Investment coins from reputable mints are a solid middle ground.</p>
+      <p>Whatever you choose, always buy from banks or reputable dealers and insist on <strong>certified, hallmarked products with assay cards</strong> to avoid counterfeit or substandard gold.</p>
+      <div class="highlight">
+        ⚠️ Risk Disclaimer: Physical gold carries storage and insurance costs, and buy/sell spreads apply. All analysis is <strong>for reference only</strong> and does not constitute investment advice. Please assess your own situation before investing.
+      </div>
     `
   },
   {
     id: 5,
     title: "黃金存摺 vs. ETF vs. 實體黃金：三種投資方式完整比較",
+    titleEn: "Gold Passbook vs. ETF vs. Physical Gold: A Complete Comparison",
     category: "投資教學",
     date: "2025.09.07",
     readTime: "8 分鐘",
@@ -1283,6 +1383,8 @@ const articles = [
     emoji: "⚖️",
     bgColor: "linear-gradient(135deg,#0d1206,#1a2410,#0d1206)",
     excerpt: "想投資黃金卻不知從何選起？黃金存摺、黃金ETF、實體金條金幣各有優缺點，本文從手續費、流動性、保管風險等六大面向全面比較，幫您找到最適合自己的黃金投資方式。",
+    excerptEn: "Not sure how to invest in gold? We compare passbooks, ETFs, and physical gold across six dimensions including fees, liquidity, and storage risk.",
+    readTimeEn: "8 min",
     content: `
       <p>黃金是許多投資人資產配置的重要一環，但「要怎麼買黃金」往往讓新手感到困惑。目前台灣投資人最常接觸的三種方式分別是<strong>黃金存摺</strong>、<strong>黃金ETF</strong>與<strong>實體黃金</strong>（金條、金幣）。三者各有適合的族群與使用場景，本文從六大面向全面比較，協助您做出最適合的選擇。</p>
 
@@ -1375,11 +1477,100 @@ const articles = [
       <div class="highlight">
         ⚠️ 風險提示：黃金價格受多重因素影響，包含美元走勢、實質利率、地緣政治與市場情緒，過去漲幅不代表未來表現。以上分析均<strong>僅供參考</strong>，不構成任何投資建議，投資前請評估自身狀況。
       </div>
+    `,
+    contentEn: `
+      <p>Gold is a cornerstone of many investors' asset allocation, yet "how to buy gold" often confuses newcomers. The three most common approaches for Taiwan investors are <strong>gold passbooks</strong>, <strong>gold ETFs</strong>, and <strong>physical gold</strong> (bars and coins). Each suits different investor profiles and use cases. This article compares all three across six dimensions to help you find the right fit.</p>
+
+      <h2>I. Quick Overview</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:110px">Criteria</th>
+              <th class="th-num" style="min-width:120px">🏦 Gold Passbook</th>
+              <th class="th-num" style="min-width:120px">📈 Gold ETF</th>
+              <th class="th-num" style="min-width:120px">🪙 Physical Gold</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd">
+              <td class="td-country">Minimum Investment</td>
+              <td class="td-num">~NT$500<br><span style="font-size:11px;color:var(--text-dim)">(from 0.01g)</span></td>
+              <td class="td-num">~NT$1,000<br><span style="font-size:11px;color:var(--text-dim)">(1 board lot)</span></td>
+              <td class="td-num">~NT$7,000+<br><span style="font-size:11px;color:var(--text-dim)">(1g coin)</span></td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">Transaction Costs</td>
+              <td class="td-num">Bid-ask spread<br><span style="font-size:11px;color:var(--text-dim)">~1–3%</span></td>
+              <td class="td-num gold-col">~0.1–0.3%<br><span style="font-size:11px;color:var(--text-dim)">Lowest</span></td>
+              <td class="td-num">Spread + fabrication<br><span style="font-size:11px;color:var(--text-dim)">~3–8%</span></td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">Custody</td>
+              <td class="td-num">Bank-held<br><span style="font-size:11px;color:var(--text-dim)">Free</span></td>
+              <td class="td-num">Brokerage account<br><span style="font-size:11px;color:var(--text-dim)">Free</span></td>
+              <td class="td-num">Self-custody<br><span style="font-size:11px;color:var(--text-dim)">Safe required</span></td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">Liquidity</td>
+              <td class="td-num">Weekday bank<br><span style="font-size:11px;color:var(--text-dim)">Business hours only</span></td>
+              <td class="td-num gold-col">Intraday anytime<br><span style="font-size:11px;color:var(--text-dim)">Highest</span></td>
+              <td class="td-num">Physical delivery<br><span style="font-size:11px;color:var(--text-dim)">Lower</span></td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">Physical Redemption</td>
+              <td class="td-num">✅ Can withdraw bars<br><span style="font-size:11px;color:var(--text-dim)">(minimum applies)</span></td>
+              <td class="td-num" style="color:var(--text-dim)">❌ Not possible</td>
+              <td class="td-num gold-col">✅ Already physical</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">Annual Management Fee</td>
+              <td class="td-num" style="color:var(--text-dim)">None</td>
+              <td class="td-num">~0.2–0.6%<br><span style="font-size:11px;color:var(--text-dim)">(embedded expense ratio)</span></td>
+              <td class="td-num" style="color:var(--text-dim)">None</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">Counterparty Risk</td>
+              <td class="td-num">Bank insolvency risk<br><span style="font-size:11px;color:var(--text-dim)">(Low)</span></td>
+              <td class="td-num">Fund company risk<br><span style="font-size:11px;color:var(--text-dim)">(Very low)</span></td>
+              <td class="td-num gold-col">No counterparty risk<br><span style="font-size:11px;color:var(--text-dim)">Safest</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>II. Gold Passbook: Best for First-Time Buyers</h2>
+      <p>Gold passbooks are offered by Bank of Taiwan, Land Bank, Mega Bank, and others. Once opened, you "deposit gold" just like cash — with minimum purchases as low as 0.01g, the barrier is very low. Transactions use the bank's posted rates, simple to operate with no investment knowledge required.</p>
+      <p>The downside is that bank bid-ask spreads typically run 1–3%, making frequent trading costly. Also, passbook gold is <strong>not classified as a deposit</strong> and falls outside deposit insurance protection (though Bank of Taiwan is state-owned and carries negligible risk).</p>
+      <div class="highlight">
+        💡 Best for: First-time gold buyers, smaller amounts (under NT$10,000), those unfamiliar with stock trading, or investors who want to dollar-cost average into gold.
+      </div>
+
+      <h2>III. Gold ETF: Lowest Trading Cost</h2>
+      <p>The most representative gold ETF on the TWSE is <strong>Yuanta Gold ETF (00635U)</strong>, which tracks the London spot gold price. It trades exactly like a stock through a brokerage account — intraday execution, with commissions of only ~0.1–0.3%, far below a gold passbook.</p>
+      <p>One caveat: ETFs carry an embedded annual expense ratio of ~0.2–0.6%, which gradually erodes returns over time. ETFs also cannot be redeemed for physical gold — they're purely a financial instrument tracking gold prices, suited for return-focused investors.</p>
+      <div class="highlight">
+        💡 Best for: Investors with a brokerage account who value trading flexibility and low costs, with larger capital (NT$10,000+), and short-to-medium term horizons.
+      </div>
+
+      <h2>IV. Physical Gold: The Ultimate Safeguard</h2>
+      <p>Physical gold includes bars, coins, and jewelry. Its greatest advantage is <strong>zero counterparty risk</strong> — it doesn't depend on any institution or system. In extreme financial crises or systemic risk scenarios, physical gold offers protection the other two options simply cannot.</p>
+      <p>The drawbacks are equally real: fabrication costs and spreads at purchase (combined 3–8%), self-custody requirements (safe or bank vault), and slower liquidation. Gold jewelry carries even higher fabrication costs and larger haircuts on buyback — for pure investment purposes, <strong>choose bars or investment-grade coins, not jewelry</strong>.</p>
+      <div class="highlight">
+        💡 Best for: Long-term holders who prioritize security over liquidity, have proper storage facilities, and want "real wealth" in their asset allocation.
+      </div>
+
+      <h2>V. How to Choose? Let Your Goals Decide</h2>
+      <p>These three approaches aren't mutually exclusive — many experienced investors use all three. A common allocation: use a <strong>gold ETF</strong> as the core position for flexibility, a <strong>gold passbook</strong> for systematic DCA accumulation, and hold a small amount of <strong>physical bars</strong> as a long-term reserve.</p>
+      <div class="highlight">
+        ⚠️ Risk Disclaimer: Gold prices are influenced by multiple factors including USD trends, real interest rates, geopolitics, and market sentiment. Past performance does not guarantee future results. All analysis is <strong>for reference only</strong> and does not constitute investment advice.
+      </div>
     `
   },
   {
     id: 4,
     title: "黃金地上存量與地下儲藏量全解析：人類迄今共挖出多少黃金？",
+    titleEn: "How Much Gold Has Been Mined? Above-Ground & Underground Reserves Explained",
     category: "市場知識",
     date: "2025.09.07",
     readTime: "6 分鐘",
@@ -1387,6 +1578,8 @@ const articles = [
     emoji: "🌍",
     bgColor: "linear-gradient(135deg,#0a0d1a,#141e35,#0a0d1a)",
     excerpt: "截至2023年底，全球黃金地上存量累計達212,582噸，其中金飾占比最高達45%，央行官方儲備占17%。地下仍埋藏約54,770噸待開採。一文帶您掌握全球黃金存量的完整分佈輪廓。",
+    excerptEn: "As of end-2023, total above-ground gold stock reached 212,582 tonnes — 45% in jewelry, 17% in central bank reserves. Some 54,770 tonnes remain underground.",
+    readTimeEn: "6 min",
     content: `
       <p>黃金是地球上最稀有的金屬之一。自數千年前人類首次開採黃金以來，迄今全球累積的<strong>地上存量（Above-Ground Stock）</strong>究竟有多少？這些黃金又分佈在哪些領域？本文根據世界黃金協會（World Gold Council）統計數據，帶您一覽全球黃金的完整存量圖景。</p>
 
@@ -1474,11 +1667,75 @@ const articles = [
       <div class="highlight">
         💡 稀缺性是黃金長期價值的核心支撐。地上存量212,582噸加上地下儲藏量約54,770噸，代表人類可掌握的黃金總量上限約為267,000噸——若全部熔鑄，僅能填滿約3.5座奧運標準游泳池。本文所有內容均<strong>僅供參考</strong>，不構成任何投資建議。
       </div>
+    `,
+    contentEn: `
+      <p>Gold is one of Earth's rarest metals. Since humans first mined it thousands of years ago, how much has accumulated above ground? Where is it all held? Drawing on World Gold Council (WGC) data, this article gives you a complete picture of global gold stock.</p>
+
+      <h2>Above-Ground Stock Overview (End of 2023)</h2>
+      <p>As of end-2023, total global above-ground gold stock stood at approximately <strong>212,582 tonnes</strong>, spanning four major categories: jewelry, investment, official reserves, and other industrial uses.</p>
+
+      <div style="overflow-x:auto; margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th>Sector</th>
+              <th class="th-num">Stock (tonnes)</th>
+              <th class="th-pct">Share</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd">
+              <td class="td-country">💍 Jewelry</td>
+              <td class="td-num gold-col">97,149</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num">45%</span><div class="pct-bar"><div class="pct-fill" style="width:45%"></div></div></div></td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">🪙 Bars, Coins &amp; ETFs</td>
+              <td class="td-num gold-col">48,634</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num">22%</span><div class="pct-bar"><div class="pct-fill" style="width:22%"></div></div></div></td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">🏦 Official Sector (Central Banks)</td>
+              <td class="td-num gold-col">37,755</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num">17%</span><div class="pct-bar"><div class="pct-fill" style="width:17%"></div></div></div></td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">⚙️ Other (Industrial, Technology, etc.)</td>
+              <td class="td-num gold-col">32,727</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num">15%</span><div class="pct-bar"><div class="pct-fill" style="width:15%"></div></div></div></td>
+            </tr>
+            <tr class="tr-odd" style="border-top:1px solid rgba(201,168,76,0.3)">
+              <td class="td-country" style="font-weight:700;color:var(--gold-light)">Total Above-Ground Stock</td>
+              <td class="td-num" style="font-weight:700;color:var(--gold-light)">212,582</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num" style="color:var(--gold-light)">100%</span><div class="pct-bar"><div class="pct-fill" style="width:100%"></div></div></div></td>
+            </tr>
+            <tr style="background:rgba(20,30,53,0.6)">
+              <td class="td-country" style="color:var(--text-muted)">⛏️ Underground Reserves (unmined)</td>
+              <td class="td-num" style="color:var(--text-muted)">~54,770</td>
+              <td class="td-pct"><div class="pct-wrap"><span class="pct-num" style="color:var(--text-dim)">Reference</span><div class="pct-bar"><div class="pct-fill" style="width:20.5%;background:linear-gradient(90deg,#2a3a5a,#4a6a9a)"></div></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Deep Dive: Each Sector</h2>
+      <p><strong>① Jewelry (45%, 97,149t)</strong> — Gold's largest use case. Human affinity for gold ornaments has never faded over millennia. India and China are the world's largest jewelry consumers, together accounting for over 50% of global jewelry demand. Though "used," high-purity jewelry retains strong recycling value.</p>
+      <p><strong>② Bars, Coins &amp; ETFs (22%, 48,634t)</strong> — Represents gold held by investors in both physical and financial form. The proliferation of gold ETFs in recent decades dramatically lowered the investment threshold, drawing in retail investors. This category has grown significantly over the past 20 years.</p>
+      <p><strong>③ Central Bank Reserves (17%, 37,755t)</strong> — Gold held by sovereign governments and central banks. Since 2010, central banks globally have shifted from net sellers to net buyers, accelerating purchases in recent years and reinforcing gold's role as an international reserve asset.</p>
+      <p><strong>④ Other Uses (15%, 32,727t)</strong> — Primarily electronics, aerospace, medical, and dental applications, plus some hard-to-classify stock. Gold's superior conductivity and corrosion resistance make it irreplaceable in high-tech industries.</p>
+
+      <h2>Underground Reserves: How Much Gold Remains?</h2>
+      <p>Global proven underground gold reserves are estimated at approximately <strong>54,770 tonnes</strong>. At current extraction rates, known gold deposits would be progressively exhausted within roughly 15–20 years, making gold's natural scarcity ever more apparent. New discoveries remain possible as exploration technology advances, but high-grade deposits are increasingly rare.</p>
+
+      <div class="highlight">
+        💡 Scarcity is the bedrock of gold's long-term value. Total accessible gold — above-ground (212,582t) plus underground (~54,770t) — amounts to roughly 267,000 tonnes. Melted down, that would fill only about 3.5 Olympic swimming pools. All content in this article is <strong>for reference only</strong> and does not constitute investment advice.
+      </div>
     `
   },
   {
     id: 3,
     title: "全球黃金供應與需求",
+    titleEn: "Global Gold Supply & Demand",
     category: "數據報告",
     date: "2025.09.07",
     readTime: "10 分鐘",
@@ -1486,6 +1743,8 @@ const articles = [
     emoji: "⚖️",
     bgColor: "linear-gradient(135deg,#1a0d06,#2e1a00,#1a0d06)",
     excerpt: "世界黃金協會最新數據顯示，2025年三季度黃金總供應量達1,313噸，年增3%；總需求同步攀升至1,314噸，投資需求年增高達47%，ETF淨流入更較去年同期暴增134%。倫敦金均價報3,456美元，年漲40%。",
+    excerptEn: "WGC data shows Q3 2025 gold supply at 1,313t (+3% YoY); total demand hit 1,314t with investment demand up 47% and ETF inflows surging 134%. London gold averaged $3,456, up 40% YoY.",
+    readTimeEn: "10 min",
     content: `
       <p>根據世界黃金協會（World Gold Council）最新發布的季度報告，2025年第三季度全球黃金市場供需兩端同步擴張，在高金價環境下，投資需求成為最強勁的成長動能，而金飾需求則因價格壓力出現明顯回落。本文彙整完整數據，供投資人全面掌握市場脈絡。</p>
 
@@ -1553,11 +1812,82 @@ const articles = [
       <div class="highlight">
         ⚠️ 風險提示：黃金投資涉及價格波動風險，過去表現不代表未來結果。本報告所有數據及分析內容均<strong>僅供參考</strong>，不構成任何形式之投資建議。投資前請評估自身風險承受能力。
       </div>
+    `,
+    contentEn: `
+      <p>According to the World Gold Council's (WGC) latest quarterly report, global gold supply and demand both expanded in Q3 2025. In a high-price environment, investment demand emerged as the strongest growth driver, while jewelry demand fell noticeably under price pressure. This article compiles the complete data for investors to assess market conditions.</p>
+
+      <div class="highlight">
+        💡 Data Note: All figures are sourced from the WGC quarterly supply &amp; demand report, in metric tonnes. QoQ change = Q3 2025 vs Q2 2025; YoY change = Q3 2025 vs Q3 2024. All content is <strong>for reference only</strong> and does not constitute investment advice.
+      </div>
+
+      <h2>Supply &amp; Demand Summary (Q3 2025)</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:160px">Category</th>
+              <th class="th-num">Q3 2025 (t)</th>
+              <th class="th-num">Q2 2025 (t)</th>
+              <th class="th-num">Q3 2024 (t)</th>
+              <th class="th-num">QoQ</th>
+              <th class="th-num">YoY</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd"><td class="td-country" style="font-weight:600;color:var(--gold-light)">⬆ Total Supply</td><td class="td-num gold-col">1,313</td><td class="td-num">1,272</td><td class="td-num">1,274</td><td class="td-num" style="color:#6EE7B7">+3.2%</td><td class="td-num" style="color:#6EE7B7">+3.1%</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:24px">Mine Production</td><td class="td-num">974</td><td class="td-num">929</td><td class="td-num">971</td><td class="td-num" style="color:#6EE7B7">+4.8%</td><td class="td-num" style="color:#6EE7B7">+0.3%</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:24px">Recycled Gold</td><td class="td-num">339</td><td class="td-num">343</td><td class="td-num">303</td><td class="td-num" style="color:#FCA5A5">-1.2%</td><td class="td-num" style="color:#6EE7B7">+11.9%</td></tr>
+            <tr class="tr-even"><td class="td-country" style="font-weight:600;color:var(--gold-light)">⬇ Total Demand</td><td class="td-num gold-col">1,314</td><td class="td-num">1,258</td><td class="td-num">1,267</td><td class="td-num" style="color:#6EE7B7">+4.5%</td><td class="td-num" style="color:#6EE7B7">+3.7%</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:24px">Jewelry</td><td class="td-num">430</td><td class="td-num">459</td><td class="td-num">516</td><td class="td-num" style="color:#FCA5A5">-6.3%</td><td class="td-num" style="color:#FCA5A5">-16.7%</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:24px">Investment (total)</td><td class="td-num gold-col">412</td><td class="td-num">321</td><td class="td-num">280</td><td class="td-num" style="color:#6EE7B7">+28.3%</td><td class="td-num" style="color:#6EE7B7">+47.1%</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:40px;color:var(--text-muted)">— Bars &amp; Coins</td><td class="td-num">269</td><td class="td-num">254</td><td class="td-num">260</td><td class="td-num" style="color:#6EE7B7">+5.9%</td><td class="td-num" style="color:#6EE7B7">+3.5%</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:40px;color:var(--text-muted)">— ETF Net Inflows</td><td class="td-num gold-col">143</td><td class="td-num">67</td><td class="td-num">61</td><td class="td-num" style="color:#6EE7B7">+113.4%</td><td class="td-num" style="color:#6EE7B7">+134.4%</td></tr>
+            <tr class="tr-odd"><td class="td-country" style="padding-left:24px">Central Banks (net)</td><td class="td-num">186</td><td class="td-num">183</td><td class="td-num">186</td><td class="td-num" style="color:#6EE7B7">+1.6%</td><td class="td-num">0.0%</td></tr>
+            <tr class="tr-even"><td class="td-country" style="padding-left:24px">Technology</td><td class="td-num">83</td><td class="td-num">81</td><td class="td-num">83</td><td class="td-num" style="color:#6EE7B7">+2.5%</td><td class="td-num">0.0%</td></tr>
+            <tr class="tr-odd" style="border-top:1px solid rgba(201,168,76,0.3)"><td class="td-country" style="padding-left:24px">OTC &amp; Other</td><td class="td-num">203</td><td class="td-num">214</td><td class="td-num">202</td><td class="td-num" style="color:#FCA5A5">-5.1%</td><td class="td-num" style="color:#6EE7B7">+0.5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Key Findings</h2>
+      <h3>① Investment Demand Leads — ETF Inflows Surge 134% YoY</h3>
+      <p>Total investment demand reached 412 tonnes in Q3 2025, a 47% YoY increase. The standout was gold ETF net inflows at 143 tonnes, up 134% from Q3 2024 — the strongest quarterly reading in three years. This reflects intensified global safe-haven buying driven by macro uncertainty and rising Fed rate-cut expectations.</p>
+      <p>Physical bars and coins demand also grew a steady 3.5% YoY to 269 tonnes, with Asia (particularly China and India) and the Middle East remaining the primary markets.</p>
+
+      <h3>② Jewelry Demand Falls Sharply — High Prices Weigh on Consumers</h3>
+      <p>Jewelry consumption dropped to 430 tonnes in Q3, down 6.3% QoQ and 16.7% YoY — the weakest quarter since 2020. London gold averaged $3,456/oz over the quarter, up 40% YoY. Sustained high prices have clearly squeezed consumer purchasing power, with Chinese and Indian markets seeing the most pronounced pullback.</p>
+
+      <h3>③ Central Bank Buying Stays Steady</h3>
+      <p>Central banks globally net-purchased 186 tonnes in Q3, flat YoY — continuing the structural trend of "de-dollarization" and gold accumulation that has persisted since 2010. Emerging market central banks remain the primary buyers, with Poland, Turkey, India, and China (People's Bank of China) among the most active.</p>
+
+      <h3>④ Supply Rises 3% — Mine Output Hits Quarterly Record</h3>
+      <p>Total supply rose 3.1% YoY to 1,313 tonnes in Q3. Mine production reached 974 tonnes, the highest quarterly output on record, partly driven by new mines coming online in Africa and South America. Recycling activity increased 11.9% YoY as high prices incentivized more secondary supply.</p>
+
+      <h2>London Gold Price Performance (Q3 2025)</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead><tr><th>Metric</th><th class="th-num">Value</th><th class="th-num">YoY Change</th></tr></thead>
+          <tbody>
+            <tr class="tr-odd"><td class="td-country">Q3 2025 Average</td><td class="td-num gold-col">$3,456/oz</td><td class="td-num" style="color:#6EE7B7">+40.2%</td></tr>
+            <tr class="tr-even"><td class="td-country">Q3 2025 High</td><td class="td-num gold-col">$3,589/oz</td><td class="td-num" style="color:#6EE7B7">+38.7%</td></tr>
+            <tr class="tr-odd"><td class="td-country">Q3 2025 Low</td><td class="td-num gold-col">$3,287/oz</td><td class="td-num" style="color:#6EE7B7">+42.1%</td></tr>
+            <tr class="tr-even"><td class="td-country">YTD Average (Jan–Sep 2025)</td><td class="td-num gold-col">$3,198/oz</td><td class="td-num" style="color:#6EE7B7">+35.6%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Outlook</h2>
+      <p>The WGC expects gold demand to remain elevated for the remainder of 2025. On the demand side, persistent central bank buying and continued ETF inflows are the key structural supports. On supply, mine output growth is limited by the lead time for new mine development. The WGC maintains a constructive outlook on gold prices for 2025 as a whole.</p>
+
+      <div class="highlight">
+        ⚠️ All data in this article is sourced from the World Gold Council and is <strong>for reference only</strong>. It does not constitute any form of investment advice. Gold prices are subject to multiple factors including monetary policy, geopolitics, and currency markets. Please conduct your own research before investing.
+      </div>
     `
   },
   {
     id: 2,
     title: "全球央行黃金儲備",
+    titleEn: "Global Central Bank Gold Reserves",
     category: "數據報告",
     date: "2025.03.03",
     readTime: "8 分鐘",
@@ -1565,6 +1895,8 @@ const articles = [
     emoji: "🏦",
     bgColor: "linear-gradient(135deg,#0d1a12,#1a3020,#0d1a12)",
     excerpt: "彙整全球 48 個央行最新黃金儲備數據，涵蓋外匯存底規模、黃金噸位與黃金占比，並附完整互動表格。烏茲別克黃金占比高達 83%，中國仍具龐大增持空間——一表掌握各國儲備布局全貌。",
+    excerptEn: "Latest data on 48 central banks' gold reserves, including forex reserves, gold tonnage, and gold ratio. Uzbekistan leads at 83%; China still has vast room to accumulate.",
+    readTimeEn: "8 min",
     content: `
       <p>根據最新統計，全球央行持有黃金儲備情況呈現出明顯的地區差異與集中趨勢。本報告彙整 48 個國家的黃金儲備數據，包含各國外匯存底、黃金持有量（噸）及黃金占外匯存底比例，供投資人參考。</p>
 
@@ -1644,11 +1976,107 @@ const articles = [
 
       <h2>主要觀察</h2>
       <p>義大利（79.38%）、烏茲別克（83.01%）的黃金占比在樣本中最為突出，相較之下，加拿大、挪威、哥斯大黎加、亞美尼亞黃金儲備為零，顯示各國儲備管理策略存在根本性的差異。中國雖為全球最大外匯存底持有國（逾 3.4 兆美元），但黃金占比僅 8.64%，仍有顯著的增持空間，近年已持續擴大購金行動。</p>
+    `,
+    contentEn: `
+      <p>According to the latest data, global central bank gold holdings show clear regional variation and concentration. This report compiles gold reserve data for 48 countries, including total foreign exchange reserves, gold holdings (tonnes), and gold as a percentage of total reserves.</p>
+
+      <h2>Data Notes</h2>
+      <p>Table is sorted by total foreign exchange reserve size, largest to smallest. "Gold Reserves (t)" reflects each central bank's actual gold holdings. "Gold %" represents gold's value as a share of total forex reserves — the higher the figure, the more a country relies on gold as its primary reserve asset. Central Asian nations such as Uzbekistan (83.01%), Kazakhstan (72.17%), and Kyrgyzstan (75.52%) hold extremely high gold ratios, reflecting a policy preference for gold as the dominant reserve instrument.</p>
+
+      <div class="highlight">
+        💡 Data Source: World Gold Council (WGC), IMF IFS. Data as of Q2 2025. Figures may vary slightly due to rounding and exchange rate fluctuations. This table is <strong>for reference only</strong> and does not constitute investment advice.
+      </div>
+
+      <h2>Global Central Bank Gold Reserves (48 Countries)</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:40px">#</th>
+              <th style="min-width:140px">Country / Region</th>
+              <th class="th-num" style="min-width:130px">Forex Reserves (USD bn)</th>
+              <th class="th-num" style="min-width:110px">Gold (tonnes)</th>
+              <th class="th-pct" style="min-width:130px">Gold %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd"><td class="td-rank">1</td><td class="td-country">🇨🇳 China</td><td class="td-num">3,316</td><td class="td-num gold-col">2,264</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">4.94%</span><div class="pct-bar"><div class="pct-fill" style="width:4.94%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">2</td><td class="td-country">🇯🇵 Japan</td><td class="td-num">1,228</td><td class="td-num gold-col">846</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">4.31%</span><div class="pct-bar"><div class="pct-fill" style="width:4.31%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">3</td><td class="td-country">🇨🇭 Switzerland</td><td class="td-num">881</td><td class="td-num gold-col">1,040</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">8.13%</span><div class="pct-bar"><div class="pct-fill" style="width:8.13%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">4</td><td class="td-country">🇮🇳 India</td><td class="td-num">648</td><td class="td-num gold-col">841</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">8.42%</span><div class="pct-bar"><div class="pct-fill" style="width:8.42%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">5</td><td class="td-country">🇷🇺 Russia</td><td class="td-num">598</td><td class="td-num gold-col">2,336</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">26.95%</span><div class="pct-bar"><div class="pct-fill" style="width:26.95%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">6</td><td class="td-country">🇹🇼 Taiwan</td><td class="td-num">577</td><td class="td-num gold-col">424</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">4.79%</span><div class="pct-bar"><div class="pct-fill" style="width:4.79%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">7</td><td class="td-country">🇸🇦 Saudi Arabia</td><td class="td-num">457</td><td class="td-num gold-col">323</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">4.60%</span><div class="pct-bar"><div class="pct-fill" style="width:4.60%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">8</td><td class="td-country">🇰🇷 South Korea</td><td class="td-num">415</td><td class="td-num gold-col">104</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">1.63%</span><div class="pct-bar"><div class="pct-fill" style="width:1.63%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">9</td><td class="td-country">🇩🇪 Germany</td><td class="td-num">292</td><td class="td-num gold-col">3,353</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">74.50%</span><div class="pct-bar"><div class="pct-fill" style="width:74.50%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">10</td><td class="td-country">🇸🇬 Singapore</td><td class="td-num">288</td><td class="td-num gold-col">228</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">5.16%</span><div class="pct-bar"><div class="pct-fill" style="width:5.16%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">11</td><td class="td-country">🇭🇰 Hong Kong</td><td class="td-num">281</td><td class="td-num gold-col">3</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">0.07%</span><div class="pct-bar"><div class="pct-fill" style="width:0.1%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">12</td><td class="td-country">🇧🇷 Brazil</td><td class="td-num">262</td><td class="td-num gold-col">130</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">3.23%</span><div class="pct-bar"><div class="pct-fill" style="width:3.23%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">13</td><td class="td-country">🇫🇷 France</td><td class="td-num">237</td><td class="td-num gold-col">2,437</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">66.72%</span><div class="pct-bar"><div class="pct-fill" style="width:66.72%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">14</td><td class="td-country">🇮🇹 Italy</td><td class="td-num">223</td><td class="td-num gold-col">2,452</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">71.46%</span><div class="pct-bar"><div class="pct-fill" style="width:71.46%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">15</td><td class="td-country">🇹🇭 Thailand</td><td class="td-num">212</td><td class="td-num gold-col">244</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">7.49%</span><div class="pct-bar"><div class="pct-fill" style="width:7.49%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">16</td><td class="td-country">🇲🇽 Mexico</td><td class="td-num">203</td><td class="td-num gold-col">120</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">3.84%</span><div class="pct-bar"><div class="pct-fill" style="width:3.84%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">17</td><td class="td-country">🇬🇧 United Kingdom</td><td class="td-num">176</td><td class="td-num gold-col">310</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">11.44%</span><div class="pct-bar"><div class="pct-fill" style="width:11.44%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">18</td><td class="td-country">🇨🇿 Czech Republic</td><td class="td-num">150</td><td class="td-num gold-col">42</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">1.82%</span><div class="pct-bar"><div class="pct-fill" style="width:1.82%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">19</td><td class="td-country">🇵🇱 Poland</td><td class="td-num">148</td><td class="td-num gold-col">392</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">17.28%</span><div class="pct-bar"><div class="pct-fill" style="width:17.28%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">20</td><td class="td-country">🇮🇩 Indonesia</td><td class="td-num">146</td><td class="td-num gold-col">78</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">3.47%</span><div class="pct-bar"><div class="pct-fill" style="width:3.47%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">21</td><td class="td-country">🇺🇦 Ukraine</td><td class="td-num">140</td><td class="td-num gold-col">27</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">1.25%</span><div class="pct-bar"><div class="pct-fill" style="width:1.25%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">22</td><td class="td-country">🇳🇴 Norway</td><td class="td-num">138</td><td class="td-num gold-col">0</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">0.00%</span><div class="pct-bar"><div class="pct-fill" style="width:0%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">23</td><td class="td-country">🇦🇺 Australia</td><td class="td-num">136</td><td class="td-num gold-col">67</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">3.21%</span><div class="pct-bar"><div class="pct-fill" style="width:3.21%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">24</td><td class="td-country">🇹🇷 Turkey</td><td class="td-num">131</td><td class="td-num gold-col">570</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">28.35%</span><div class="pct-bar"><div class="pct-fill" style="width:28.35%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">25</td><td class="td-country">🇮🇷 Iran</td><td class="td-num">120</td><td class="td-num gold-col">—</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">—</span><div class="pct-bar"><div class="pct-fill" style="width:0%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">26</td><td class="td-country">🇺🇸 United States</td><td class="td-num">113</td><td class="td-num gold-col">8,133</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">74.25%</span><div class="pct-bar"><div class="pct-fill" style="width:74.25%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">27</td><td class="td-country">🇦🇷 Argentina</td><td class="td-num">103</td><td class="td-num gold-col">62</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">3.91%</span><div class="pct-bar"><div class="pct-fill" style="width:3.91%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">28</td><td class="td-country">🇵🇭 Philippines</td><td class="td-num">103</td><td class="td-num gold-col">159</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">10.05%</span><div class="pct-bar"><div class="pct-fill" style="width:10.05%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">29</td><td class="td-country">🇩🇿 Algeria</td><td class="td-num">97</td><td class="td-num gold-col">174</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">11.65%</span><div class="pct-bar"><div class="pct-fill" style="width:11.65%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">30</td><td class="td-country">🇮🇶 Iraq</td><td class="td-num">96</td><td class="td-num gold-col">136</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">9.21%</span><div class="pct-bar"><div class="pct-fill" style="width:9.21%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">31</td><td class="td-country">🇲🇾 Malaysia</td><td class="td-num">95</td><td class="td-num gold-col">40</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">2.74%</span><div class="pct-bar"><div class="pct-fill" style="width:2.74%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">32</td><td class="td-country">🇧🇩 Bangladesh</td><td class="td-num">85</td><td class="td-num gold-col">14</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">1.07%</span><div class="pct-bar"><div class="pct-fill" style="width:1.07%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">33</td><td class="td-country">🇳🇱 Netherlands</td><td class="td-num">78</td><td class="td-num gold-col">612</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">51.12%</span><div class="pct-bar"><div class="pct-fill" style="width:51.12%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">34</td><td class="td-country">🇪🇬 Egypt</td><td class="td-num">68</td><td class="td-num gold-col">127</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">12.15%</span><div class="pct-bar"><div class="pct-fill" style="width:12.15%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">35</td><td class="td-country">🇦🇪 UAE</td><td class="td-num">67</td><td class="td-num gold-col">—</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">—</span><div class="pct-bar"><div class="pct-fill" style="width:0%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">36</td><td class="td-country">🇵🇰 Pakistan</td><td class="td-num">60</td><td class="td-num gold-col">65</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">7.07%</span><div class="pct-bar"><div class="pct-fill" style="width:7.07%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">37</td><td class="td-country">🇻🇳 Vietnam</td><td class="td-num">57</td><td class="td-num gold-col">—</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">—</span><div class="pct-bar"><div class="pct-fill" style="width:0%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">38</td><td class="td-country">🇵🇹 Portugal</td><td class="td-num">50</td><td class="td-num gold-col">383</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">49.84%</span><div class="pct-bar"><div class="pct-fill" style="width:49.84%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">39</td><td class="td-country">🇰🇿 Kazakhstan</td><td class="td-num">49</td><td class="td-num gold-col">300</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">72.17%</span><div class="pct-bar"><div class="pct-fill" style="width:72.17%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">40</td><td class="td-country">🇷🇴 Romania</td><td class="td-num">49</td><td class="td-num gold-col">104</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">13.82%</span><div class="pct-bar"><div class="pct-fill" style="width:13.82%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">41</td><td class="td-country">🇸🇪 Sweden</td><td class="td-num">48</td><td class="td-num gold-col">126</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">17.16%</span><div class="pct-bar"><div class="pct-fill" style="width:17.16%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">42</td><td class="td-country">🇵🇪 Peru</td><td class="td-num">47</td><td class="td-num gold-col">34</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">4.70%</span><div class="pct-bar"><div class="pct-fill" style="width:4.70%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">43</td><td class="td-country">🇱🇾 Libya</td><td class="td-num">46</td><td class="td-num gold-col">117</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">16.56%</span><div class="pct-bar"><div class="pct-fill" style="width:16.56%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">44</td><td class="td-country">🇷🇸 Serbia</td><td class="td-num">26</td><td class="td-num gold-col">47</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">11.76%</span><div class="pct-bar"><div class="pct-fill" style="width:11.76%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">45</td><td class="td-country">🇧🇾 Belarus</td><td class="td-num">25</td><td class="td-num gold-col">51</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">13.27%</span><div class="pct-bar"><div class="pct-fill" style="width:13.27%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">46</td><td class="td-country">🇬🇭 Ghana</td><td class="td-num">24</td><td class="td-num gold-col">—</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">—</span><div class="pct-bar"><div class="pct-fill" style="width:0%"></div></div></div></td></tr>
+            <tr class="tr-odd"><td class="td-rank">47</td><td class="td-country">🇰🇬 Kyrgyzstan</td><td class="td-num">11</td><td class="td-num gold-col">7</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">75.52%</span><div class="pct-bar"><div class="pct-fill" style="width:75.52%"></div></div></div></td></tr>
+            <tr class="tr-even"><td class="td-rank">48</td><td class="td-country">🇺🇿 Uzbekistan</td><td class="td-num">9</td><td class="td-num gold-col">371</td><td class="td-pct"><div class="pct-wrap"><span class="pct-num">83.01%</span><div class="pct-bar"><div class="pct-fill" style="width:83.01%"></div></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Key Insights</h2>
+      <h3>① The U.S. Remains the World's Largest Gold Holder</h3>
+      <p>With 8,133 tonnes, the U.S. holds nearly 4x more gold than Germany (3,353t) in second place. U.S. gold represents 74.25% of its total foreign exchange reserves — making gold essentially the core of its reserve system. Fort Knox and the New York Federal Reserve vault are the primary storage locations.</p>
+
+      <h3>② European Countries Lead in Gold Ratio</h3>
+      <p>Germany (74.50%), Italy (71.46%), France (66.72%), and the Netherlands (51.12%) all hold gold at over 50% of total reserves — reflecting Europe's deep-rooted tradition of using gold as the ultimate store of value and a hedge against systemic risk.</p>
+
+      <h3>③ Central Asian Nations: Extreme Gold Concentration</h3>
+      <p>Uzbekistan (83.01%), Kazakhstan (72.17%), and Kyrgyzstan (75.52%) hold the world's highest gold ratios among nations with available data. This reflects their policy of diversifying away from the U.S. dollar, using domestically-produced gold as the primary reserve asset.</p>
+
+      <h3>④ China: Massive Absolute Holdings, Still Room to Grow</h3>
+      <p>China holds 2,264 tonnes — the world's sixth largest — but gold represents only 4.94% of its total reserves. Given China's total forex reserves of $3.3 trillion (world's largest), even a modest increase in gold allocation would translate into enormous absolute demand. Market analysts widely expect China to continue accumulating gold.</p>
+
+      <h3>⑤ Taiwan: Stable Holdings, Low Ratio</h3>
+      <p>Taiwan holds 424 tonnes — ranked 13th globally — representing 4.79% of its total reserves. Taiwan's gold holdings have been stable for decades, with no significant increases in recent years. Given Taiwan's massive forex reserves of $577 billion, analysts note substantial room to increase the gold ratio.</p>
+
+      <div class="highlight">
+        ⚠️ All data in this report is sourced from the WGC and IMF and is <strong>for reference only</strong>. It does not constitute investment advice. Central bank gold holdings may differ slightly from official data due to timing differences and reporting variations.
+      </div>
     `
   },
   {
     id: 1,
     title: "聯準會政策轉向預期升溫，黃金突破3,300美元關鍵阻力位",
+    titleEn: "Fed Pivot Bets Rise as Gold Breaks Key $3,300 Resistance",
     category: "市場分析",
     date: "2025.03.02",
     readTime: "5 分鐘",
@@ -1656,6 +2084,8 @@ const articles = [
     emoji: "📊",
     bgColor: "linear-gradient(135deg,#1a1206,#3a2a0a,#1a1206)",
     excerpt: "隨著通膨數據持續降溫，市場對聯準會降息預期明顯升溫，推升黃金現貨價格強勢突破3,300美元心理關卡，創下近三個月新高。分析師普遍看好後市，目標價上看3,450美元。",
+    excerptEn: "As inflation cools, Fed rate-cut bets have surged, driving gold spot above the $3,300 psychological level to a 3-month high. Analysts broadly bullish with a $3,450 target.",
+    readTimeEn: "5 min",
     content: `
       <p>本週黃金市場走勢強勁，現貨黃金價格於週三盤中突破每盎司 <strong>3,300 美元</strong>關鍵阻力位，創下近三個月以來的新高紀錄。市場分析師指出，此波漲勢的主要驅動力來自於美國最新公布的通膨數據低於預期，進一步強化了市場對聯準會提前降息的押注。</p>
 
@@ -1677,6 +2107,28 @@ const articles = [
 
       <h2>結語</h2>
       <p>綜合基本面與技術面分析，目前黃金市場的多頭格局相對明確。然而，投資決策應考量個人風險承受能力與資產配置比例，黃金通常建議占整體投資組合的 5% 至 15% 為宜。本文所有內容均<strong>僅供參考</strong>，不構成任何投資建議。</p>
+    `,
+    contentEn: `
+      <p>Gold markets posted strong gains this week, with spot gold breaking through the key <strong>$3,300 per ounce</strong> resistance level mid-session on Wednesday — a three-month high. Analysts attribute the rally primarily to cooler-than-expected U.S. inflation data, which strengthened bets on an earlier Fed rate cut.</p>
+
+      <h2>Cooling Inflation: The Main Driver</h2>
+      <p>The U.S. Bureau of Labor Statistics reported CPI annual growth falling to 2.8%, below the 3.1% market consensus and the lowest reading since 2021. The data immediately weakened the dollar and pushed Treasury yields lower, significantly boosting the appeal of non-yielding gold.</p>
+      <p>Federal funds futures data shows that traders' probability estimate for two rate cuts this year has jumped from 42% a week ago to 68%. Capital has visibly accelerated into gold-related assets — gold ETF net inflows this week hit a three-month high.</p>
+
+      <div class="highlight">
+        💡 Key Insight: When U.S. real interest rates (nominal rate − inflation) decline, the opportunity cost of holding gold falls — that's the core logic behind gold rallies. Watch the 10-year TIPS yield closely.
+      </div>
+
+      <h2>Technical View: Support & Targets After the Breakout</h2>
+      <p>From a technical perspective, gold's decisive close above $3,300 has flipped that level from resistance to strong support. In the near term, holding above $3,280 confirms the bullish structure, with the next target at <strong>$3,380</strong> and a medium-term objective of <strong>$3,450</strong>.</p>
+      <p>Notably, the RSI sits around 67 — not yet in overbought territory (above 70) — suggesting the rally still has room to run, though investors should remain alert to short-term profit-taking pressure.</p>
+
+      <h2>How Can Taiwan Investors Participate?</h2>
+      <p>Taiwan investors have several main options. A gold passbook (offered by Bank of Taiwan, Land Bank, etc.) is the most convenient entry point with relatively low fees. For higher liquidity, consider Yuanta Gold ETF (00635U), which tracks London spot gold and trades exactly like a stock on the TWSE.</p>
+      <p>One critical factor: gold returns denominated in TWD must account for <strong>exchange rate movement</strong>. If the New Taiwan Dollar appreciates simultaneously, actual returns may fall short of the USD-denominated price gain — a variable Taiwan investors cannot ignore.</p>
+
+      <h2>Conclusion</h2>
+      <p>Both fundamentals and technicals currently support a bullish gold outlook. That said, investment decisions should reflect personal risk tolerance and portfolio allocation. Gold is generally recommended at 5%–15% of a total portfolio. All content in this article is <strong>for reference only</strong> and does not constitute investment advice.</p>
     `
   },
 ];
@@ -1713,30 +2165,42 @@ function renderAll() {
 
   empty.style.display = 'none';
 
+  const en = (typeof currentLang !== 'undefined' && currentLang === 'en');
+  const catMap = {'市場分析':'Market Analysis','投資教學':'Education','國際情勢':'Global Affairs','台灣市場':'Taiwan Market','總體經濟':'Macro Economy','市場知識':'Market Knowledge'};
+
   // 精選（第一篇大卡）
   const first = filtered[0];
+  const fTitle = en && first.titleEn ? first.titleEn : first.title;
+  const fExcerpt = en && first.excerptEn ? first.excerptEn : first.excerpt;
+  const fCat = en ? (catMap[first.category] || first.category) : first.category;
+  const fTime = en ? (first.readTimeEn || first.readTime || '3 min') : (first.readTime || '3 分鐘');
   featured.innerHTML = `
     <div class="featured-article fade-up" onclick="openArticle(${first.id})">
       <div class="featured-img" style="background:${first.bgColor || 'linear-gradient(135deg,#1a1206,#2a1a06)'}">
         <span style="position:relative;z-index:1">${first.emoji || '📰'}</span>
-        <div class="featured-badge">精選</div>
+        <div class="featured-badge">${en ? 'FEATURED' : '精選'}</div>
       </div>
       <div class="featured-body">
-        <div class="featured-category">${first.category}</div>
-        <div class="featured-title">${first.title}</div>
-        <div class="featured-excerpt">${first.excerpt}</div>
+        <div class="featured-category">${fCat}</div>
+        <div class="featured-title">${fTitle}</div>
+        <div class="featured-excerpt">${fExcerpt}</div>
         <div class="featured-meta">
           <span>${first.date}</span>
-          <span>📖 ${first.readTime || '3 分鐘'}</span>
+          <span>📖 ${fTime}</span>
           <span>👁 ${first.views || '0'}</span>
-          <span class="read-more">閱讀全文 →</span>
+          <span class="read-more">${en ? 'Read more →' : '閱讀全文 →'}</span>
         </div>
       </div>
     </div>`;
 
   // 其餘文章格
   const rest = filtered.slice(1, visibleCount + 1);
-  grid.innerHTML = rest.map(a => `
+  grid.innerHTML = rest.map(a => {
+    const aTitle = en && a.titleEn ? a.titleEn : a.title;
+    const aExcerpt = en && a.excerptEn ? a.excerptEn : a.excerpt;
+    const aCat = en ? (catMap[a.category] || a.category) : a.category;
+    const aTime = en ? (a.readTimeEn || a.readTime || '3 min') : (a.readTime || '3 分鐘');
+    return `
     <div class="article-card fade-up" onclick="openArticle(${a.id})">
       <div class="card-img">
         <div class="card-img-inner" style="background:${a.bgColor || 'linear-gradient(135deg,#1a1206,#2a1a06)'}">
@@ -1744,15 +2208,17 @@ function renderAll() {
         </div>
       </div>
       <div class="card-body">
-        <div class="card-category">${a.category}</div>
-        <div class="card-title">${a.title}</div>
-        <div class="card-excerpt">${a.excerpt}</div>
+        <div class="card-category">${aCat}</div>
+        <div class="card-title">${aTitle}</div>
+        <div class="card-excerpt">${aExcerpt}</div>
         <div class="card-meta">
           <span>${a.date}</span>
-          <span>📖 ${a.readTime || '3 分鐘'}</span>
+          <span>📖 ${aTime}</span>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  document.getElementById('articleCount').innerHTML = en ? `${filtered.length} articles` : `共 <span id="articleCountNum">${filtered.length}</span> 篇文章`;
 
   // 載入更多
   const hasMore = filtered.length > visibleCount + 1;
@@ -1779,10 +2245,13 @@ function openArticle(id) {
   if (!a) return;
   document.getElementById('modalImg').style.background = a.bgColor || 'linear-gradient(135deg,#1a1206,#2a1a06)';
   document.getElementById('modalImg').innerHTML = `<span style="position:relative;z-index:1;font-size:72px">${a.emoji || '📰'}</span>`;
-  document.getElementById('modalCategory').textContent = a.category;
-  document.getElementById('modalTitle').textContent = a.title;
-  document.getElementById('modalMeta').innerHTML = `<span>${a.date}</span><span>📖 ${a.readTime || '3 分鐘'}</span><span>👁 ${a.views || '0'} 瀏覽</span>`;
-  document.getElementById('modalContent').innerHTML = a.content || '<p>文章內容即將更新。</p>';
+  const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
+  const catMapM = {'市場分析':'Market Analysis','投資教學':'Education','國際情勢':'Global Affairs','台灣市場':'Taiwan Market','總體經濟':'Macro Economy','市場知識':'Market Knowledge'};
+  document.getElementById('modalCategory').textContent = isEn ? (catMapM[a.category] || a.category) : a.category;
+  document.getElementById('modalTitle').textContent = isEn && a.titleEn ? a.titleEn : a.title;
+  const readT = isEn ? (a.readTimeEn || a.readTime || '3 min') : (a.readTime || '3 分鐘');
+  document.getElementById('modalMeta').innerHTML = `<span>${a.date}</span><span>📖 ${readT}</span><span>👁 ${a.views || '0'} ${isEn ? 'views' : '瀏覽'}</span>`;
+  document.getElementById('modalContent').innerHTML = (isEn && a.contentEn) ? a.contentEn : (a.content || '<p>文章內容即將更新。</p>');
   document.getElementById('articleOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -1860,15 +2329,15 @@ onAuthStateChanged(auth, user => {
       <button class="info-modal-close" onclick="closeInfoModal()">×</button>
     </div>
     <div class="info-modal-tabs">
-      <button class="info-modal-tab active" onclick="switchInfoTab('about', this)">關於我們</button>
-      <button class="info-modal-tab" onclick="switchInfoTab('contact', this)">聯絡我們</button>
-      <button class="info-modal-tab" onclick="switchInfoTab('privacy', this)">隱私政策</button>
-      <button class="info-modal-tab" onclick="switchInfoTab('terms', this)">服務條款</button>
+      <button class="info-modal-tab active" onclick="switchInfoTab('about', this)" data-i18n="info_about">關於我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('contact', this)" data-i18n="info_contact">聯絡我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('privacy', this)" data-i18n="info_privacy">隱私政策</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('terms', this)" data-i18n="info_terms">服務條款</button>
     </div>
     <div class="info-modal-body">
 
       <!-- 關於我們 -->
-      <div class="info-panel active" id="info-about">
+      <div class="info-panel active lang-zh" id="info-about">
         <div class="info-section">
           <div class="info-section-title">我們的使命</div>
           <p>黃金殿是一個專注於貴金屬投資的資訊平台，致力於為台灣及華語地區投資人提供即時、準確的黃金與貴金屬市場資訊。</p>
@@ -1890,7 +2359,7 @@ onAuthStateChanged(auth, user => {
       </div>
 
       <!-- 聯絡我們 -->
-      <div class="info-panel" id="info-contact">
+      <div class="info-panel lang-zh" id="info-contact">
         <div class="info-section">
           <div class="info-section-title">與我們聯繫</div>
           <p>我們非常重視每一位用戶的意見與反饋。無論您有任何建議、問題或合作邀請，歡迎透過以下方式與我們聯繫。</p>
@@ -1899,7 +2368,7 @@ onAuthStateChanged(auth, user => {
               <div class="info-contact-icon">✉️</div>
               <div>
                 <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">客服信箱</div>
-                <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>
+                <a href="/cdn-cgi/l/email-protection#8cf8f9ffe5f8edefe4e5e0e8ccebe1ede5e0a2efe3e1" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="dca8a9afb5a8bdbfb4b5b0b89cbbb1bdb5b0f2bfb3b1">[email&#160;protected]</span></a>
               </div>
             </div>
             <div class="info-contact-row">
@@ -1930,7 +2399,7 @@ onAuthStateChanged(auth, user => {
       </div>
 
       <!-- 隱私政策 -->
-      <div class="info-panel" id="info-privacy">
+      <div class="info-panel lang-zh" id="info-privacy">
         <div class="info-section">
           <div class="info-section-title">資料收集</div>
           <p>黃金殿（以下稱「本平台」）收集的個人資料包含：您主動提供的帳號資訊（電子郵件、使用者名稱），以及系統自動記錄的瀏覽行為、裝置資訊與 IP 位址等技術資料。</p>
@@ -1946,7 +2415,7 @@ onAuthStateChanged(auth, user => {
         </div>
         <div class="info-section">
           <div class="info-section-title">資料安全</div>
-          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>。</p>
+          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="/cdn-cgi/l/email-protection#9eeaebedf7eafffdf6f7f2fadef9f3fff7f2b0fdf1f3" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="e49091978d9085878c8d8880a48389858d88ca878b89">[email&#160;protected]</span></a>。</p>
                   </div>
         <div class="info-section">
           <div class="info-section-title">政策更新</div>
@@ -1955,7 +2424,7 @@ onAuthStateChanged(auth, user => {
       </div>
 
       <!-- 服務條款 -->
-      <div class="info-panel" id="info-terms">
+      <div class="info-panel lang-zh" id="info-terms">
         <div class="info-section">
           <div class="info-section-title">服務說明</div>
           <p>黃金殿提供貴金屬市場資訊、投資分析及社群討論等服務。使用本平台即表示您已閱讀並同意以下服務條款。</p>
@@ -1978,7 +2447,7 @@ onAuthStateChanged(auth, user => {
         </div>
         <div class="info-section">
           <div class="info-section-title">智慧財產權</div>
-          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>。</p>
+          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="/cdn-cgi/l/email-protection#a9dddcdac0ddc8cac1c0c5cde9cec4c8c0c587cac6c4" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="dfabaaacb6abbebcb7b6b3bb9fb8b2beb6b3f1bcb0b2">[email&#160;protected]</span></a>。</p>
                   </div>
         <div class="info-section">
           <div class="info-section-title">條款修訂</div>
@@ -1986,17 +2455,55 @@ onAuthStateChanged(auth, user => {
         </div>
       </div>
 
+      <!-- EN panels -->
+      <div class="info-panel lang-en" id="info-about-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Our Mission</div><p>Gold Palace is a precious metals investment platform dedicated to providing real-time, accurate market data to investors in Taiwan and the Chinese-speaking world.</p></div>
+        <div class="info-section"><div class="info-section-title">Platform Features</div><div class="info-highlight">⚡ Live Prices · All major metals updated every 60 min<br>📊 Pro Tools · Historical charts &amp; technical indicators<br>💬 Community · Thousands of active investors<br>📰 Curated News · Global market coverage</div></div>
+        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All information is <strong style="color:var(--text)">for reference only</strong> and does not constitute investment advice.</p></div>
+      </div>
+      <div class="info-panel lang-en" id="info-contact-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Get in Touch</div><p>We value every user's feedback. Reach us for suggestions, questions, or partnership inquiries.</p>
+          <div class="info-contact-card">
+            <div class="info-contact-row"><div class="info-contact-icon">✉️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">EMAIL</div><a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a></div></div>
+            <div class="info-contact-row"><div class="info-contact-icon">🕐</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">HOURS</div>Mon–Fri 09:00–18:00 (GMT+8)</div></div>
+            <div class="info-contact-row"><div class="info-contact-icon">⏱️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">RESPONSE</div>Within 1–3 business days</div></div>
+          </div>
+        </div>
+        <div class="info-section"><div class="info-section-title">Common Inquiries</div><div class="info-highlight">🐛 Report bugs or incorrect data<br>💡 Feature suggestions<br>🤝 Media &amp; business partnerships<br>📝 Content licensing</div></div>
+      </div>
+      <div class="info-panel lang-en" id="info-privacy-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Data Collection</div><p>We collect account info (email, username) and technical data (browsing behavior, device info, IP address).</p></div>
+        <div class="info-section"><div class="info-section-title">Purpose</div><p>Data is used to provide services, send notifications, improve UX, and prevent fraud.</p><div class="info-highlight">We will <strong style="color:var(--text)">never</strong> sell your data to third parties.</div></div>
+        <div class="info-section"><div class="info-section-title">Cookies</div><p>We use cookies to maintain sessions and collect anonymous stats. Manage via browser settings.</p></div>
+        <div class="info-section"><div class="info-section-title">Security</div><p>Industry-standard encryption protects your data. Questions? <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+      </div>
+      <div class="info-panel lang-en" id="info-terms-en" style="display:none">
+        <div class="info-section"><div class="info-section-title">Service</div><p>Gold Palace provides precious metals market info, analysis, and community discussions. By using this platform, you agree to these terms.</p></div>
+        <div class="info-section"><div class="info-section-title">Membership</div><p>Must be 18+. One account per user. Accounts are non-transferable.</p></div>
+        <div class="info-section"><div class="info-section-title">Conduct</div><div class="info-highlight">✅ Allowed: Share experiences, discuss markets, lawful comments<br>❌ Prohibited: Misinformation, harassment, spam, illegal activity</div></div>
+        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All content is <strong style="color:var(--text)">for reference only</strong>. We are not liable for investment losses. IP protected. <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+      </div>
+
+
     </div>
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── INFO MODAL ──
 const infoConfig = {
-  about:   { icon: '🏛️', label: 'ABOUT US', title: '關於我們' },
-  contact: { icon: '✉️', label: 'CONTACT',  title: '聯絡我們' },
-  privacy: { icon: '🔒', label: 'PRIVACY',  title: '隱私政策' },
-  terms:   { icon: '📋', label: 'TERMS',    title: '服務條款' },
+  zh: {
+    about:   { icon: '🏛️', label: 'ABOUT US',       title: '關於我們' },
+    contact: { icon: '✉️', label: 'CONTACT',        title: '聯絡我們' },
+    privacy: { icon: '🔒', label: 'PRIVACY POLICY', title: '隱私政策' },
+    terms:   { icon: '📋', label: 'TERMS',          title: '服務條款' },
+  },
+  en: {
+    about:   { icon: '🏛️', label: 'ABOUT US',       title: 'About Us' },
+    contact: { icon: '✉️', label: 'CONTACT',        title: 'Contact Us' },
+    privacy: { icon: '🔒', label: 'PRIVACY POLICY', title: 'Privacy Policy' },
+    terms:   { icon: '📋', label: 'TERMS',          title: 'Terms of Service' },
+  }
 };
 function openInfoModal(tab) {
   switchInfoTab(tab);
@@ -2008,21 +2515,83 @@ function closeInfoModal() {
 function closeInfoModalOutside(e) {
   if (e.target === document.getElementById('infoModalOverlay')) closeInfoModal();
 }
+let _currentInfoTab = 'about';
 function switchInfoTab(tab, clickedBtn) {
-  const cfg = infoConfig[tab];
+  _currentInfoTab = tab;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'zh';
+  const cfg = infoConfig[lang][tab];
   document.getElementById('infoModalIcon').textContent = cfg.icon;
   document.getElementById('infoModalLabel').textContent = cfg.label;
   document.getElementById('infoModalTitle').textContent = cfg.title;
   ['about','contact','privacy','terms'].forEach(t => {
-    document.getElementById('info-'+t).classList.toggle('active', t===tab);
+    const zhEl = document.getElementById('info-' + t);
+    const enEl = document.getElementById('info-' + t + '-en');
+    const show = (t === tab);
+    if (zhEl) zhEl.style.display = (show && lang === 'zh') ? '' : 'none';
+    if (enEl) enEl.style.display = (show && lang === 'en') ? '' : 'none';
   });
-  document.querySelectorAll('.info-modal-tab').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'"+tab+"'")) {
-      btn.classList.add('active');
-    }
-  });
+  document.querySelectorAll('.info-modal-tab').forEach(b => b.classList.remove('active'));
+  if (clickedBtn) clickedBtn.classList.add('active');
+  else {
+    const idx = ['about','contact','privacy','terms'].indexOf(tab);
+    const tabs = document.querySelectorAll('.info-modal-tab');
+    if (tabs[idx]) tabs[idx].classList.add('active');
+  }
 }
+</script>
+<script>
+const i18n = {
+  zh: {
+    nav_price:'國際金價', nav_market:'完整行情', nav_jewelry:'黃金飾品', nav_news:'投資訊息', nav_forum:'討論區',
+    btn_login:'登入', btn_register:'免費註冊', btn_logout:'登出',
+    breadcrumb_home:'黃金殿',
+    page_title:'投資訊息<span>精選</span>',
+    page_desc:'匯整國內外貴金屬市場最新動態、深度分析與投資教學，助您掌握每一個關鍵機會。',
+    tag_all:'全部', tag_market:'市場分析', tag_edu:'投資教學', tag_global:'國際情勢', tag_tw:'台灣市場', tag_macro:'總體經濟',
+    empty_title:'目前尚無文章', empty_desc:'文章即將上線，敬請期待。<br>您可以先瀏覽其他分類或前往討論區。',
+    load_more:'載入更多文章',
+    sidebar_tags:'熱門標籤', sidebar_about_title:'關於黃金殿',
+    sidebar_about_desc:'黃金殿是專注於貴金屬投資的資訊平台，提供即時金價、市場分析與社群討論服務。',
+    sidebar_about_link:'前往首頁查看即時金價 →',
+    tag_etf:'黃金ETF', tag_cb:'央行購金', tag_ta:'技術分析', tag_silver:'白銀', tag_inflation:'通膨',
+    footer_desc:'專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。',
+    footer_links:'快速連結', footer_member:'會員服務', footer_about:'關於', footer_back:'返回首頁',
+    footer_copy:'© 2025 黃金殿 · 貴金屬投資平台 · <span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span>',
+    info_about:'關於我們', info_contact:'聯絡我們', info_privacy:'隱私政策', info_terms:'服務條款',
+  },
+  en: {
+    nav_price:'Gold Price', nav_market:'Full Market', nav_jewelry:'Jewelry', nav_news:'News', nav_forum:'Forum',
+    btn_login:'Login', btn_register:'Sign Up Free', btn_logout:'Logout',
+    breadcrumb_home:'Gold Palace',
+    page_title:'Investment <span>Highlights</span>',
+    page_desc:'Curated precious metals market news, in-depth analysis and investment guides to help you capture every key opportunity.',
+    tag_all:'All', tag_market:'Market Analysis', tag_edu:'Education', tag_global:'Global Affairs', tag_tw:'Taiwan Market', tag_macro:'Macro Economy',
+    empty_title:'No articles yet', empty_desc:'Articles coming soon — stay tuned.<br>Browse other categories or visit the forum.',
+    load_more:'Load More Articles',
+    sidebar_tags:'Popular Tags', sidebar_about_title:'About Gold Palace',
+    sidebar_about_desc:'Gold Palace is a precious metals investment platform providing live gold prices, market analysis and community discussions.',
+    sidebar_about_link:'View live gold prices on homepage →',
+    tag_etf:'Gold ETF', tag_cb:'Central Bank Buying', tag_ta:'Technical Analysis', tag_silver:'Silver', tag_inflation:'Inflation',
+    footer_desc:'Professional precious metals investment platform. All information is for reference only and does not constitute investment advice.',
+    footer_links:'Quick Links', footer_member:'Members', footer_about:'About', footer_back:'Back to Home',
+    footer_copy:'© 2025 Gold Palace · Precious Metals Platform · <span style="color:var(--text-dim)">For reference only, not investment advice</span>',
+    info_about:'About Us', info_contact:'Contact', info_privacy:'Privacy Policy', info_terms:'Terms of Service',
+  }
+};
+let currentLang = localStorage.getItem('lang') || 'zh';
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('langZH').classList.toggle('active', lang === 'zh');
+  document.getElementById('langEN').classList.toggle('active', lang === 'en');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (i18n[lang][k] !== undefined) el.innerHTML = i18n[lang][k];
+  });
+  renderAll();
+  if (typeof _currentInfoTab !== 'undefined') switchInfoTab(_currentInfoTab);
+}
+document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
 </script>
 </body>
 </html>
