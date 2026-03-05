@@ -165,6 +165,36 @@
   nav a.active { color: var(--gold-light); }
   nav a.active::after { transform: scaleX(1); }
 
+  /* ─── LANG SWITCHER ─── */
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+    margin-left: 8px;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 11px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color: var(--obsidian);
+  }
+  .lang-btn:hover:not(.active) { color: var(--gold); }
+
   .header-actions {
     display: flex;
     align-items: center;
@@ -1116,22 +1146,26 @@
       </div>
     </a>
     <nav>
-      <a href="#" class="active">國際金價</a>
-      <a href="/jewelry.html">黃金飾品</a>
-      <a href="/market.html">投資訊息</a>
-      <a href="/forum">討論區</a>
+      <a href="#" class="active" data-i18n="nav_price">國際金價</a>
+      <a href="/jewelry.html" data-i18n="nav_jewelry">黃金飾品</a>
+      <a href="/market.html" data-i18n="nav_news">投資訊息</a>
+      <a href="/forum" data-i18n="nav_forum">討論區</a>
     </nav>
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="langZH" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="langEN" onclick="setLang('en')">EN</button>
+    </div>
     <div class="header-actions" id="headerActions">
       <!-- 未登入狀態 -->
       <div id="authButtons" style="display:flex;gap:10px;">
-        <button class="btn-login" onclick="openModal()">登入</button>
-        <button class="btn-register" onclick="openModal()">免費註冊</button>
+        <button class="btn-login" onclick="openModal()" data-i18n="btn_login">登入</button>
+        <button class="btn-register" onclick="openModal()" data-i18n="btn_register">免費註冊</button>
       </div>
       <!-- 已登入狀態（預設隱藏） -->
       <div id="userMenu" style="display:none;align-items:center;gap:10px;">
         <img id="userAvatar" src="" alt="" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;">
         <span id="userName" style="font-size:13px;color:var(--gold-light);letter-spacing:1px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-        <button class="btn-login" onclick="signOutUser()">登出</button>
+        <button class="btn-login" onclick="signOutUser()" data-i18n="btn_logout">登出</button>
       </div>
     </div>
   </div>
@@ -1143,35 +1177,35 @@
   <div class="hero-grid"></div>
   <div class="hero-content">
     <div class="fade-up">
-      <div class="hero-badge"><span class="badge-dot"></span>即時金價更新中</div>
-      <h1 class="hero-title">
+      <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero_badge">即時金價更新中</span></div>
+      <h1 class="hero-title" data-i18n="hero_title">
         掌握<span>黃金市場</span><br>
         精準投資時機
       </h1>
-      <p class="hero-desc">
+      <p class="hero-desc" data-i18n="hero_desc">
         整合全球貴金屬即時行情、專業投資分析與活躍社群討論。<br>
         從新手到專業投資人，一站式掌握黃金市場動向。
       </p>
       <div class="hero-cta">
-        <button class="cta-primary" onclick="openModal()">立即加入會員</button>
-        <button class="cta-secondary" onclick="document.getElementById('chartSection').scrollIntoView({behavior:'smooth'})">瀏覽金價走勢</button>
+        <button class="cta-primary" onclick="openModal()" data-i18n="hero_cta1">立即加入會員</button>
+        <button class="cta-secondary" onclick="document.getElementById('chartSection').scrollIntoView({behavior:'smooth'})" data-i18n="hero_cta2">瀏覽金價走勢</button>
       </div>
     </div>
 
     <!-- Live Gold Price Card -->
     <div class="gold-card fade-up delay-2">
       <div class="card-header">
-        <span class="card-title">黃金現貨 · XAU/USD</span>
+        <span class="card-title" data-i18n="gold_card_title">黃金現貨 · XAU/USD</span>
         <span class="live-badge"><span class="live-dot"></span>LIVE</span>
       </div>
       <div class="price-main" id="hero-price">3,285.40</div>
-      <div class="price-unit">美元 / 盎司</div>
+      <div class="price-unit" data-i18n="price_unit">美元 / 盎司</div>
       <div class="price-change" id="hero-change">▲ +12.30 &nbsp;(+0.38%)</div>
       <div class="price-grid">
-        <div class="price-stat"><label>今日最高</label><span id="h-high">3,298.70</span></div>
-        <div class="price-stat"><label>今日最低</label><span id="h-low">3,270.20</span></div>
-        <div class="price-stat"><label>開盤價</label><span>3,273.10</span></div>
-        <div class="price-stat"><label>台灣牌價</label><span>NT$3,371/g</span></div>
+        <div class="price-stat"><label data-i18n="price_high">今日最高</label><span id="h-high">3,298.70</span></div>
+        <div class="price-stat"><label data-i18n="price_low">今日最低</label><span id="h-low">3,270.20</span></div>
+        <div class="price-stat"><label data-i18n="price_open">開盤價</label><span>3,273.10</span></div>
+        <div class="price-stat"><label data-i18n="price_tw">台灣牌價</label><span>NT$3,371/g</span></div>
       </div>
       <div class="update-note" id="update-time">資料延遲 · 最後更新：--:--:--</div>
     </div>
@@ -1183,8 +1217,8 @@
   <div class="chart-inner">
     <div class="chart-header">
       <div>
-        <div class="section-label">價格走勢</div>
-        <div class="section-title" style="font-size:20px;">黃金歷史走勢圖</div>
+        <div class="section-label" data-i18n="chart_label">價格走勢</div>
+        <div class="section-title" style="font-size:20px;" data-i18n="chart_title">黃金歷史走勢圖</div>
       </div>
       <div class="chart-tabs">
         <button class="chart-tab active" onclick="setTVInterval('1D',this)">1日</button>
@@ -1212,38 +1246,38 @@
 <div class="section">
   <div class="section-header">
     <div>
-      <div class="section-label">市場概覽</div>
-      <div class="section-title">貴金屬行情一覽</div>
+      <div class="section-label" data-i18n="market_label">市場概覽</div>
+      <div class="section-title" data-i18n="market_title">貴金屬行情一覽</div>
     </div>
-    <a href="/market" class="section-more">查看完整行情 →</a>
+    <a href="/market" class="section-more" data-i18n="market_more">查看完整行情 →</a>
   </div>
   <div class="market-table fade-up delay-1">
     <div class="market-row market-header">
-      <div>貴金屬</div>
-      <div>現貨價格</div>
-      <div>漲跌幅</div>
-      <div>走勢</div>
+      <div data-i18n="th_metal">貴金屬</div>
+      <div data-i18n="th_price">現貨價格</div>
+      <div data-i18n="th_change">漲跌幅</div>
+      <div data-i18n="th_trend">走勢</div>
     </div>
     <div class="market-row">
-      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C9A84C,#8B6914)">Au</div><div><div class="metal-name">黃金</div><div class="metal-symbol">XAU/USD</div></div></div>
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C9A84C,#8B6914)">Au</div><div><div class="metal-name" data-i18n="metal_gold">黃金</div><div class="metal-symbol">XAU/USD</div></div></div>
       <div class="market-price" id="m-gold">$3,285.40</div>
       <div class="market-change up" id="m-gold-c">▲ +0.38%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,20 10,18 20,22 30,15 40,12 50,14 60,8 70,10 80,6" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
     </div>
     <div class="market-row">
-      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C0C0C0,#808080)">Ag</div><div><div class="metal-name">白銀</div><div class="metal-symbol">XAG/USD</div></div></div>
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C0C0C0,#808080)">Ag</div><div><div class="metal-name" data-i18n="metal_silver">白銀</div><div class="metal-symbol">XAG/USD</div></div></div>
       <div class="market-price" id="m-silver">$32.84</div>
       <div class="market-change up" id="m-silver-c">▲ +1.61%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,22 10,20 20,18 30,16 40,14 50,16 60,12 70,10 80,8" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
     </div>
     <div class="market-row">
-      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#E5E4E2,#6E6E6E)">Pt</div><div><div class="metal-name">鉑金</div><div class="metal-symbol">XPT/USD</div></div></div>
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#E5E4E2,#6E6E6E)">Pt</div><div><div class="metal-name" data-i18n="metal_platinum">鉑金</div><div class="metal-symbol">XPT/USD</div></div></div>
       <div class="market-price" id="m-platinum">$982.50</div>
       <div class="market-change down" id="m-platinum-c">▼ -0.32%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,8 10,10 20,12 30,14 40,12 50,15 60,18 70,16 80,20" fill="none" stroke="#FCA5A5" stroke-width="1.5"/></svg></div>
     </div>
     <div class="market-row">
-      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#B5B5B5,#5a5a5a)">Pd</div><div><div class="metal-name">鈀金</div><div class="metal-symbol">XPD/USD</div></div></div>
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#B5B5B5,#5a5a5a)">Pd</div><div><div class="metal-name" data-i18n="metal_palladium">鈀金</div><div class="metal-symbol">XPD/USD</div></div></div>
       <div class="market-price" id="m-palladium">$1,024.70</div>
       <div class="market-change up" id="m-palladium-c">▲ +0.83%</div>
       <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,18 10,16 20,14 30,12 40,15 50,10 60,8 70,12 80,9" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
@@ -1257,10 +1291,10 @@
 <div class="section">
   <div class="section-header">
     <div>
-      <div class="section-label">最新動態</div>
-      <div class="section-title">投資資訊精選</div>
+      <div class="section-label" data-i18n="news_label">最新動態</div>
+      <div class="section-title" data-i18n="news_title">投資資訊精選</div>
     </div>
-    <a href="news.html" class="section-more">更多資訊 →</a>
+    <a href="news.html" class="section-more" data-i18n="news_more">更多資訊 →</a>
   </div>
   <div class="cards-grid">
     <div class="article-card fade-up delay-1">
@@ -1299,10 +1333,10 @@
 <div class="section">
   <div class="section-header">
     <div>
-      <div class="section-label">社群討論</div>
-      <div class="section-title">熱門話題</div>
+      <div class="section-label" data-i18n="forum_label">社群討論</div>
+      <div class="section-title" data-i18n="forum_title">熱門話題</div>
     </div>
-    <a href="/forum" class="section-more">進入討論區 →</a>
+    <a href="/forum" class="section-more" data-i18n="forum_more">進入討論區 →</a>
   </div>
   <div class="discussion-list" id="hotTopicsList">
     <!-- 載入中骨架 -->
@@ -1335,40 +1369,40 @@
   <div class="footer-main">
     <div class="footer-brand">
       <span class="logo-text" style="font-family:'Noto Serif TC',serif;color:var(--gold-light)">黃金殿</span>
-      <p class="footer-desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。</p>
+      <p class="footer-desc" data-i18n="footer_desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。</p>
     </div>
     <div>
-      <div class="footer-heading">快速連結</div>
+      <div class="footer-heading" data-i18n="footer_links">快速連結</div>
       <ul class="footer-links">
-        <li><a href="#">國際金價</a></li>
-        <li><a href="/jewelry.html">黃金飾品</a></li>
-        <li><a href="/market.html">投資訊息</a></li>
-        <li><a href="/forum">討論區</a></li>
+        <li><a href="#" data-i18n="nav_price">國際金價</a></li>
+        <li><a href="/jewelry.html" data-i18n="nav_jewelry">黃金飾品</a></li>
+        <li><a href="/market.html" data-i18n="nav_news">投資訊息</a></li>
+        <li><a href="/forum" data-i18n="nav_forum">討論區</a></li>
       </ul>
     </div>
     <div>
-      <div class="footer-heading">會員服務</div>
+      <div class="footer-heading" data-i18n="footer_member">會員服務</div>
       <ul class="footer-links">
-        <li><a href="#" onclick="openModal();return false;">免費註冊</a></li>
-        <li><a href="#" onclick="openModal();return false;">會員登入</a></li>
+        <li><a href="#" onclick="openModal();return false;" data-i18n="btn_register">免費註冊</a></li>
+        <li><a href="#" onclick="openModal();return false;" data-i18n="btn_login">登入</a></li>
       </ul>
     </div>
     <div>
-      <div class="footer-heading">關於</div>
+      <div class="footer-heading" data-i18n="footer_about">關於</div>
       <ul class="footer-links">
-        <li><a href="#" onclick="openInfoModal('about');return false;">關於我們</a></li>
-        <li><a href="#" onclick="openInfoModal('contact');return false;">聯絡我們</a></li>
-        <li><a href="#" onclick="openInfoModal('privacy');return false;">隱私政策</a></li>
-        <li><a href="#" onclick="openInfoModal('terms');return false;">服務條款</a></li>
+        <li><a href="#" onclick="openInfoModal('about');return false;" data-i18n="info_about">關於我們</a></li>
+        <li><a href="#" onclick="openInfoModal('contact');return false;" data-i18n="info_contact">聯絡我們</a></li>
+        <li><a href="#" onclick="openInfoModal('privacy');return false;" data-i18n="info_privacy">隱私政策</a></li>
+        <li><a href="#" onclick="openInfoModal('terms');return false;" data-i18n="info_terms">服務條款</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2025 黃金殿 · 貴金屬投資平台 ·&nbsp;<span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span>
     <div class="footer-bottom-links">
-      <a href="#" onclick="openInfoModal('contact');return false;">聯絡我們</a>
-      <a href="#" onclick="openInfoModal('privacy');return false;">隱私政策</a>
-      <a href="#" onclick="openInfoModal('about');return false;">關於我們</a>
+      <a href="#" onclick="openInfoModal('contact');return false;" data-i18n="info_contact">聯絡我們</a>
+      <a href="#" onclick="openInfoModal('privacy');return false;" data-i18n="info_privacy">隱私政策</a>
+      <a href="#" onclick="openInfoModal('about');return false;" data-i18n="info_about">關於我們</a>
     </div>
   </div>
 </footer>
@@ -1377,25 +1411,103 @@
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="modal-title">歡迎來到黃金殿</div>
-    <div class="modal-sub">貴金屬投資資訊平台</div>
+    <div class="modal-title" data-i18n="modal_title">歡迎來到黃金殿</div>
+    <div class="modal-sub" data-i18n="modal_sub">貴金屬投資資訊平台</div>
 
     <!-- Google 登入按鈕 -->
     <button class="google-signin-btn" onclick="signInWithGoogle()">
       <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      使用 Google 帳號登入 / 註冊
+      <span data-i18n="google_btn">使用 Google 帳號登入 / 註冊</span>
     </button>
 
     <div class="modal-divider">
-      <span>一個帳號，完整功能</span>
+      <span data-i18n="modal_divider">一個帳號，完整功能</span>
     </div>
     <div class="modal-features">
-      <div class="modal-feature-item">✦ 參與討論區發文與留言</div>
-      <div class="modal-feature-item">✦ 收藏金價走勢與文章</div>
-      <div class="modal-feature-item">✦ 接收重要市場通知</div>
+      <div class="modal-feature-item" data-i18n="feature1">✦ 參與討論區發文與留言</div>
+      <div class="modal-feature-item" data-i18n="feature2">✦ 收藏金價走勢與文章</div>
+      <div class="modal-feature-item" data-i18n="feature3">✦ 接收重要市場通知</div>
     </div>
   </div>
 </div>
+
+<script>
+// ── 多語言 i18n ──
+const i18n = {
+  zh: {
+    nav_price: '國際金價', nav_jewelry: '黃金飾品', nav_news: '投資訊息', nav_forum: '討論區',
+    btn_login: '登入', btn_register: '免費註冊', btn_logout: '登出',
+    hero_badge: '即時金價更新中',
+    hero_title: '掌握<span>黃金市場</span><br>精準投資時機',
+    hero_desc: '整合全球貴金屬即時行情、專業投資分析與活躍社群討論。<br>從新手到專業投資人，一站式掌握黃金市場動向。',
+    hero_cta1: '立即加入會員', hero_cta2: '瀏覽金價走勢',
+    gold_card_title: '黃金現貨 · XAU/USD',
+    price_unit: '美元 / 盎司', price_high: '今日最高', price_low: '今日最低', price_open: '開盤價', price_tw: '台灣牌價',
+    chart_label: '價格走勢', chart_title: '黃金歷史走勢圖',
+    market_label: '市場概覽', market_title: '貴金屬行情一覽', market_more: '查看完整行情 →',
+    th_metal: '貴金屬', th_price: '現貨價格', th_change: '漲跌幅', th_trend: '走勢',
+    metal_gold: '黃金', metal_silver: '白銀', metal_platinum: '鉑金', metal_palladium: '鈀金',
+    news_label: '最新動態', news_title: '投資資訊精選', news_more: '更多資訊 →',
+    forum_label: '社群討論', forum_title: '熱門話題', forum_more: '進入討論區 →',
+    footer_desc: '專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。',
+    footer_links: '快速連結', footer_member: '會員服務', footer_about: '關於',
+    info_about: '關於我們', info_contact: '聯絡我們', info_privacy: '隱私政策', info_terms: '服務條款',
+    modal_title: '歡迎來到黃金殿', modal_sub: '貴金屬投資資訊平台',
+    google_btn: '使用 Google 帳號登入 / 註冊',
+    modal_divider: '一個帳號，完整功能',
+    feature1: '✦ 參與討論區發文與留言', feature2: '✦ 收藏金價走勢與文章', feature3: '✦ 接收重要市場通知',
+  },
+  en: {
+    nav_price: 'Gold Price', nav_jewelry: 'Jewelry', nav_news: 'News', nav_forum: 'Forum',
+    btn_login: 'Login', btn_register: 'Sign Up Free', btn_logout: 'Logout',
+    hero_badge: 'Live Gold Price Updates',
+    hero_title: 'Master the<span> Gold Market</span><br>Invest with Precision',
+    hero_desc: 'Real-time precious metals quotes, expert analysis and an active community.<br>Everything you need — from beginner to pro investor.',
+    hero_cta1: 'Join Now', hero_cta2: 'View Price Chart',
+    gold_card_title: 'Gold Spot · XAU/USD',
+    price_unit: 'USD / Troy Oz', price_high: "Today's High", price_low: "Today's Low", price_open: 'Open', price_tw: 'TW Listed Price',
+    chart_label: 'PRICE TREND', chart_title: 'Gold Historical Chart',
+    market_label: 'MARKET OVERVIEW', market_title: 'Precious Metals At a Glance', market_more: 'Full Market →',
+    th_metal: 'Metal', th_price: 'Spot Price', th_change: 'Change', th_trend: 'Trend',
+    metal_gold: 'Gold', metal_silver: 'Silver', metal_platinum: 'Platinum', metal_palladium: 'Palladium',
+    news_label: 'LATEST', news_title: 'Investment Highlights', news_more: 'More Articles →',
+    forum_label: 'COMMUNITY', forum_title: 'Hot Topics', forum_more: 'Go to Forum →',
+    footer_desc: 'Professional precious metals investment platform. All information is for reference only and does not constitute investment advice.',
+    footer_links: 'Quick Links', footer_member: 'Members', footer_about: 'About',
+    info_about: 'About Us', info_contact: 'Contact', info_privacy: 'Privacy Policy', info_terms: 'Terms of Service',
+    modal_title: 'Welcome to Gold Palace', modal_sub: 'Precious Metals Investment Platform',
+    google_btn: 'Sign in / Sign up with Google',
+    modal_divider: 'One account, full access',
+    feature1: '✦ Post and comment in the forum', feature2: '✦ Save gold charts and articles', feature3: '✦ Receive key market alerts',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'zh';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('langZH').classList.toggle('active', lang === 'zh');
+  document.getElementById('langEN').classList.toggle('active', lang === 'en');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key] !== undefined) {
+      el.innerHTML = i18n[lang][key];
+    }
+  });
+  // 同步更新 Info Modal 標題與內容（如果已開啟）
+  if (typeof _currentInfoTab !== 'undefined') {
+    const cfg = infoContent[lang][_currentInfoTab];
+    document.getElementById('infoModalIcon').textContent = cfg.icon;
+    document.getElementById('infoModalLabel').textContent = cfg.label;
+    document.getElementById('infoModalTitle').textContent = cfg.title;
+    document.getElementById('infoModalBody').innerHTML = infoContent[lang].panels[_currentInfoTab];
+  }
+}
+
+// 頁面載入時套用語言
+document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
+</script>
 
 <script type="module">
 // ── FIREBASE 初始化 ──
@@ -1726,15 +1838,27 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
       <button class="info-modal-close" onclick="closeInfoModal()">×</button>
     </div>
     <div class="info-modal-tabs">
-      <button class="info-modal-tab active" onclick="switchInfoTab('about', this)">關於我們</button>
-      <button class="info-modal-tab" onclick="switchInfoTab('contact', this)">聯絡我們</button>
-      <button class="info-modal-tab" onclick="switchInfoTab('privacy', this)">隱私政策</button>
-      <button class="info-modal-tab" onclick="switchInfoTab('terms', this)">服務條款</button>
+      <button class="info-modal-tab active" onclick="switchInfoTab('about', this)" data-i18n="info_about">關於我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('contact', this)" data-i18n="info_contact">聯絡我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('privacy', this)" data-i18n="info_privacy">隱私政策</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('terms', this)" data-i18n="info_terms">服務條款</button>
     </div>
-    <div class="info-modal-body">
+    <div class="info-modal-body" id="infoModalBody">
+      <!-- 內容由 JS 動態產生 -->
+    </div>
+  </div>
+</div>
 
-      <!-- 關於我們 -->
-      <div class="info-panel active" id="info-about">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── INFO MODAL ──
+const infoContent = {
+  zh: {
+    about:   { icon: '🏛️', label: 'ABOUT US',       title: '關於我們' },
+    contact: { icon: '✉️', label: 'CONTACT',        title: '聯絡我們' },
+    privacy: { icon: '🔒', label: 'PRIVACY POLICY', title: '隱私政策' },
+    terms:   { icon: '📋', label: 'TERMS',          title: '服務條款' },
+    panels: {
+      about: `
         <div class="info-section">
           <div class="info-section-title">我們的使命</div>
           <p>黃金殿是一個專注於貴金屬投資的資訊平台，致力於為台灣及華語地區投資人提供即時、準確的黃金與貴金屬市場資訊。</p>
@@ -1752,11 +1876,8 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
         <div class="info-section">
           <div class="info-section-title">免責聲明</div>
           <p>黃金殿所提供之所有資訊，包含金價行情、分析文章及社群討論內容，均<strong style="color:var(--text)">僅供參考</strong>，不構成任何投資建議或買賣依據。投資貴金屬具有市場風險，請審慎評估自身財務狀況後再作決定。</p>
-        </div>
-      </div>
-
-      <!-- 聯絡我們 -->
-      <div class="info-panel" id="info-contact">
+        </div>`,
+      contact: `
         <div class="info-section">
           <div class="info-section-title">與我們聯繫</div>
           <p>我們非常重視每一位用戶的意見與反饋。無論您有任何建議、問題或合作邀請，歡迎透過以下方式與我們聯繫。</p>
@@ -1792,11 +1913,8 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
             🤝 媒體合作與商業洽談<br>
             📝 內容授權相關詢問
           </div>
-        </div>
-      </div>
-
-      <!-- 隱私政策 -->
-      <div class="info-panel" id="info-privacy">
+        </div>`,
+      privacy: `
         <div class="info-section">
           <div class="info-section-title">資料收集</div>
           <p>黃金殿（以下稱「本平台」）收集的個人資料包含：您主動提供的帳號資訊（電子郵件、使用者名稱），以及系統自動記錄的瀏覽行為、裝置資訊與 IP 位址等技術資料。</p>
@@ -1817,11 +1935,8 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
         <div class="info-section">
           <div class="info-section-title">政策更新</div>
           <p>本隱私政策如有重大變更，我們將於平台顯著位置公告，並寄送通知至您的註冊信箱。繼續使用本平台即視為您同意修訂後之條款。最後更新：2025年1月</p>
-        </div>
-      </div>
-
-      <!-- 服務條款 -->
-      <div class="info-panel" id="info-terms">
+        </div>`,
+      terms: `
         <div class="info-section">
           <div class="info-section-title">服務說明</div>
           <p>黃金殿提供貴金屬市場資訊、投資分析及社群討論等服務。使用本平台即表示您已閱讀並同意以下服務條款。</p>
@@ -1849,21 +1964,128 @@ setInterval(fetchGoldPrice, UPDATE_INTERVAL);
         <div class="info-section">
           <div class="info-section-title">條款修訂</div>
           <p>本平台保留隨時修改服務條款之權利。條款修訂後將於本站公告，請定期查閱。最後更新：2025年1月</p>
+        </div>`
+    }
+  },
+  en: {
+    about:   { icon: '🏛️', label: 'ABOUT US',       title: 'About Us' },
+    contact: { icon: '✉️', label: 'CONTACT',        title: 'Contact Us' },
+    privacy: { icon: '🔒', label: 'PRIVACY POLICY', title: 'Privacy Policy' },
+    terms:   { icon: '📋', label: 'TERMS',          title: 'Terms of Service' },
+    panels: {
+      about: `
+        <div class="info-section">
+          <div class="info-section-title">Our Mission</div>
+          <p>Gold Palace is a precious metals investment information platform dedicated to providing real-time, accurate gold and precious metals market data to investors in Taiwan and the Chinese-speaking world.</p>
+          <p>We believe every investor deserves access to professional, transparent market information. From live gold spot prices to in-depth investment analysis, we aggregate global data so you can stay ahead of the market.</p>
         </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<script>
-// ── INFO MODAL ──
-const infoConfig = {
-  about:   { icon: '🏛️', label: 'ABOUT US', title: '關於我們' },
-  contact: { icon: '✉️', label: 'CONTACT',  title: '聯絡我們' },
-  privacy: { icon: '🔒', label: 'PRIVACY',  title: '隱私政策' },
-  terms:   { icon: '📋', label: 'TERMS',    title: '服務條款' },
+        <div class="info-section">
+          <div class="info-section-title">Platform Features</div>
+          <div class="info-highlight">
+            ⚡ Live Price Updates · All major precious metals refreshed every 60 minutes<br>
+            📊 Professional Tools · Historical charts and technical indicators<br>
+            💬 Active Community · Exchange ideas with thousands of investors<br>
+            📰 Curated News · Aggregated market news from around the world
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Disclaimer</div>
+          <p>All information provided by Gold Palace, including price quotes, analysis articles, and community discussions, is <strong style="color:var(--text)">for reference only</strong> and does not constitute investment advice or a basis for trading. Investing in precious metals carries market risk. Please assess your own financial situation carefully before making any decisions.</p>
+        </div>`,
+      contact: `
+        <div class="info-section">
+          <div class="info-section-title">Get in Touch</div>
+          <p>We value the feedback of every user. Whether you have suggestions, questions, or partnership inquiries, feel free to reach us through the following.</p>
+          <div class="info-contact-card">
+            <div class="info-contact-row">
+              <div class="info-contact-icon">✉️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">SUPPORT EMAIL</div>
+                <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">🕐</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">HOURS</div>
+                Monday – Friday, 09:00 – 18:00 (Taiwan Time, GMT+8)
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">⏱️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">RESPONSE TIME</div>
+                General inquiries are typically answered within 1–3 business days
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Common Inquiries</div>
+          <div class="info-highlight">
+            🐛 Report website issues or incorrect data<br>
+            💡 Feature requests and improvement suggestions<br>
+            🤝 Media partnerships and business proposals<br>
+            📝 Content licensing inquiries
+          </div>
+        </div>`,
+      privacy: `
+        <div class="info-section">
+          <div class="info-section-title">Data Collection</div>
+          <p>Gold Palace ("the Platform") collects personal data including: account information you provide directly (email address, username), and technical data automatically recorded by the system such as browsing behavior, device information, and IP address.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Purpose of Data Use</div>
+          <p>Data collected is used to: provide and maintain platform services, send important service notifications, improve user experience, and prevent fraud and abnormal activity.</p>
+          <div class="info-highlight">The Platform will <strong style="color:var(--text)">never</strong> sell your personal data to third parties or use it for any unauthorized commercial purpose.</div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Cookie Usage</div>
+          <p>The Platform uses cookies to maintain login sessions, remember user preferences, and collect anonymous statistics to improve service quality. You may manage or disable cookies through your browser settings, though some features may be affected.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Data Security</div>
+          <p>We protect your personal data with industry-standard encryption and conduct regular security reviews. For any questions regarding your personal data, please contact <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Policy Updates</div>
+          <p>If significant changes are made to this Privacy Policy, we will announce them prominently on the Platform and send notifications to your registered email. Continued use of the Platform constitutes acceptance of the revised terms. Last updated: January 2025</p>
+        </div>`,
+      terms: `
+        <div class="info-section">
+          <div class="info-section-title">Service Description</div>
+          <p>Gold Palace provides precious metals market information, investment analysis, and community discussion services. By using this Platform, you confirm that you have read and agree to the following Terms of Service.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Membership</div>
+          <p>You must be at least 18 years old to register as a member. Each user may register only one account and must provide a valid email address. Accounts may not be transferred or lent to others.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Code of Conduct</div>
+          <div class="info-highlight">
+            ✅ Permitted: Share personal investment experiences, discuss market trends, post lawful comments<br>
+            ❌ Prohibited: Spread misinformation, harass others, post spam or advertisements, engage in any illegal activity
+          </div>
+          <p>Violations may result in account suspension or termination without prior notice.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Disclaimer</div>
+          <p>All information on this Platform is <strong style="color:var(--text)">for reference only</strong> and does not constitute investment advice. Investing in precious metals involves market risk and may result in losses. The Platform is not responsible for any investment losses arising from reliance on information on this site.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Intellectual Property</div>
+          <p>All content on this Platform, including text, images, code, and design, is protected by copyright law. Reproduction, copying, or commercial use without authorization is prohibited. For licensing inquiries, contact <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Amendments</div>
+          <p>The Platform reserves the right to modify these Terms of Service at any time. Changes will be announced on this site. Last updated: January 2025</p>
+        </div>`
+    }
+  }
 };
+
+let _currentInfoTab = 'about';
+
 function openInfoModal(tab) {
   switchInfoTab(tab);
   document.getElementById('infoModalOverlay').classList.add('open');
@@ -1875,22 +2097,22 @@ function closeInfoModalOutside(e) {
   if (e.target === document.getElementById('infoModalOverlay')) closeInfoModal();
 }
 function switchInfoTab(tab, clickedBtn) {
-  const cfg = infoConfig[tab];
+  _currentInfoTab = tab;
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'zh';
+  const cfg = infoContent[lang][tab];
   document.getElementById('infoModalIcon').textContent = cfg.icon;
   document.getElementById('infoModalLabel').textContent = cfg.label;
   document.getElementById('infoModalTitle').textContent = cfg.title;
-  ['about','contact','privacy','terms'].forEach(t => {
-    document.getElementById('info-'+t).classList.toggle('active', t===tab);
-  });
-  document.querySelectorAll('.info-modal-tab').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'"+tab+"'")) {
-      btn.classList.add('active');
-    }
-  });
+  document.getElementById('infoModalBody').innerHTML = infoContent[lang].panels[tab];
+  document.querySelectorAll('.info-modal-tab').forEach(btn => btn.classList.remove('active'));
+  if (clickedBtn) clickedBtn.classList.add('active');
+  else {
+    const tabs = ['about','contact','privacy','terms'];
+    const idx = tabs.indexOf(tab);
+    const allTabs = document.querySelectorAll('.info-modal-tab');
+    if (allTabs[idx]) allTabs[idx].classList.add('active');
+  }
 }
 </script>
-<script>var ConverlyCustomData = {channelId: null};</script>
-<script async defer src="https://cdn.affiliates.one/production/adlinks/0b31286b5880063dc580ea8790e01382953bf2ea6bce3ea8c30dfb5671d81e50.js"></script>
 </body>
 </html>
