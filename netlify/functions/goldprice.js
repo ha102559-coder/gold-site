@@ -15,6 +15,7 @@ exports.handler = async function(event, context) {
       `https://api.metals.dev/v1/latest?api_key=${SILVER_API_KEY}&base=USD&symbols=XAG`
     );
     const rawSilver = await resSilver.json();
+    console.log('Silver response:', JSON.stringify(rawSilver));
     const silver = parseFloat(rawSilver.metals.XAG);
 
     return {
