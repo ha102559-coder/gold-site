@@ -1,14 +1,18 @@
 exports.handler = async function(event, context) {
   try {
-    const API_KEY = process.env.METALS_API_KEY; // 改用環境變數
-
+    const API_KEY = process.env.METALS_API_KEY;
     const res = await fetch(
       `https://api.metals.dev/v1/latest?api_key=${API_KEY}&base=USD&symbols=XAU,XAG,XPT,XPD`
     );
-    const raw = await res.json();
 
+    // 先檢查狀態碼，再解析 JSON
     if (!res.ok) throw new Error(`Metals API error: ${res.status}`);
-
+    
+    const raw = await res.json();
+    
+    // 防止 metals 欄位不存在（例如 API Key 錯誤）
+    if (!raw.metals) throw new Error(raw.error || 'No metals data returned');
+    
     const metals = raw.metals;
 
     return {
@@ -22,7 +26,9 @@ exports.handler = async function(event, context) {
         metals: {
           XAU: parseFloat(metals.XAU),
           XAG: parseFloat(metals.XAG),
-          }
+          XPT: parseFloat(metals.XPT),  // 補上
+          XPD: parseFloat(metals.XPD),  // 補上
+        }
       })
     };
   } catch(err) {
