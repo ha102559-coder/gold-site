@@ -1251,43 +1251,37 @@
     </div>
     <a href="/market" class="section-more" data-i18n="market_more">查看完整行情 →</a>
   </div>
-<div class="fade-up delay-1" style="border-radius:2px;overflow:hidden;border:1px solid rgba(201,168,76,0.2);position:relative;">
-  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);opacity:0.6;z-index:1;"></div>
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-    {
-      "colorTheme": "dark",
-      "dateRange": "1D",
-      "showChart": true,
-      "locale": "zh_TW",
-      "width": "100%",
-      "height": "400",
-      "isTransparent": true,
-      "showSymbolLogo": true,
-      "plotLineColorGrowing": "#C9A84C",
-      "plotLineColorFalling": "#FCA5A5",
-      "gridLineColor": "rgba(201,168,76,0.1)",
-      "scaleFontColor": "#9A9080",
-      "belowLineFillColorGrowing": "rgba(201,168,76,0.05)",
-      "belowLineFillColorFalling": "rgba(252,165,165,0.05)",
-      "belowLineFillColorGrowingBottom": "transparent",
-      "belowLineFillColorFallingBottom": "transparent",
-      "symbolActiveColor": "rgba(201,168,76,0.1)",
-      "tabs": [
-        {
-          "title": "貴金屬",
-          "symbols": [
-            { "s": "TVC:GOLD",     "d": "黃金 XAU/USD" },
-            { "s": "TVC:SILVER",   "d": "白銀 XAG/USD" },
-            { "s": "TVC:PLATINUM", "d": "鉑金 XPT/USD" },
-            { "s": "TVC:PALLADIUM","d": "鈀金 XPD/USD" }
-          ],
-          "originalTitle": "Precious Metals"
-        }
-      ]
-    }
-    </script>
+  <div class="market-table fade-up delay-1">
+    <div class="market-row market-header">
+      <div data-i18n="th_metal">貴金屬</div>
+      <div data-i18n="th_price">現貨價格</div>
+      <div data-i18n="th_change">漲跌幅</div>
+      <div data-i18n="th_trend">走勢</div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C9A84C,#8B6914)">Au</div><div><div class="metal-name" data-i18n="metal_gold">黃金</div><div class="metal-symbol">XAU/USD</div></div></div>
+      <div class="market-price" id="m-gold">$3,285.40</div>
+      <div class="market-change up" id="m-gold-c">▲ +0.38%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,20 10,18 20,22 30,15 40,12 50,14 60,8 70,10 80,6" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#C0C0C0,#808080)">Ag</div><div><div class="metal-name" data-i18n="metal_silver">白銀</div><div class="metal-symbol">XAG/USD</div></div></div>
+      <div class="market-price" id="m-silver">$32.84</div>
+      <div class="market-change up" id="m-silver-c">▲ +1.61%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,22 10,20 20,18 30,16 40,14 50,16 60,12 70,10 80,8" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#E5E4E2,#6E6E6E)">Pt</div><div><div class="metal-name" data-i18n="metal_platinum">鉑金</div><div class="metal-symbol">XPT/USD</div></div></div>
+      <div class="market-price" id="m-platinum">$982.50</div>
+      <div class="market-change down" id="m-platinum-c">▼ -0.32%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,8 10,10 20,12 30,14 40,12 50,15 60,18 70,16 80,20" fill="none" stroke="#FCA5A5" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="market-row">
+      <div class="market-name"><div class="metal-icon" style="background:linear-gradient(135deg,#B5B5B5,#5a5a5a)">Pd</div><div><div class="metal-name" data-i18n="metal_palladium">鈀金</div><div class="metal-symbol">XPD/USD</div></div></div>
+      <div class="market-price" id="m-palladium">$1,024.70</div>
+      <div class="market-change up" id="m-palladium-c">▲ +0.83%</div>
+      <div class="market-sparkline"><svg class="mini-chart" viewBox="0 0 80 30"><polyline points="0,18 10,16 20,14 30,12 40,15 50,10 60,8 70,12 80,9" fill="none" stroke="#6EE7B7" stroke-width="1.5"/></svg></div>
+    </div>
   </div>
 </div>
 
@@ -1735,7 +1729,7 @@ function setTVInterval(rangeKey, el) {
 })();
 
 // ── REAL PRICE FROM METALS.DEV API ──
-const UPDATE_INTERVAL = 20 * 60 * 1000; // 每60分鐘更新一次
+const UPDATE_INTERVAL = 60 * 60 * 1000; // 每60分鐘更新一次
 
 let lastGoldPrice = null;
 let lastOpenPrice = null;
@@ -1832,8 +1826,8 @@ function renderPrice(data) {
 async function fetchGoldPrice() {
   try {
     const res = await fetch('/.netlify/functions/goldprice');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     renderPrice(data);
   } catch(err) {
     console.error('金價API錯誤:', err);

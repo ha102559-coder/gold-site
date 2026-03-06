@@ -857,7 +857,7 @@ function setSilverPeriod(range, interval, el) {
 })();
 
 // ── 即時金價 API ──
-const UPDATE_INTERVAL = 20 * 60 * 1000; // 每60分鐘更新
+const UPDATE_INTERVAL = 60 * 60 * 1000; // 每60分鐘更新
 let lastGoldOpen = null;
 let lastSilverOpen = null;
 
@@ -938,9 +938,9 @@ function renderMarketPrice(data) {
 
 async function fetchMarketPrice() {
   try {
-const res = await fetch('/.netlify/functions/goldprice');
-if (!res.ok) throw new Error(`HTTP ${res.status}`);
-const data = await res.json();
+   const res = await fetch('/.netlify/functions/goldprice');
+   const data = await res.json();
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     renderMarketPrice(data);
   } catch(err) {
     console.error('金價API錯誤:', err);
