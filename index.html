@@ -1767,56 +1767,51 @@ function updateTickerItem(priceId, changeId, price, prevPrice) {
 
 function renderPrice(data) {
   try {
-    const metals = data.metals;
-    const gold = metals.XAU || metals.gold;
-    const silver = metals.XAG || metals.silver;
-    const platinum = metals.XPT || metals.platinum;
-    const palladium = metals.XPD || metals.palladium;
+    const m = data.metals;
 
-    // 計算黃金漲跌
-    const open = lastOpenPrice || gold;
-    const change = gold - open;
-    const changePct = ((change / open) * 100).toFixed(2);
-    const isUp = change >= 0;
-    const sign = isUp ? '▲ +' : '▼ ';
-    const colorClass = isUp ? '#6EE7B7' : '#FCA5A5';
+    const update = (priceId, changeId, price, pct) => {
+      const priceEl = document.getElementById(priceId);
+      const changeEl = document.getElementById(changeId);
+      if (priceEl && price) {
+        priceEl.textContent = '$' + price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      }
+      if (changeEl && pct !== undefined) {
+        const isUp = pct >= 0;
+        changeEl.textContent = `${isUp ? '▲ +' : '▼ '}${Math.abs(pct).toFixed(2)}%`;
+        changeEl.className = `market-change ${isUp ? 'up' : 'down'}`;
+      }
+    };
 
-    // 主卡片黃金價格
-    document.getElementById('hero-price').textContent = gold.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    // 行情表
+    update('m-gold',      'm-gold-c',      m.XAU, m.XAU_pct);
+    update('m-silver',    'm-silver-c',    m.XAG, m.XAG_pct);
+    update('m-platinum',  'm-platinum-c',  m.XPT, m.XPT_pct);
+    update('m-palladium', 'm-palladium-c', m.XPD, m.XPD_pct);
+
+    // 主卡片黃金
+    const gold = m.XAU;
+    const pct = m.XAU_pct;
+    const isUp = pct >= 0;
+    document.getElementById('hero-price').textContent =
+      gold.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     const changeEl = document.getElementById('hero-change');
+    changeEl.style.color = isUp ? '#6EE7B7' : '#FCA5A5';
     changeEl.style.background = isUp ? 'rgba(110,231,183,0.1)' : 'rgba(252,165,165,0.1)';
-    changeEl.style.color = colorClass;
-    changeEl.innerHTML = `${sign}${Math.abs(change).toFixed(2)} &nbsp;(${isUp ? '+' : ''}${changePct}%)`;
-
-    // 高低點估算
-    document.getElementById('h-high').textContent = (gold * 1.005).toFixed(2);
-    document.getElementById('h-low').textContent = (gold * 0.995).toFixed(2);
+    changeEl.innerHTML = `${isUp ? '▲ +' : '▼ '}${Math.abs(pct).toFixed(2)}%`;
 
     // 跑馬燈
-    const tickerGold = document.getElementById('t-gold');
-    const tickerGoldC = document.getElementById('t-gold-c');
-    if (tickerGold) tickerGold.textContent = `$${gold.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-    if (tickerGoldC) {
-      tickerGoldC.textContent = `${sign}${Math.abs(change).toFixed(2)}`;
-      tickerGoldC.className = `change ${isUp ? 'up' : 'down'}`;
+    const tg = document.getElementById('t-gold');
+    const tgc = document.getElementById('t-gold-c');
+    if (tg) tg.textContent = '$' + gold.toLocaleString('en-US', {minimumFractionDigits: 2});
+    if (tgc) {
+      tgc.textContent = `${isUp ? '▲ +' : '▼ '}${Math.abs(pct).toFixed(2)}%`;
+      tgc.className = `change ${isUp ? 'up' : 'down'}`;
     }
-    updateTickerItem('t-silver', 't-silver-c', silver, silver * 0.99);
-    updateTickerItem('t-platinum', 't-platinum-c', platinum, platinum * 1.003);
-    updateTickerItem('t-palladium', 't-palladium-c', palladium, palladium * 0.998);
-
-    // 行情一覽表
-    updateMetalDisplay('m-gold', 'm-gold-c', gold, open);
-    updateMetalDisplay('m-silver', 'm-silver-c', silver, silver * 0.99);
-    updateMetalDisplay('m-platinum', 'm-platinum-c', platinum, platinum * 1.003);
-    updateMetalDisplay('m-palladium', 'm-palladium-c', palladium, palladium * 0.998);
 
     // 更新時間
     const now = new Date();
-    document.getElementById('update-time').textContent =
-      `資料每60分鐘更新 · 最後更新：${now.toLocaleTimeString('zh-TW')}`;
-
-    lastGoldPrice = gold;
-    if (!lastOpenPrice) lastOpenPrice = gold;
+    const updateEl = document.getElementById('update-time');
+    if (updateEl) updateEl.textContent = `資料每2小時更新 · 最後更新：${now.toLocaleTimeString('zh-TW')}`;
 
   } catch(e) {
     console.error('金價解析錯誤:', e);
