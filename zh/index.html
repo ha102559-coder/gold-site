@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3087347251258530"
+     crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃金殿 · 貴金屬投資資訊平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-pale: #F5E6B8;
+    --gold-deep: #8B6914;
+    --obsidian: #0D0D0D;
+    --dark: #111111;
+    --dark-2: #1A1A1A;
+    --dark-3: #222222;
+    --dark-4: #2C2C2C;
+    --text: #E8E0D0;
+    --text-muted: #9A9080;
+    --text-dim: #5A5448;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--obsidian);
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ─── TICKER BAR ─── */
+  .ticker-bar {
+    background: var(--gold-deep);
+    background: linear-gradient(90deg, #4a3200, #6b4a0a, #4a3200);
+    padding: 6px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-bar::before, .ticker-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+  }
+  .ticker-bar::before { left: 0; background: linear-gradient(90deg, #4a3200, transparent); }
+  .ticker-bar::after { right: 0; background: linear-gradient(270deg, #4a3200, transparent); }
+
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--gold-pale);
+    font-family: 'Noto Sans TC', monospace;
+  }
+  .ticker-item .label {
+    color: var(--gold-light);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .ticker-item .price { font-weight: 500; font-size: 13px; }
+  .ticker-item .change.up { color: #6EE7B7; }
+  .ticker-item .change.down { color: #FCA5A5; }
+  .ticker-sep { color: var(--gold-deep); font-size: 16px; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 16px rgba(201,168,76,0.4);
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+  }
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    transition: all 0.25s;
+    position: relative;
+    white-space: nowrap;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 18px; right: 18px;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+    transform-origin: left;
+  }
+  nav a:hover { color: var(--gold-light); }
+  nav a:hover::after { transform: scaleX(1); }
+  nav a.active { color: var(--gold-light); }
+  nav a.active::after { transform: scaleX(1); }
+
+  /* ─── LANG SWITCHER ─── */
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+    margin-left: 8px;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 11px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color: var(--obsidian);
+  }
+  .lang-btn:hover:not(.active) { color: var(--gold); }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-login {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--gold);
+    padding: 7px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 1px;
+  }
+  .btn-login:hover {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--gold);
+  }
+  .btn-register {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    border: none;
+    color: var(--obsidian);
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 1px;
+  }
+  .btn-register:hover {
+    box-shadow: 0 4px 16px rgba(201,168,76,0.4);
+    transform: translateY(-1px);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--dark);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 10% 80%, rgba(139,105,20,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 32px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border-strong);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .badge-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-title span {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    max-width: 500px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .cta-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color: var(--obsidian);
+    border: none;
+    padding: 14px 32px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+  }
+  .cta-primary:hover { box-shadow: 0 6px 24px rgba(201,168,76,0.45); transform: translateY(-2px); }
+  .cta-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 14px 32px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+  }
+  .cta-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ─── GOLD PRICE CARD ─── */
+  .gold-card {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gold-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: #6EE7B7;
+    letter-spacing: 1px;
+  }
+  .live-dot { width: 5px; height: 5px; background: #6EE7B7; border-radius: 50%; animation: pulse 1.5s infinite; }
+
+  .price-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .price-unit { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+  .price-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(110,231,183,0.1);
+    color: #6EE7B7;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .price-stat label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .price-stat span {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .update-note {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 14px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  /* ─── SECTION LAYOUT ─── */
+  .section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .section-more {
+    color: var(--text-muted);
+    font-size: 13px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+  .section-more:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 32px;
+  }
+
+  /* ─── CARDS GRID ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .article-card {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .article-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+  .article-card:hover .card-img-inner { transform: scale(1.04); }
+
+  .card-img {
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-img-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.4s ease;
+  }
+  .card-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+  .card-body { padding: 20px; }
+  .card-category {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card-title-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .card-excerpt {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ─── CHART SECTION ─── */
+  .chart-section {
+    background: var(--dark-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .chart-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .chart-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--dark-3);
+    padding: 4px;
+    border-radius: 6px;
+  }
+  .chart-tab {
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .chart-tab.active {
+    background: var(--dark-4);
+    color: var(--gold);
+  }
+  .chart-area {
+    height: 460px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .chart-area iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ─── DISCUSSION PREVIEW ─── */
+  .discussion-list { display: flex; flex-direction: column; gap: 12px; }
+  .discussion-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .discussion-item:hover {
+    border-color: var(--border-strong);
+    background: var(--dark-3);
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-deep), var(--dark-4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold-pale);
+    flex-shrink: 0;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .discussion-body { flex: 1; }
+  .discussion-title {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .discussion-title:hover { color: var(--gold-light); }
+  .discussion-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .discussion-stat { display: flex; align-items: center; gap: 4px; }
+  .discussion-tag {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── MARKET OVERVIEW ─── */
+  .market-table {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .market-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.2s;
+  }
+  .market-row:last-child { border-bottom: none; }
+  .market-row:hover:not(.market-header) { background: var(--dark-3); }
+  .market-row.market-header {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    background: var(--dark-3);
+  }
+  .market-name { display: flex; align-items: center; gap: 10px; }
+  .metal-icon { width: 28px; height: 28px; border-radius: 50%; display:flex;align-items:center;justify-content:center;font-size:13px; }
+  .metal-name { font-size: 14px; color: var(--text); }
+  .metal-symbol { font-size: 11px; color: var(--text-dim); }
+  .market-price { font-size: 14px; color: var(--text); font-weight: 400; }
+  .market-change { font-size: 13px; }
+  .market-change.up { color: #6EE7B7; }
+  .market-change.down { color: #FCA5A5; }
+  .market-sparkline { display: flex; align-items: center; }
+  .mini-chart { width: 80px; height: 30px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .footer-main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px 32px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+  .footer-brand .logo-text { font-size: 20px; margin-bottom: 12px; display: block; }
+  .footer-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .footer-heading {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold-light); }
+  .footer-bottom {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom-links a:hover { color: var(--gold); }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 36px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 12px 12px 0 0;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+  .modal-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .modal-tab {
+    padding: 10px 24px;
+    font-size: 14px;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .modal-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+  .modal-tab.active { color: var(--gold); }
+  .modal-tab.active::after { transform: scaleX(1); }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 6px; display: block; }
+  .form-input {
+    width: 100%;
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--text-dim); }
+  .form-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    border: none;
+    color: var(--obsidian);
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    transition: all 0.2s;
+  }
+  .form-submit:hover { box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .modal-panel { display: none; }
+  .modal-panel.active { display: block; }
+
+  /* Google 登入按鈕 */
+  .google-signin-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #fff;
+    color: #3c4043;
+    border: 1px solid #dadce0;
+    padding: 13px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .google-signin-btn:hover {
+    background: #f8f9fa;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .modal-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 16px;
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .modal-divider::before, .modal-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .modal-features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .modal-feature-item {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── INFO MODAL ─── */
+  .info-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    padding: 20px;
+  }
+  .info-modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .info-modal {
+    background: var(--dark-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .info-modal-overlay.open .info-modal {
+    transform: translateY(0) scale(1);
+  }
+  .info-modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .info-modal-header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .info-modal-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 16px 32px 0;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .info-modal-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .info-modal-tab:hover { border-color: var(--border-strong); color: var(--gold); }
+  .info-modal-tab.active {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+  .info-modal-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(139,105,20,0.2));
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .info-modal-title-group { flex: 1; }
+  .info-modal-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .info-modal-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .info-modal-close {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .info-modal-close:hover { border-color: var(--gold); color: var(--gold); }
+  .info-modal-body {
+    padding: 28px 32px 32px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .info-modal-body::-webkit-scrollbar { width: 4px; }
+  .info-modal-body::-webkit-scrollbar-track { background: var(--dark-3); }
+  .info-modal-body::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 2px; }
+
+  .info-section {
+    margin-bottom: 28px;
+  }
+  .info-section:last-child { margin-bottom: 0; }
+  .info-section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-section p {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .info-section p:last-child { margin-bottom: 0; }
+  .info-contact-card {
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .info-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .info-contact-row:last-child { margin-bottom: 0; }
+  .info-contact-icon {
+    width: 32px; height: 32px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .info-contact-row a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .info-contact-row a:hover { color: var(--gold-light); }
+  .info-highlight {
+    background: rgba(201,168,76,0.06);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 12px 0;
+  }
+
+  /* ─── INFO PANEL hidden/shown ─── */
+  .info-panel { display: none; }
+  .info-panel.active { display: block; }
+
+  /* animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="label">黃金 XAU/USD</span><span class="price" id="t-gold">$3,285.40</span><span class="change up" id="t-gold-c">▲ +12.30</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">白銀 XAG/USD</span><span class="price" id="t-silver">$32.84</span><span class="change up" id="t-silver-c">▲ +0.52</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鉑金 XPT/USD</span><span class="price" id="t-platinum">$982.50</span><span class="change down" id="t-platinum-c">▼ -3.20</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鈀金 XPD/USD</span><span class="price" id="t-palladium">$1,024.70</span><span class="change up" id="t-palladium-c">▲ +8.40</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.45</span><span class="change down">▼ -0.08</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">黃金台灣牌價</span><span class="price">NT$3,371/g</span><span class="change up">▲ +15</span></div>
+    <div class="ticker-sep">·</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><span class="label">黃金 XAU/USD</span><span class="price">$3,285.40</span><span class="change up">▲ +12.30</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">白銀 XAG/USD</span><span class="price">$32.84</span><span class="change up">▲ +0.52</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鉑金 XPT/USD</span><span class="price">$982.50</span><span class="change down">▼ -3.20</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">鈀金 XPD/USD</span><span class="price">$1,024.70</span><span class="change up">▲ +8.40</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">USD/TWD</span><span class="price">32.45</span><span class="change down">▼ -0.08</span></div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><span class="label">黃金台灣牌價</span><span class="price">NT$3,371/g</span><span class="change up">▲ +15</span></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">金</div>
+      <div>
+        <div class="logo-text">黃金殿</div>
+        <div class="logo-sub">GOLD INVESTMENT PLATFORM</div>
+      </div>
+    </a>
+    <nav>
+      <a href="#" class="active" data-i18n="nav_price">國際金價</a>
+      <a href="/jewelry.html" data-i18n="nav_jewelry">黃金飾品</a>
+      <a href="/market.html" data-i18n="nav_market">投資訊息</a>
+      <a href="/forum" data-i18n="nav_forum">討論區</a>
+    </nav>
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="langZH" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="langEN" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="header-actions" id="headerActions">
+      <!-- 未登入狀態 -->
+      <div id="authButtons" style="display:flex;gap:10px;">
+        <button class="btn-login" onclick="openModal()" data-i18n="btn_login">登入</button>
+        <button class="btn-register" onclick="openModal()" data-i18n="btn_register">免費註冊</button>
+      </div>
+      <!-- 已登入狀態（預設隱藏） -->
+      <div id="userMenu" style="display:none;align-items:center;gap:10px;">
+        <img id="userAvatar" src="" alt="" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;">
+        <span id="userName" style="font-size:13px;color:var(--gold-light);letter-spacing:1px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        <button class="btn-login" onclick="signOutUser()" data-i18n="btn_logout">登出</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="fade-up">
+      <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero_badge">即時金價更新中</span></div>
+      <h1 class="hero-title" data-i18n="hero_title">
+        掌握<span>黃金市場</span><br>
+        精準投資時機
+      </h1>
+      <p class="hero-desc" data-i18n="hero_desc">
+        整合全球貴金屬即時行情、專業投資分析與活躍社群討論。<br>
+        從新手到專業投資人，一站式掌握黃金市場動向。
+      </p>
+      <div class="hero-cta">
+        <button class="cta-primary" onclick="openModal()" data-i18n="hero_cta1">立即加入會員</button>
+        <button class="cta-secondary" onclick="document.getElementById('chartSection').scrollIntoView({behavior:'smooth'})" data-i18n="hero_cta2">瀏覽金價走勢</button>
+      </div>
+    </div>
+
+    <!-- Live Gold Price Card -->
+    <div class="gold-card fade-up delay-2">
+      <div class="card-header">
+        <span class="card-title" data-i18n="gold_card_title">黃金現貨 · XAU/USD</span>
+        <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      </div>
+      <div class="price-main" id="hero-price">3,285.40</div>
+      <div class="price-unit" data-i18n="price_unit">美元 / 盎司</div>
+      <div class="price-change" id="hero-change">▲ +12.30 &nbsp;(+0.38%)</div>
+      <div class="price-grid">
+        <div class="price-stat"><label data-i18n="price_high">今日最高</label><span id="h-high">3,298.70</span></div>
+        <div class="price-stat"><label data-i18n="price_low">今日最低</label><span id="h-low">3,270.20</span></div>
+        <div class="price-stat"><label data-i18n="price_open">開盤價</label><span>3,273.10</span></div>
+        <div class="price-stat"><label data-i18n="price_tw">台灣牌價</label><span>NT$3,371/g</span></div>
+      </div>
+      <div class="update-note" id="update-time">資料延遲 · 最後更新：--:--:--</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHART SECTION -->
+<div class="chart-section" id="chartSection">
+  <div class="chart-inner">
+    <div class="chart-header">
+      <div>
+        <div class="section-label" data-i18n="chart_label">價格走勢</div>
+        <div class="section-title" style="font-size:20px;" data-i18n="chart_title">黃金歷史走勢圖</div>
+      </div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" onclick="setTVInterval('1D',this)">1日</button>
+        <button class="chart-tab" onclick="setTVInterval('1W',this)">1週</button>
+        <button class="chart-tab" onclick="setTVInterval('1M',this)">1個月</button>
+        <button class="chart-tab" onclick="setTVInterval('3M',this)">3個月</button>
+        <button class="chart-tab" onclick="setTVInterval('12M',this)">1年</button>
+        <button class="chart-tab" onclick="setTVInterval('60M',this)">5年</button>
+      </div>
+    </div>
+    <div class="chart-area" id="tvChartArea">
+      <!-- TradingView Widget BEGIN -->
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div id="tradingview_xauusd" style="height:100%;width:100%"></div>
+      </div>
+      <!-- TradingView Widget END -->
+    </div>
+    <div style="font-size:10px;color:var(--text-dim);text-align:right;margin-top:8px;letter-spacing:1px;">
+      圖表數據由 <a href="https://www.tradingview.com/" target="_blank" style="color:var(--text-dim);text-decoration:none;">TradingView</a> 提供
+    </div>
+  </div>
+</div>
+
+<!-- MARKET OVERVIEW -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label" data-i18n="market_label">市場概覽</div>
+      <div class="section-title" data-i18n="market_title">貴金屬行情一覽</div>
+    </div>
+    <a href="/market" class="section-more" data-i18n="market_more">查看完整行情 →</a>
+  </div>
+<div class="fade-up delay-1" style="border-radius:2px;overflow:hidden;border:1px solid rgba(201,168,76,0.2);position:relative;">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);opacity:0.6;z-index:1;"></div>
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+    {
+      "colorTheme": "dark",
+      "dateRange": "1D",
+      "showChart": true,
+      "locale": "zh_TW",
+      "width": "100%",
+      "height": "400",
+      "isTransparent": true,
+      "showSymbolLogo": true,
+      "plotLineColorGrowing": "#C9A84C",
+      "plotLineColorFalling": "#FCA5A5",
+      "gridLineColor": "rgba(201,168,76,0.1)",
+      "scaleFontColor": "#9A9080",
+      "belowLineFillColorGrowing": "rgba(201,168,76,0.05)",
+      "belowLineFillColorFalling": "rgba(252,165,165,0.05)",
+      "belowLineFillColorGrowingBottom": "transparent",
+      "belowLineFillColorFallingBottom": "transparent",
+      "symbolActiveColor": "rgba(201,168,76,0.1)",
+      "tabs": [
+        {
+          "title": "貴金屬",
+          "symbols": [
+            { "s": "TVC:GOLD",     "d": "黃金 XAU/USD" },
+            { "s": "TVC:SILVER",   "d": "白銀 XAG/USD" },
+            { "s": "TVC:PLATINUM", "d": "鉑金 XPT/USD" },
+            { "s": "TVC:PALLADIUM","d": "鈀金 XPD/USD" }
+          ],
+          "originalTitle": "Precious Metals"
+        }
+      ]
+    }
+    </script>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- INVESTMENT NEWS -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label" data-i18n="news_label">最新動態</div>
+      <div class="section-title" data-i18n="news_title">投資資訊精選</div>
+    </div>
+    <a href="news.html" class="section-more" data-i18n="news_more">更多資訊 →</a>
+  </div>
+  <div class="cards-grid">
+    <div class="article-card fade-up delay-1">
+      <div class="card-img"><div class="card-img-inner card-img-placeholder" style="background:linear-gradient(135deg,#1a1206,#3a2a0a)">📊</div></div>
+      <div class="card-body">
+        <div class="card-category">投資教學</div>
+        <div class="card-title-text">🪙 金豆、金條、金幣怎麼選？</div>
+        <div class="card-excerpt">同樣是實體黃金，金豆、金條、金幣各有不同的重量規格、溢價幅度與保存難度。本文詳解三種形式的優缺點...</div>
+        <div class="card-meta"><span>2025.02.27</span><span>📖 閱讀 2.1k</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up delay-2">
+      <div class="card-img"><div class="card-img-inner card-img-placeholder" style="background:linear-gradient(135deg,#0d1a1a,#0a2a1a)">🌍</div></div>
+      <div class="card-body">
+        <div class="card-category">市場知識</div>
+        <div class="card-title-text">🌍 黃金地上存量全解析</div>
+        <div class="card-excerpt">截至2023年底，全球黃金地上存量累計達212,582噸，其中金飾占比最高達45%...</div>
+        <div class="card-meta"><span>2025.02.26</span><span>📖 閱讀 1.8k</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up delay-3">
+      <div class="card-img"><div class="card-img-inner card-img-placeholder" style="background:linear-gradient(135deg,#1a0d0d,#2a1010)">💡</div></div>
+      <div class="card-body">
+        <div class="card-category">投資教學</div>
+        <div class="card-title-text">黃金ETF vs 實體黃金 新手投資人完整比較指南</div>
+        <div class="card-excerpt">許多投資人在考慮布局黃金時，常面臨選擇ETF還是實體黃金的困惑。本文從流動性、保管成本...</div>
+        <div class="card-meta"><span>2025.02.25</span><span>📖 閱讀 3.4k</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- DISCUSSION PREVIEW -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label" data-i18n="forum_label">社群討論</div>
+      <div class="section-title" data-i18n="forum_title">熱門話題</div>
+    </div>
+    <a href="/forum" class="section-more" data-i18n="forum_more">進入討論區 →</a>
+  </div>
+  <div class="discussion-list" id="hotTopicsList">
+    <!-- 載入中骨架 -->
+    <div class="discussion-item skeleton-item" style="opacity:0.4">
+      <div class="avatar" style="background:var(--dark-4)"></div>
+      <div class="discussion-body">
+        <div style="height:16px;background:var(--dark-4);border-radius:4px;width:70%;margin-bottom:10px"></div>
+        <div style="height:12px;background:var(--dark-4);border-radius:4px;width:40%"></div>
+      </div>
+    </div>
+    <div class="discussion-item skeleton-item" style="opacity:0.3">
+      <div class="avatar" style="background:var(--dark-4)"></div>
+      <div class="discussion-body">
+        <div style="height:16px;background:var(--dark-4);border-radius:4px;width:80%;margin-bottom:10px"></div>
+        <div style="height:12px;background:var(--dark-4);border-radius:4px;width:35%"></div>
+      </div>
+    </div>
+    <div class="discussion-item skeleton-item" style="opacity:0.2">
+      <div class="avatar" style="background:var(--dark-4)"></div>
+      <div class="discussion-body">
+        <div style="height:16px;background:var(--dark-4);border-radius:4px;width:60%;margin-bottom:10px"></div>
+        <div style="height:12px;background:var(--dark-4);border-radius:4px;width:45%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <span class="logo-text" style="font-family:'Noto Serif TC',serif;color:var(--gold-light)">黃金殿</span>
+      <p class="footer-desc" data-i18n="footer_desc">專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。</p>
+    </div>
+    <div>
+      <div class="footer-heading" data-i18n="footer_links">快速連結</div>
+      <ul class="footer-links">
+        <li><a href="#" data-i18n="nav_price">國際金價</a></li>
+        <li><a href="/jewelry.html" data-i18n="nav_jewelry">黃金飾品</a></li>
+        <li><a href="/market.html" data-i18n="nav_market">投資訊息</a></li>
+        <li><a href="/forum" data-i18n="nav_forum">討論區</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading" data-i18n="footer_member">會員服務</div>
+      <ul class="footer-links">
+        <li><a href="#" onclick="openModal();return false;" data-i18n="btn_register">免費註冊</a></li>
+        <li><a href="#" onclick="openModal();return false;" data-i18n="btn_login">登入</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading" data-i18n="footer_about">關於</div>
+      <ul class="footer-links">
+        <li><a href="#" onclick="openInfoModal('about');return false;" data-i18n="info_about">關於我們</a></li>
+        <li><a href="#" onclick="openInfoModal('contact');return false;" data-i18n="info_contact">聯絡我們</a></li>
+        <li><a href="#" onclick="openInfoModal('privacy');return false;" data-i18n="info_privacy">隱私政策</a></li>
+        <li><a href="#" onclick="openInfoModal('terms');return false;" data-i18n="info_terms">服務條款</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 黃金殿 · 貴金屬投資平台 ·&nbsp;<span style="color:var(--text-dim)">資料僅供參考，不構成投資建議</span></span>
+    <div class="footer-bottom-links">
+      <a href="#" onclick="openInfoModal('contact');return false;" data-i18n="info_contact">聯絡我們</a>
+      <a href="#" onclick="openInfoModal('privacy');return false;" data-i18n="info_privacy">隱私政策</a>
+      <a href="#" onclick="openInfoModal('about');return false;" data-i18n="info_about">關於我們</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title" data-i18n="modal_title">歡迎來到黃金殿</div>
+    <div class="modal-sub" data-i18n="modal_sub">貴金屬投資資訊平台</div>
+
+    <!-- Google 登入按鈕 -->
+    <button class="google-signin-btn" onclick="signInWithGoogle()">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <span data-i18n="google_btn">使用 Google 帳號登入 / 註冊</span>
+    </button>
+
+    <div class="modal-divider">
+      <span data-i18n="modal_divider">一個帳號，完整功能</span>
+    </div>
+    <div class="modal-features">
+      <div class="modal-feature-item" data-i18n="feature1">✦ 參與討論區發文與留言</div>
+      <div class="modal-feature-item" data-i18n="feature2">✦ 收藏金價走勢與文章</div>
+      <div class="modal-feature-item" data-i18n="feature3">✦ 接收重要市場通知</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 多語言 i18n ──
+const i18n = {
+  zh: {
+    nav_price: '國際金價', nav_jewelry: '黃金飾品', nav_market: '投資訊息', nav_forum: '討論區',
+    btn_login: '登入', btn_register: '免費註冊', btn_logout: '登出',
+    hero_badge: '即時金價更新中',
+    hero_title: '掌握<span>黃金市場</span><br>精準投資時機',
+    hero_desc: '整合全球貴金屬即時行情、專業投資分析與活躍社群討論。<br>從新手到專業投資人，一站式掌握黃金市場動向。',
+    hero_cta1: '立即加入會員', hero_cta2: '瀏覽金價走勢',
+    gold_card_title: '黃金現貨 · XAU/USD',
+    price_unit: '美元 / 盎司', price_high: '今日最高', price_low: '今日最低', price_open: '開盤價', price_tw: '台灣牌價',
+    chart_label: '價格走勢', chart_title: '黃金歷史走勢圖',
+    market_label: '市場概覽', market_title: '貴金屬行情一覽', market_more: '查看完整行情 →',
+    th_metal: '貴金屬', th_price: '現貨價格', th_change: '漲跌幅', th_trend: '走勢',
+    metal_gold: '黃金', metal_silver: '白銀', metal_platinum: '鉑金', metal_palladium: '鈀金',
+    news_label: '最新動態', news_title: '投資資訊精選', news_more: '更多資訊 →',
+    forum_label: '社群討論', forum_title: '熱門話題', forum_more: '進入討論區 →',
+    footer_desc: '專業貴金屬投資資訊平台，提供即時金價、投資分析與社群討論服務。投資有風險，所有資訊僅供參考，不構成投資建議。',
+    footer_links: '快速連結', footer_member: '會員服務', footer_about: '關於',
+    info_about: '關於我們', info_contact: '聯絡我們', info_privacy: '隱私政策', info_terms: '服務條款',
+    modal_title: '歡迎來到黃金殿', modal_sub: '貴金屬投資資訊平台',
+    google_btn: '使用 Google 帳號登入 / 註冊',
+    modal_divider: '一個帳號，完整功能',
+    feature1: '✦ 參與討論區發文與留言', feature2: '✦ 收藏金價走勢與文章', feature3: '✦ 接收重要市場通知',
+  },
+  en: {
+    nav_price: 'Gold Price', nav_jewelry: 'Jewelry', nav_market: 'Market', nav_forum: 'Forum',
+    btn_login: 'Login', btn_register: 'Sign Up Free', btn_logout: 'Logout',
+    hero_badge: 'Live Gold Price Updates',
+    hero_title: 'Master the<span> Gold Market</span><br>Invest with Precision',
+    hero_desc: 'Real-time precious metals quotes, expert analysis and an active community.<br>Everything you need — from beginner to pro investor.',
+    hero_cta1: 'Join Now', hero_cta2: 'View Price Chart',
+    gold_card_title: 'Gold Spot · XAU/USD',
+    price_unit: 'USD / Troy Oz', price_high: "Today's High", price_low: "Today's Low", price_open: 'Open', price_tw: 'TW Listed Price',
+    chart_label: 'PRICE TREND', chart_title: 'Gold Historical Chart',
+    market_label: 'MARKET OVERVIEW', market_title: 'Precious Metals At a Glance', market_more: 'Full Market →',
+    th_metal: 'Metal', th_price: 'Spot Price', th_change: 'Change', th_trend: 'Trend',
+    metal_gold: 'Gold', metal_silver: 'Silver', metal_platinum: 'Platinum', metal_palladium: 'Palladium',
+    news_label: 'LATEST', news_title: 'Investment Highlights', news_more: 'More Articles →',
+    forum_label: 'COMMUNITY', forum_title: 'Hot Topics', forum_more: 'Go to Forum →',
+    footer_desc: 'Professional precious metals investment platform. All information is for reference only and does not constitute investment advice.',
+    footer_links: 'Quick Links', footer_member: 'Members', footer_about: 'About',
+    info_about: 'About Us', info_contact: 'Contact', info_privacy: 'Privacy Policy', info_terms: 'Terms of Service',
+    modal_title: 'Welcome to Gold Palace', modal_sub: 'Precious Metals Investment Platform',
+    google_btn: 'Sign in / Sign up with Google',
+    modal_divider: 'One account, full access',
+    feature1: '✦ Post and comment in the forum', feature2: '✦ Save gold charts and articles', feature3: '✦ Receive key market alerts',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'zh';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('langZH').classList.toggle('active', lang === 'zh');
+  document.getElementById('langEN').classList.toggle('active', lang === 'en');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key] !== undefined) {
+      el.innerHTML = i18n[lang][key];
+    }
+  });
+  // 同步更新 Info Modal 標題與內容
+  if (typeof _currentInfoTab !== 'undefined') {
+    const cfg = infoContent[lang][_currentInfoTab];
+    document.getElementById('infoModalIcon').textContent = cfg.icon;
+    document.getElementById('infoModalLabel').textContent = cfg.label;
+    document.getElementById('infoModalTitle').textContent = cfg.title;
+    document.getElementById('infoModalBody').innerHTML = infoContent[lang].panels[_currentInfoTab];
+  }
+  // 更新圖表時間區間按鈕文字
+  const tabLabels = {
+    zh: ['1日','1週','1個月','3個月','1年','5年'],
+    en: ['1D','1W','1M','3M','1Y','5Y']
+  };
+  document.querySelectorAll('.chart-tab').forEach((btn, i) => {
+    btn.textContent = tabLabels[lang][i];
+  });
+  // 重新載入 TradingView 圖表（以套用新語言）
+  if (typeof TradingView !== 'undefined') {
+    const activeTab = document.querySelector('.chart-tab.active');
+    const rangeKeys = ['1D','1W','1M','3M','12M','60M'];
+    const tabs = document.querySelectorAll('.chart-tab');
+    let activeKey = '1D';
+    tabs.forEach((t, i) => { if (t.classList.contains('active')) activeKey = rangeKeys[i]; });
+    initTVChart(activeKey);
+  }
+}
+
+// 頁面載入時套用語言
+document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
+</script>
+
+<script type="module">
+// ── FIREBASE 初始化 ──
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, query, orderBy, limit, getDocs, where }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB7SY3k0835AyM1fLDtOs0thPrg3cmxifk",
+  authDomain: "gold-bed6c.firebaseapp.com",
+  projectId: "gold-bed6c",
+  storageBucket: "gold-bed6c.firebasestorage.app",
+  messagingSenderId: "498200351921",
+  appId: "1:498200351921:web:66e590427b3457a43afe90"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ── 登入狀態監聽 ──
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById('authButtons').style.display = 'none';
+    const menu = document.getElementById('userMenu');
+    menu.style.display = 'flex';
+    document.getElementById('userAvatar').src = user.photoURL || '';
+    document.getElementById('userName').textContent = user.displayName || user.email;
+    closeModal();
+  } else {
+    document.getElementById('authButtons').style.display = 'flex';
+    document.getElementById('userMenu').style.display = 'none';
+  }
+});
+
+// ── Google 登入 ──
+window.signInWithGoogle = async function() {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      alert('登入失敗，請稍後再試。\n' + err.message);
+    }
+  }
+};
+
+// ── 登出 ──
+window.signOutUser = async function() {
+  await signOut(auth);
+};
+
+// ── 熱門話題：從 Firestore 抓取回覆數最高的 4 篇 ──
+function timeAgo(date) {
+  if (!date) return '';
+  const now = new Date();
+  const d = date.toDate ? date.toDate() : new Date(date);
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return '剛剛';
+  if (diff < 3600) return `${Math.floor(diff/60)} 分鐘前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)} 小時前`;
+  if (diff < 172800) return '昨天';
+  return `${Math.floor(diff/86400)} 天前`;
+}
+
+function renderHotTopics(posts) {
+  const list = document.getElementById('hotTopicsList');
+  if (!posts.length) {
+    list.innerHTML = `
+      <div style="text-align:center;padding:32px;color:var(--text-dim);font-size:13px;letter-spacing:1px;">
+        討論區尚無話題，<a href="/forum" style="color:var(--gold);text-decoration:none;">立即發起討論 →</a>
+      </div>`;
+    return;
+  }
+  list.innerHTML = posts.map(post => {
+    const name = post.authorName || '匿名';
+    const avatar = name.charAt(0);
+    const replyCount = post.replyCount || 0;
+    const viewCount = post.viewCount || 0;
+    const tag = post.category || post.tag || '討論';
+    return `
+      <a href="/forum" style="text-decoration:none;">
+        <div class="discussion-item">
+          <div class="avatar">${avatar}</div>
+          <div class="discussion-body">
+            <div class="discussion-title">${post.title || '（無標題）'}</div>
+            <div class="discussion-meta">
+              <span>${name}</span>
+              <span class="discussion-tag">${tag}</span>
+              <span class="discussion-stat">💬 ${replyCount} 回覆</span>
+              <span class="discussion-stat">👁 ${viewCount} 瀏覽</span>
+              <span>${timeAgo(post.createdAt)}</span>
+            </div>
+          </div>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+async function fetchHotTopics() {
+  try {
+    const q = query(
+      collection(db, 'posts'),
+      where('isDeleted', '==', false),
+      orderBy('replyCount', 'desc'),
+      limit(4)
+    );
+    const snapshot = await getDocs(q);
+    const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderHotTopics(posts);
+  } catch (err) {
+    console.error('熱門話題載入失敗:', err);
+    // 載入失敗時顯示進入討論區的提示
+    const list = document.getElementById('hotTopicsList');
+    list.innerHTML = `
+      <div style="text-align:center;padding:32px;color:var(--text-dim);font-size:13px;letter-spacing:1px;">
+        <a href="/forum" style="color:var(--gold);text-decoration:none;">前往討論區查看所有話題 →</a>
+      </div>`;
+  }
+}
+
+fetchHotTopics();
+
+</script>
+<script>
+// ── MODAL ──
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+// ── TRADINGVIEW CHART ──
+const tvRangeMap = {
+  '1D':  { range: '1D',  interval: '15' },
+  '1W':  { range: '1W',  interval: '60' },
+  '1M':  { range: '1M',  interval: '240' },
+  '3M':  { range: '3M',  interval: 'D' },
+  '12M': { range: '12M', interval: 'W' },
+  '60M': { range: '60M', interval: 'M' },
+};
+
+let tvWidget = null;
+
+function initTVChart(rangeKey) {
+  const container = document.getElementById('tradingview_xauusd');
+  container.innerHTML = '';
+  const cfg = tvRangeMap[rangeKey] || tvRangeMap['1D'];
+  const tvLocale = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'en' : 'zh_TW';
+  tvWidget = new TradingView.widget({
+    container_id: 'tradingview_xauusd',
+    symbol: 'OANDA:XAUUSD',
+    interval: cfg.interval,
+    range: cfg.range,
+    timezone: 'Asia/Taipei',
+    theme: 'dark',
+    style: '1',
+    locale: tvLocale,
+    toolbar_bg: '#1A1A1A',
+    enable_publishing: false,
+    hide_top_toolbar: false,
+    hide_legend: false,
+    save_image: false,
+    backgroundColor: '#111111',
+    gridColor: 'rgba(201,168,76,0.05)',
+    width: '100%',
+    height: '100%',
+    allow_symbol_change: false,
+    hide_side_toolbar: true,
+    withdateranges: false,
+    studies: [],
+    overrides: {
+      'mainSeriesProperties.candleStyle.upColor': '#6EE7B7',
+      'mainSeriesProperties.candleStyle.downColor': '#FCA5A5',
+      'mainSeriesProperties.candleStyle.borderUpColor': '#6EE7B7',
+      'mainSeriesProperties.candleStyle.borderDownColor': '#FCA5A5',
+      'mainSeriesProperties.candleStyle.wickUpColor': '#6EE7B7',
+      'mainSeriesProperties.candleStyle.wickDownColor': '#FCA5A5',
+    },
+  });
+}
+
+function setTVInterval(rangeKey, el) {
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  initTVChart(rangeKey);
+}
+
+// 載入 TradingView library 後初始化
+(function() {
+  const script = document.createElement('script');
+  script.src = 'https://s3.tradingview.com/tv.js';
+  script.async = true;
+  script.onload = function() { initTVChart('1D'); };
+  document.head.appendChild(script);
+})();
+
+// ── REAL PRICE FROM METALS.DEV API ──
+const UPDATE_INTERVAL = 60 * 60 * 1000; // 每60分鐘更新一次
+
+let lastGoldPrice = null;
+let lastOpenPrice = null;
+
+function updateMetalDisplay(priceId, changeId, price, prevPrice) {
+  const el = document.getElementById(priceId);
+  const changeEl = document.getElementById(changeId);
+  if (!el || !price) return;
+
+  el.textContent = `$${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+  if (changeEl && prevPrice) {
+    const change = price - prevPrice;
+    const changePct = ((change / prevPrice) * 100).toFixed(2);
+    const isUp = change >= 0;
+    changeEl.textContent = `${isUp ? '▲ +' : '▼ '}${Math.abs(changePct)}%`;
+    changeEl.className = `market-change ${isUp ? 'up' : 'down'}`;
+  }
+}
+
+function updateTickerItem(priceId, changeId, price, prevPrice) {
+  const el = document.getElementById(priceId);
+  const changeEl = document.getElementById(changeId);
+  if (!el || !price) return;
+
+  el.textContent = `$${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+  if (changeEl && prevPrice) {
+    const change = price - prevPrice;
+    const isUp = change >= 0;
+    changeEl.textContent = `${isUp ? '▲ +' : '▼ '}${Math.abs(change).toFixed(2)}`;
+    changeEl.className = `change ${isUp ? 'up' : 'down'}`;
+  }
+}
+
+function renderPrice(data) {
+  try {
+    const metals = data.metals;
+    const gold = metals.XAU || metals.gold;
+    const silver = metals.XAG || metals.silver;
+    const platinum = metals.XPT || metals.platinum;
+    const palladium = metals.XPD || metals.palladium;
+
+    // 計算黃金漲跌
+    const open = lastOpenPrice || gold;
+    const change = gold - open;
+    const changePct = ((change / open) * 100).toFixed(2);
+    const isUp = change >= 0;
+    const sign = isUp ? '▲ +' : '▼ ';
+    const colorClass = isUp ? '#6EE7B7' : '#FCA5A5';
+
+    // 主卡片黃金價格
+    document.getElementById('hero-price').textContent = gold.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    const changeEl = document.getElementById('hero-change');
+    changeEl.style.background = isUp ? 'rgba(110,231,183,0.1)' : 'rgba(252,165,165,0.1)';
+    changeEl.style.color = colorClass;
+    changeEl.innerHTML = `${sign}${Math.abs(change).toFixed(2)} &nbsp;(${isUp ? '+' : ''}${changePct}%)`;
+
+    // 高低點估算
+    document.getElementById('h-high').textContent = (gold * 1.005).toFixed(2);
+    document.getElementById('h-low').textContent = (gold * 0.995).toFixed(2);
+
+    // 跑馬燈
+    const tickerGold = document.getElementById('t-gold');
+    const tickerGoldC = document.getElementById('t-gold-c');
+    if (tickerGold) tickerGold.textContent = `$${gold.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+    if (tickerGoldC) {
+      tickerGoldC.textContent = `${sign}${Math.abs(change).toFixed(2)}`;
+      tickerGoldC.className = `change ${isUp ? 'up' : 'down'}`;
+    }
+    updateTickerItem('t-silver', 't-silver-c', silver, silver * 0.99);
+    updateTickerItem('t-platinum', 't-platinum-c', platinum, platinum * 1.003);
+    updateTickerItem('t-palladium', 't-palladium-c', palladium, palladium * 0.998);
+
+    // 行情一覽表
+    updateMetalDisplay('m-gold', 'm-gold-c', gold, open);
+    updateMetalDisplay('m-silver', 'm-silver-c', silver, silver * 0.99);
+    updateMetalDisplay('m-platinum', 'm-platinum-c', platinum, platinum * 1.003);
+    updateMetalDisplay('m-palladium', 'm-palladium-c', palladium, palladium * 0.998);
+
+    // 更新時間
+    const now = new Date();
+    document.getElementById('update-time').textContent =
+      `資料每60分鐘更新 · 最後更新：${now.toLocaleTimeString('zh-TW')}`;
+
+    lastGoldPrice = gold;
+    if (!lastOpenPrice) lastOpenPrice = gold;
+
+  } catch(e) {
+    console.error('金價解析錯誤:', e);
+  }
+}
+
+async function fetchGoldPrice() {
+  try {
+    const res = await fetch('/.netlify/functions/goldprice');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();                     
+    renderPrice(data);
+  } catch(err) {
+    console.error('金價API錯誤:', err);
+    // API失敗時保留上次數字，不顯示錯誤給用戶
+    const now = new Date();
+    const updateEl = document.getElementById('update-time');
+    if (updateEl) updateEl.textContent = `連線中… · ${now.toLocaleTimeString('zh-TW')}`;
+  }
+}
+
+// 立即執行一次，之後每60分鐘更新
+fetchGoldPrice();
+setInterval(fetchGoldPrice, UPDATE_INTERVAL);
+</script>
+<!-- INFO MODAL -->
+<div class="info-modal-overlay" id="infoModalOverlay" onclick="closeInfoModalOutside(event)">
+  <div class="info-modal">
+    <div class="info-modal-header">
+      <div style="display:flex;align-items:center;gap:14px;flex:1">
+        <div class="info-modal-icon" id="infoModalIcon">ℹ️</div>
+        <div class="info-modal-title-group">
+          <div class="info-modal-label" id="infoModalLabel">ABOUT</div>
+          <div class="info-modal-title" id="infoModalTitle">關於我們</div>
+        </div>
+      </div>
+      <button class="info-modal-close" onclick="closeInfoModal()">×</button>
+    </div>
+    <div class="info-modal-tabs">
+      <button class="info-modal-tab active" onclick="switchInfoTab('about', this)" data-i18n="info_about">關於我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('contact', this)" data-i18n="info_contact">聯絡我們</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('privacy', this)" data-i18n="info_privacy">隱私政策</button>
+      <button class="info-modal-tab" onclick="switchInfoTab('terms', this)" data-i18n="info_terms">服務條款</button>
+    </div>
+    <div class="info-modal-body" id="infoModalBody">
+      <!-- 內容由 JS 動態產生 -->
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── INFO MODAL ──
+const infoContent = {
+  zh: {
+    about:   { icon: '🏛️', label: 'ABOUT US',       title: '關於我們' },
+    contact: { icon: '✉️', label: 'CONTACT',        title: '聯絡我們' },
+    privacy: { icon: '🔒', label: 'PRIVACY POLICY', title: '隱私政策' },
+    terms:   { icon: '📋', label: 'TERMS',          title: '服務條款' },
+    panels: {
+      about: `
+        <div class="info-section">
+          <div class="info-section-title">我們的使命</div>
+          <p>黃金殿是一個專注於貴金屬投資的資訊平台，致力於為台灣及華語地區投資人提供即時、準確的黃金與貴金屬市場資訊。</p>
+          <p>我們相信，每一位投資人都應該享有專業、透明的市場資訊。從黃金現貨報價到深度投資分析，我們匯聚全球資料，讓您隨時掌握市場動向。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">平台特色</div>
+          <div class="info-highlight">
+            ⚡ 即時金價更新 · 全球主要貴金屬報價每60分鐘同步<br>
+            📊 專業分析工具 · 歷史走勢圖表、技術指標一覽<br>
+            💬 活躍社群討論 · 與數千名投資人交流心得<br>
+            📰 精選投資資訊 · 匯整國內外重要市場新聞
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">免責聲明</div>
+          <p>黃金殿所提供之所有資訊，包含金價行情、分析文章及社群討論內容，均<strong style="color:var(--text)">僅供參考</strong>，不構成任何投資建議或買賣依據。投資貴金屬具有市場風險，請審慎評估自身財務狀況後再作決定。</p>
+        </div>`,
+      contact: `
+        <div class="info-section">
+          <div class="info-section-title">與我們聯繫</div>
+          <p>我們非常重視每一位用戶的意見與反饋。無論您有任何建議、問題或合作邀請，歡迎透過以下方式與我們聯繫。</p>
+          <div class="info-contact-card">
+            <div class="info-contact-row">
+              <div class="info-contact-icon">✉️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">客服信箱</div>
+                <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">🕐</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">服務時間</div>
+                週一至週五 09:00 – 18:00（台灣時間 GMT+8）
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">⏱️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">回覆時效</div>
+                一般查詢通常於 1–3 個工作天內回覆
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">常見聯絡事項</div>
+          <div class="info-highlight">
+            🐛 回報網站問題或錯誤資訊<br>
+            💡 功能建議與改進意見<br>
+            🤝 媒體合作與商業洽談<br>
+            📝 內容授權相關詢問
+          </div>
+        </div>`,
+      privacy: `
+        <div class="info-section">
+          <div class="info-section-title">資料收集</div>
+          <p>黃金殿（以下稱「本平台」）收集的個人資料包含：您主動提供的帳號資訊（電子郵件、使用者名稱），以及系統自動記錄的瀏覽行為、裝置資訊與 IP 位址等技術資料。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">資料使用目的</div>
+          <p>我們收集的資料用於以下目的：提供並維護平台服務、發送重要服務通知、改善使用者體驗，以及防範詐欺與異常活動。</p>
+          <div class="info-highlight">本平台<strong style="color:var(--text)">不會</strong>將您的個人資料出售給第三方，亦不會用於任何未經授權的商業目的。</div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Cookie 使用</div>
+          <p>本平台使用 Cookie 技術以維持登入狀態、記錄使用偏好，並收集匿名統計數據以改善服務品質。您可透過瀏覽器設定管理或停用 Cookie，但部分功能可能因此受到影響。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">資料安全</div>
+          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">政策更新</div>
+          <p>本隱私政策如有重大變更，我們將於平台顯著位置公告，並寄送通知至您的註冊信箱。繼續使用本平台即視為您同意修訂後之條款。最後更新：2025年1月</p>
+        </div>`,
+      terms: `
+        <div class="info-section">
+          <div class="info-section-title">服務說明</div>
+          <p>黃金殿提供貴金屬市場資訊、投資分析及社群討論等服務。使用本平台即表示您已閱讀並同意以下服務條款。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">會員資格</div>
+          <p>您須年滿 18 歲方可註冊成為本平台會員。每位使用者限申請一個帳號，且須提供真實有效的電子郵件地址。帳號不得轉讓或出借他人使用。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">使用規範</div>
+          <div class="info-highlight">
+            ✅ 允許：分享個人投資經驗、討論市場趨勢、發表合法評論<br>
+            ❌ 禁止：散布虛假資訊、惡意攻擊他人、發布廣告垃圾訊息、從事任何違法行為
+          </div>
+          <p>違反上述規範者，本平台有權在不事先通知的情況下暫停或終止您的帳號。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">免責聲明</div>
+          <p>本平台所有資訊<strong style="color:var(--text)">僅供參考</strong>，不構成投資建議。投資貴金屬具有市場風險，可能導致損失。本平台對因參考本站資訊而產生的任何投資損失不承擔責任。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">智慧財產權</div>
+          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>。</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">條款修訂</div>
+          <p>本平台保留隨時修改服務條款之權利。條款修訂後將於本站公告，請定期查閱。最後更新：2025年1月</p>
+        </div>`
+    }
+  },
+  en: {
+    about:   { icon: '🏛️', label: 'ABOUT US',       title: 'About Us' },
+    contact: { icon: '✉️', label: 'CONTACT',        title: 'Contact Us' },
+    privacy: { icon: '🔒', label: 'PRIVACY POLICY', title: 'Privacy Policy' },
+    terms:   { icon: '📋', label: 'TERMS',          title: 'Terms of Service' },
+    panels: {
+      about: `
+        <div class="info-section">
+          <div class="info-section-title">Our Mission</div>
+          <p>Gold Palace is a precious metals investment information platform dedicated to providing real-time, accurate gold and precious metals market data to investors in Taiwan and the Chinese-speaking world.</p>
+          <p>We believe every investor deserves access to professional, transparent market information. From live gold spot prices to in-depth investment analysis, we aggregate global data so you can stay ahead of the market.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Platform Features</div>
+          <div class="info-highlight">
+            ⚡ Live Price Updates · All major precious metals refreshed every 60 minutes<br>
+            📊 Professional Tools · Historical charts and technical indicators<br>
+            💬 Active Community · Exchange ideas with thousands of investors<br>
+            📰 Curated News · Aggregated market news from around the world
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Disclaimer</div>
+          <p>All information provided by Gold Palace, including price quotes, analysis articles, and community discussions, is <strong style="color:var(--text)">for reference only</strong> and does not constitute investment advice or a basis for trading. Investing in precious metals carries market risk. Please assess your own financial situation carefully before making any decisions.</p>
+        </div>`,
+      contact: `
+        <div class="info-section">
+          <div class="info-section-title">Get in Touch</div>
+          <p>We value the feedback of every user. Whether you have suggestions, questions, or partnership inquiries, feel free to reach us through the following.</p>
+          <div class="info-contact-card">
+            <div class="info-contact-row">
+              <div class="info-contact-icon">✉️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">SUPPORT EMAIL</div>
+                <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">🕐</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">HOURS</div>
+                Monday – Friday, 09:00 – 18:00 (Taiwan Time, GMT+8)
+              </div>
+            </div>
+            <div class="info-contact-row">
+              <div class="info-contact-icon">⏱️</div>
+              <div>
+                <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">RESPONSE TIME</div>
+                General inquiries are typically answered within 1–3 business days
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Common Inquiries</div>
+          <div class="info-highlight">
+            🐛 Report website issues or incorrect data<br>
+            💡 Feature requests and improvement suggestions<br>
+            🤝 Media partnerships and business proposals<br>
+            📝 Content licensing inquiries
+          </div>
+        </div>`,
+      privacy: `
+        <div class="info-section">
+          <div class="info-section-title">Data Collection</div>
+          <p>Gold Palace ("the Platform") collects personal data including: account information you provide directly (email address, username), and technical data automatically recorded by the system such as browsing behavior, device information, and IP address.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Purpose of Data Use</div>
+          <p>Data collected is used to: provide and maintain platform services, send important service notifications, improve user experience, and prevent fraud and abnormal activity.</p>
+          <div class="info-highlight">The Platform will <strong style="color:var(--text)">never</strong> sell your personal data to third parties or use it for any unauthorized commercial purpose.</div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Cookie Usage</div>
+          <p>The Platform uses cookies to maintain login sessions, remember user preferences, and collect anonymous statistics to improve service quality. You may manage or disable cookies through your browser settings, though some features may be affected.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Data Security</div>
+          <p>We protect your personal data with industry-standard encryption and conduct regular security reviews. For any questions regarding your personal data, please contact <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Policy Updates</div>
+          <p>If significant changes are made to this Privacy Policy, we will announce them prominently on the Platform and send notifications to your registered email. Continued use of the Platform constitutes acceptance of the revised terms. Last updated: January 2025</p>
+        </div>`,
+      terms: `
+        <div class="info-section">
+          <div class="info-section-title">Service Description</div>
+          <p>Gold Palace provides precious metals market information, investment analysis, and community discussion services. By using this Platform, you confirm that you have read and agree to the following Terms of Service.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Membership</div>
+          <p>You must be at least 18 years old to register as a member. Each user may register only one account and must provide a valid email address. Accounts may not be transferred or lent to others.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Code of Conduct</div>
+          <div class="info-highlight">
+            ✅ Permitted: Share personal investment experiences, discuss market trends, post lawful comments<br>
+            ❌ Prohibited: Spread misinformation, harass others, post spam or advertisements, engage in any illegal activity
+          </div>
+          <p>Violations may result in account suspension or termination without prior notice.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Disclaimer</div>
+          <p>All information on this Platform is <strong style="color:var(--text)">for reference only</strong> and does not constitute investment advice. Investing in precious metals involves market risk and may result in losses. The Platform is not responsible for any investment losses arising from reliance on information on this site.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Intellectual Property</div>
+          <p>All content on this Platform, including text, images, code, and design, is protected by copyright law. Reproduction, copying, or commercial use without authorization is prohibited. For licensing inquiries, contact <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>.</p>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Amendments</div>
+          <p>The Platform reserves the right to modify these Terms of Service at any time. Changes will be announced on this site. Last updated: January 2025</p>
+        </div>`
+    }
+  }
+};
+
+let _currentInfoTab = 'about';
+
+function openInfoModal(tab) {
+  switchInfoTab(tab);
+  document.getElementById('infoModalOverlay').classList.add('open');
+}
+function closeInfoModal() {
+  document.getElementById('infoModalOverlay').classList.remove('open');
+}
+function closeInfoModalOutside(e) {
+  if (e.target === document.getElementById('infoModalOverlay')) closeInfoModal();
+}
+function switchInfoTab(tab, clickedBtn) {
+  _currentInfoTab = tab;
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'zh';
+  const cfg = infoContent[lang][tab];
+  document.getElementById('infoModalIcon').textContent = cfg.icon;
+  document.getElementById('infoModalLabel').textContent = cfg.label;
+  document.getElementById('infoModalTitle').textContent = cfg.title;
+  document.getElementById('infoModalBody').innerHTML = infoContent[lang].panels[tab];
+  document.querySelectorAll('.info-modal-tab').forEach(btn => btn.classList.remove('active'));
+  if (clickedBtn) clickedBtn.classList.add('active');
+  else {
+    const tabs = ['about','contact','privacy','terms'];
+    const idx = tabs.indexOf(tab);
+    const allTabs = document.querySelectorAll('.info-modal-tab');
+    if (allTabs[idx]) allTabs[idx].classList.add('active');
+  }
+}
+</script>
+</body>
+</html>
