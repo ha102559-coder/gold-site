@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>投資討論區</title>
+<title>Investment Forum</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 
 <!-- ★ 在這裡填入你的 Firebase 設定 ★ -->
@@ -38,6 +38,191 @@
   const provider = new GoogleAuthProvider();
 
   // ══════════════════════════════════════════════
+  // i18n
+  // ══════════════════════════════════════════════
+  const lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+
+  const t = {
+    zh: {
+      title:           '投資討論區',
+      back:            '← 返回主頁',
+      logo:            '貴<span>金</span>屬 · 投資討論區',
+      searchPlaceholder:'搜尋標題…',
+      loginBtn:        'Google 登入',
+      logoutBtn:       '登出',
+      postBtn:         '✏ 發文',
+      loginFirst:      '請先登入',
+      navLabel:        '討論分類',
+      infoLabel:       '資訊',
+      catAll:          '全部',
+      catGold:         '黃金',
+      catSilver:       '白銀',
+      catETF:          'ETF',
+      catTech:         '科技股',
+      announce:        '公告',
+      feedTitleAll:    '全部討論',
+      feedSubAll:      '顯示所有分類的最新討論',
+      feedTitleGold:   '黃金討論',
+      feedSubGold:     '黃金投資相關討論',
+      feedTitleSilver: '白銀討論',
+      feedSubSilver:   '白銀投資相關討論',
+      feedTitleETF:    'ETF 討論',
+      feedSubETF:      'ETF 基金相關討論',
+      feedTitleTech:   '科技股討論',
+      feedSubTech:     '科技類股討論',
+      loading:         '載入中…',
+      noPost:          '暫無討論',
+      prevPage:        '‹ 上頁',
+      nextPage:        '下頁 ›',
+      pageInfo:        (n) => `第 ${n} 頁`,
+      searchingFor:    (kw) => `搜尋「${kw}」中…`,
+      clearSearch:     '✕ 清除',
+      loadFail:        (msg) => `⚠️ 載入失敗：${msg}<br><small>請確認 Firebase 設定是否正確，或 Firestore 索引是否已建立。</small>`,
+      detailLoadFail:  (msg) => `載入失敗：${msg}`,
+      noReply:         '尚無回覆，來第一個留言！',
+      replyCount:      (n) => `回覆留言（${n}）`,
+      replyFormTitle:  '發表回覆',
+      replyPlaceholder:'輸入回覆內容…',
+      replyMedia:      '附加圖片 / 影片（最多 5 個）',
+      replyUpload:     '點擊上傳圖片或影片',
+      replySubmitBtn:  '送出回覆',
+      loginPrompt:     '請 <a onclick="loginGoogle()" style="color:var(--gold);cursor:pointer">Google 登入</a> 後才能回覆',
+      editBtn:         '✏ 編輯',
+      deleteBtn:       '🗑 刪除',
+      confirmDelPost:  '確定要刪除這篇文章？此操作無法復原。',
+      confirmDelReply: '確定要刪除此回覆？',
+      deleteFail:      (msg) => '刪除失敗：' + msg,
+      postModalTitle:  '發表文章',
+      editModalTitle:  '編輯文章',
+      rulesTitle:      '發文規定',
+      rules:           '1. 請勿張貼重複文章、無意義內容或廣告。<br>2. 請勿提供個人聯絡方式。<br>3. 請勿涉及人身攻擊、污衊或違社會善良風俗內容。<br>4. 本討論區有 IP 記錄，禁止張貼違法內容。',
+      labelCat:        '分類',
+      labelRequired:   '*',
+      selectCat:       '選擇分類',
+      labelTitle:      '標題',
+      titleLimit:      '（最多50字）',
+      titlePlaceholder:'輸入文章標題',
+      labelContent:    '內容',
+      contentPlaceholder:'輸入文章內容…',
+      labelMedia:      '上傳圖片 / 影片（最多10個）',
+      uploadLabel:     '點擊上傳圖片或影片（單檔上限 5GB，Firebase Storage 免費 5GB）',
+      submitPost:      '發　表',
+      savePost:        '儲存文章',
+      uploading:       '上傳中…',
+      saving:          '儲存中…',
+      errNoCat:        '請選擇分類',
+      errNoTitle:      '請輸入標題',
+      errNoContent:    '請輸入內容',
+      errNoReply:      '請輸入回覆內容',
+      errEmptyContent: '內容不能為空',
+      loginFail:       (msg) => '登入失敗：' + msg,
+      editReplyTitle:  '編輯回覆',
+      saveReplyBtn:    '儲存回覆',
+      profileBack:     '← 返回討論區',
+      profilePostsLabel:'發表過的文章',
+      profileJoined:   (d) => `加入日期：${d}`,
+      profileUnknown:  '不明',
+      profileNoPost:   '尚無發表文章',
+      profileMember:   '未知會員',
+      profileLoadFail: (msg) => `載入失敗：${msg}`,
+      updateTime:      (t) => `資料每2小時更新 · 最後更新：${t}`,
+    },
+    en: {
+      title:           'Investment Forum',
+      back:            '← Back to Home',
+      logo:            'Precious <span>Metals</span> · Forum',
+      searchPlaceholder:'Search title…',
+      loginBtn:        'Sign in with Google',
+      logoutBtn:       'Sign out',
+      postBtn:         '✏ New Post',
+      loginFirst:      'Please sign in first',
+      navLabel:        'CATEGORIES',
+      infoLabel:       'INFO',
+      catAll:          'All',
+      catGold:         'Gold',
+      catSilver:       'Silver',
+      catETF:          'ETF',
+      catTech:         'Tech Stocks',
+      announce:        'Announcements',
+      feedTitleAll:    'All Discussions',
+      feedSubAll:      'Latest posts across all categories',
+      feedTitleGold:   'Gold',
+      feedSubGold:     'Gold investment discussions',
+      feedTitleSilver: 'Silver',
+      feedSubSilver:   'Silver investment discussions',
+      feedTitleETF:    'ETF',
+      feedSubETF:      'ETF fund discussions',
+      feedTitleTech:   'Tech Stocks',
+      feedSubTech:     'Technology stock discussions',
+      loading:         'Loading…',
+      noPost:          'No discussions yet',
+      prevPage:        '‹ Prev',
+      nextPage:        'Next ›',
+      pageInfo:        (n) => `Page ${n}`,
+      searchingFor:    (kw) => `Searching "${kw}"…`,
+      clearSearch:     '✕ Clear',
+      loadFail:        (msg) => `⚠️ Failed to load: ${msg}<br><small>Please check your Firebase config or Firestore indexes.</small>`,
+      detailLoadFail:  (msg) => `Failed to load: ${msg}`,
+      noReply:         'No replies yet. Be the first!',
+      replyCount:      (n) => `Replies (${n})`,
+      replyFormTitle:  'Leave a Reply',
+      replyPlaceholder:'Write your reply…',
+      replyMedia:      'Attach images / videos (max 5)',
+      replyUpload:     'Click to upload image or video',
+      replySubmitBtn:  'Submit Reply',
+      loginPrompt:     'Please <a onclick="loginGoogle()" style="color:var(--gold);cursor:pointer">sign in</a> to reply',
+      editBtn:         '✏ Edit',
+      deleteBtn:       '🗑 Delete',
+      confirmDelPost:  'Delete this post? This action cannot be undone.',
+      confirmDelReply: 'Delete this reply?',
+      deleteFail:      (msg) => 'Delete failed: ' + msg,
+      postModalTitle:  'New Post',
+      editModalTitle:  'Edit Post',
+      rulesTitle:      'Posting Rules',
+      rules:           '1. No duplicate posts, spam, or advertisements.<br>2. Do not share personal contact information.<br>3. No personal attacks, defamation, or inappropriate content.<br>4. IP addresses are logged. Illegal content is strictly prohibited.',
+      labelCat:        'Category',
+      labelRequired:   '*',
+      selectCat:       'Select category',
+      labelTitle:      'Title',
+      titleLimit:      '(max 50 chars)',
+      titlePlaceholder:'Enter post title',
+      labelContent:    'Content',
+      contentPlaceholder:'Write your post…',
+      labelMedia:      'Upload images / videos (max 10)',
+      uploadLabel:     'Click to upload image or video (max 5GB per file)',
+      submitPost:      'Submit',
+      savePost:        'Save Post',
+      uploading:       'Uploading…',
+      saving:          'Saving…',
+      errNoCat:        'Please select a category',
+      errNoTitle:      'Please enter a title',
+      errNoContent:    'Please enter content',
+      errNoReply:      'Please enter a reply',
+      errEmptyContent: 'Content cannot be empty',
+      loginFail:       (msg) => 'Sign-in failed: ' + msg,
+      editReplyTitle:  'Edit Reply',
+      saveReplyBtn:    'Save Reply',
+      profileBack:     '← Back to Forum',
+      profilePostsLabel:'Posts by this user',
+      profileJoined:   (d) => `Joined: ${d}`,
+      profileUnknown:  'Unknown',
+      profileNoPost:   'No posts yet',
+      profileMember:   'Unknown Member',
+      profileLoadFail: (msg) => `Failed to load: ${msg}`,
+      updateTime:      (t) => `Updated every 2 hours · Last update: ${t}`,
+    }
+  }[lang];
+
+  // Category display names
+  const catDisplay = {
+    all:   t.catAll,
+    '黃金': t.catGold,
+    '白銀': t.catSilver,
+    'ETF':  t.catETF,
+    '科技股':t.catTech,
+  };
+
+  // ══════════════════════════════════════════════
   // State
   // ══════════════════════════════════════════════
   let currentUser   = null;
@@ -54,11 +239,11 @@
   const catTagClass = { '黃金':'cat-gold','白銀':'cat-silver','ETF':'cat-etf','科技股':'cat-tech' };
   const catEmoji    = { '黃金':'🥇','白銀':'🥈','ETF':'📊','科技股':'💻' };
   const catInfo = {
-    all:    { title:'全部討論',  sub:'顯示所有分類的最新討論' },
-    '黃金':  { title:'黃金討論',  sub:'黃金投資相關討論' },
-    '白銀':  { title:'白銀討論',  sub:'白銀投資相關討論' },
-    'ETF':   { title:'ETF 討論', sub:'ETF 基金相關討論' },
-    '科技股':{ title:'科技股討論',sub:'科技類股討論' },
+    all:    { title: t.feedTitleAll,    sub: t.feedSubAll },
+    '黃金':  { title: t.feedTitleGold,   sub: t.feedSubGold },
+    '白銀':  { title: t.feedTitleSilver, sub: t.feedSubSilver },
+    'ETF':   { title: t.feedTitleETF,    sub: t.feedSubETF },
+    '科技股':{ title: t.feedTitleTech,   sub: t.feedSubTech },
   };
 
   // ══════════════════════════════════════════════
@@ -96,7 +281,7 @@
 
   async function loginGoogle() {
     try { await signInWithPopup(auth, provider); }
-    catch(e) { alert('登入失敗：' + e.message); }
+    catch(e) { alert(t.loginFail(e.message)); }
   }
 
   async function logout() {
@@ -111,15 +296,15 @@
     if (!currentUser) {
       el.innerHTML = `<button class="btn-google" id="loginBtn">
         <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Google 登入</button>`;
+        ${t.loginBtn}</button>`;
       document.getElementById('loginBtn').onclick = loginGoogle;
-      pb.disabled = true; pb.title = '請先登入';
+      pb.disabled = true; pb.title = t.loginFirst;
     } else {
       const av = currentUser.photoURL
         ? `<img class="avatar" src="${esc(currentUser.photoURL)}" alt="">`
         : `<div class="avatar-ph">👤</div>`;
       el.innerHTML = `${av}<span class="uname">${esc(currentUser.displayName||currentUser.email)}</span>
-        <button class="btn-logout" id="logoutBtn">登出</button>`;
+        <button class="btn-logout" id="logoutBtn">${t.logoutBtn}</button>`;
       document.getElementById('logoutBtn').onclick = logout;
       pb.disabled = false; pb.title = '';
     }
@@ -129,7 +314,7 @@
   // Load Posts
   // ══════════════════════════════════════════════
   async function loadPosts(direction = 'reset') {
-    document.getElementById('postList').innerHTML = '<div class="loading">載入中…</div>';
+    document.getElementById('postList').innerHTML = `<div class="loading">${t.loading}</div>`;
     document.getElementById('paginationArea').innerHTML = '';
 
     try {
@@ -192,7 +377,7 @@
 
     } catch(e) {
       document.getElementById('postList').innerHTML =
-        `<div class="error-msg">⚠️ 載入失敗：${esc(e.message)}<br><small>請確認 Firebase 設定是否正確，或 Firestore 索引是否已建立。</small></div>`;
+        `<div class="error-msg">${t.loadFail(esc(e.message))}</div>`;
     }
   }
 
@@ -200,7 +385,7 @@
     const el  = document.getElementById('postList');
     const now = Date.now();
     if (!posts.length) {
-      el.innerHTML = `<div class="empty"><div class="ei">📭</div>暫無討論</div>`;
+      el.innerHTML = `<div class="empty"><div class="ei">📭</div>${t.noPost}</div>`;
       return;
     }
     el.innerHTML = posts.map(p => {
@@ -210,17 +395,18 @@
       const thumb = img
         ? `<img class="post-thumb" src="${esc(img)}" alt="">`
         : `<div class="post-thumb-ph">${catEmoji[p.category]||'📄'}</div>`;
+      const catName = catDisplay[p.category] || esc(p.category);
       return `
       <div class="post-card" data-id="${p.id}">
         ${thumb}
         <div class="post-body">
           <div class="title-row">
             <span class="ptitle">${esc(p.title)}</span>
-            ${isNew?'<span class="badge bnew">新</span>':''}
-            ${p.replyCount>0?'<span class="badge breply">新回</span>':''}
+            ${isNew?`<span class="badge bnew">${lang==='zh'?'新':'New'}</span>`:''}
+            ${p.replyCount>0?`<span class="badge breply">${lang==='zh'?'新回':'Reply'}</span>`:''}
           </div>
           <div class="pmeta">
-            <span class="cat-tag ${catTagClass[p.category]||''}">${catEmoji[p.category]||''} ${esc(p.category)}</span>
+            <span class="cat-tag ${catTagClass[p.category]||''}">${catEmoji[p.category]||''} ${catName}</span>
             <span>👤 <a style="color:var(--gold);cursor:pointer" onclick="event.stopPropagation();openUserProfile('${esc(p.authorId)}')">${esc(p.authorName)}</a></span>
             <span>🕐 ${fmtDate(ts)}</span>
           </div>
@@ -244,9 +430,9 @@
     if (!hasPrev && !hasNext) return;
     el.innerHTML = `
       <div class="pagination">
-        <button class="page-btn" ${hasPrev?'':'disabled'} id="prevBtn">‹ 上頁</button>
-        <span class="page-info">第 ${currentPage} 頁</span>
-        <button class="page-btn" ${hasNext?'':'disabled'} id="nextBtn">下頁 ›</button>
+        <button class="page-btn" ${hasPrev?'':'disabled'} id="prevBtn">${t.prevPage}</button>
+        <span class="page-info">${t.pageInfo(currentPage)}</span>
+        <button class="page-btn" ${hasNext?'':'disabled'} id="nextBtn">${t.nextPage}</button>
       </div>`;
     if (hasPrev) document.getElementById('prevBtn').onclick = () => loadPosts('prev');
     if (hasNext) document.getElementById('nextBtn').onclick = () => loadPosts('next');
@@ -260,7 +446,7 @@
     searchKeyword = kw;
     const bar  = document.getElementById('searchBar');
     const txt  = document.getElementById('searchTxt');
-    if (kw) { bar.style.display='flex'; txt.textContent=`搜尋「${kw}」中…`; }
+    if (kw) { bar.style.display='flex'; txt.textContent=t.searchingFor(kw); }
     else    { bar.style.display='none'; }
     loadPosts('reset');
   }
@@ -277,8 +463,8 @@
   // ══════════════════════════════════════════════
   async function openDetail(postId) {
     currentPostId = postId;
-    document.getElementById('detailTitle').textContent = '載入中…';
-    document.getElementById('detailBody').innerHTML    = '<div class="loading">載入中…</div>';
+    document.getElementById('detailTitle').textContent = t.loading;
+    document.getElementById('detailBody').innerHTML    = `<div class="loading">${t.loading}</div>`;
     openModal('detailModal');
 
     try {
@@ -301,7 +487,7 @@
       renderDetail(post, replies);
     } catch(e) {
       document.getElementById('detailBody').innerHTML =
-        `<div class="error-msg">載入失敗：${esc(e.message)}</div>`;
+        `<div class="error-msg">${t.detailLoadFail(esc(e.message))}</div>`;
     }
   }
 
@@ -319,45 +505,45 @@
 
     const actHtml = isOwner ? `
       <div class="post-actions">
-        <button class="act-btn edit" onclick="openEditPost(${JSON.stringify(post).replace(/"/g,'&quot;')})">✏ 編輯</button>
-        <button class="act-btn del"  onclick="deletePost('${post.id}')">🗑 刪除</button>
+        <button class="act-btn edit" onclick="openEditPost(${JSON.stringify(post).replace(/"/g,'&quot;')})">${t.editBtn}</button>
+        <button class="act-btn del"  onclick="deletePost('${post.id}')">${t.deleteBtn}</button>
       </div>` : '';
 
     const repliesHtml = replies.length
       ? replies.map((r,i) => renderReplyCard(r, i, post.id)).join('')
-      : '<div class="no-reply">尚無回覆，來第一個留言！</div>';
+      : `<div class="no-reply">${t.noReply}</div>`;
 
     const replyFormHtml = currentUser
       ? `<div class="reply-form">
-          <div class="rf-title">發表回覆</div>
+          <div class="rf-title">${t.replyFormTitle}</div>
           <div id="replyErr" class="error-msg" style="display:none"></div>
           <div class="form-group">
-            <textarea class="form-textarea" id="r_content" placeholder="輸入回覆內容…" style="height:90px"></textarea>
+            <textarea class="form-textarea" id="r_content" placeholder="${t.replyPlaceholder}" style="height:90px"></textarea>
           </div>
           <div class="form-group">
-            <label class="form-label">附加圖片 / 影片（最多 5 個）</label>
+            <label class="form-label">${t.replyMedia}</label>
             <div class="media-previews" id="replyPrev"></div>
             <div class="upload-area" onclick="document.getElementById('replyFileInput').click()">
               <input type="file" id="replyFileInput" multiple accept="image/*,video/*" style="display:none">
-              <span class="upload-label">點擊上傳圖片或影片</span>
+              <span class="upload-label">${t.replyUpload}</span>
             </div>
           </div>
-          <button class="submit-btn" id="replySubmitBtn">送出回覆</button>
+          <button class="submit-btn" id="replySubmitBtn">${t.replySubmitBtn}</button>
         </div>`
-      : `<div class="login-prompt">請 <a onclick="loginGoogle()" style="color:var(--gold);cursor:pointer">Google 登入</a> 後才能回覆</div>`;
+      : `<div class="login-prompt">${t.loginPrompt}</div>`;
 
     document.getElementById('detailBody').innerHTML = `
       <div class="detail-meta">
         ${post.authorPhoto?`<img class="u-av" src="${esc(post.authorPhoto)}" alt="">`:'<span>👤</span>'}
         <span class="u-name" style="cursor:pointer" onclick="openUserProfile('${esc(post.authorId)}')">${esc(post.authorName)}</span>
-        <span class="cat-tag ${catTagClass[post.category]||''}">${catEmoji[post.category]||''} ${esc(post.category)}</span>
+        <span class="cat-tag ${catTagClass[post.category]||''}">${catEmoji[post.category]||''} ${catDisplay[post.category]||esc(post.category)}</span>
         <span class="dmeta-time">🕐 ${fmtDate(ts)}</span>
         <span class="dmeta-time">👁 ${post.views||0}</span>
       </div>
       ${actHtml}
       <div class="detail-content">${esc(post.content)}</div>
       ${mediaHtml}
-      <div class="replies-hd">回覆留言（<span id="replyCount">${replies.length}</span>）</div>
+      <div class="replies-hd">${t.replyCount(`<span id="replyCount">${replies.length}</span>`)}</div>
       <div id="repliesList">${repliesHtml}</div>
       ${replyFormHtml}`;
 
@@ -383,8 +569,8 @@
 
     const acts = isOwner ? `
       <div class="reply-acts">
-        <button class="act-btn edit sm" onclick="openReplyEdit('${r.id}','${postId}',\`${r.content.replace(/`/g,'\\`')}\`)">✏ 編輯</button>
-        <button class="act-btn del sm"  onclick="deleteReply('${r.id}','${postId}')">🗑</button>
+        <button class="act-btn edit sm" onclick="openReplyEdit('${r.id}','${postId}',\`${r.content.replace(/`/g,'\\`')}\`)">${t.editBtn}</button>
+        <button class="act-btn del sm"  onclick="deleteReply('${r.id}','${postId}')">${t.deleteBtn}</button>
       </div>` : '';
 
     return `
@@ -408,7 +594,7 @@
   // ══════════════════════════════════════════════
   function openPostModal(editData = null) {
     if (!currentUser) { loginGoogle(); return; }
-    document.getElementById('postModalTitle').textContent = editData ? '編輯文章' : '發表文章';
+    document.getElementById('postModalTitle').textContent = editData ? t.editModalTitle : t.postModalTitle;
     document.getElementById('editPostId').value  = editData?.id  || '';
     document.getElementById('f_cat').value       = editData?.category || '';
     document.getElementById('f_title').value     = editData?.title   || '';
@@ -432,11 +618,11 @@
     const title    = document.getElementById('f_title').value.trim();
     const content  = document.getElementById('f_content').value.trim();
 
-    if (!category) { showErr(errEl,'請選擇分類'); return; }
-    if (!title)    { showErr(errEl,'請輸入標題'); return; }
-    if (!content)  { showErr(errEl,'請輸入內容'); return; }
+    if (!category) { showErr(errEl, t.errNoCat); return; }
+    if (!title)    { showErr(errEl, t.errNoTitle); return; }
+    if (!content)  { showErr(errEl, t.errNoContent); return; }
 
-    btn.disabled = true; btn.textContent = '上傳中…';
+    btn.disabled = true; btn.textContent = t.uploading;
 
     try {
       // Upload media to Firebase Storage
@@ -473,12 +659,12 @@
       showErr(errEl, e.message);
     } finally {
       btn.disabled = false;
-      btn.textContent = editId ? '儲存文章' : '發　表';
+      btn.textContent = editId ? t.savePost : t.submitPost;
     }
   }
 
   async function deletePost(postId) {
-    if (!confirm('確定要刪除這篇文章？此操作無法復原。')) return;
+    if (!confirm(t.confirmDelPost)) return;
     try {
       const token = await currentUser.getIdToken();
       const res   = await fetch('/.netlify/functions/deletePost', {
@@ -490,7 +676,7 @@
       if (!res.ok) throw new Error(data.error);
       closeModal('detailModal');
       loadPosts('reset');
-    } catch(e) { alert('刪除失敗：' + e.message); }
+    } catch(e) { alert(t.deleteFail(e.message)); }
   }
 
   // ══════════════════════════════════════════════
@@ -501,7 +687,7 @@
     const errEl   = document.getElementById('replyErr');
     const content = document.getElementById('r_content').value.trim();
     errEl.style.display = 'none';
-    if (!content) { showErr(errEl,'請輸入回覆內容'); return; }
+    if (!content) { showErr(errEl, t.errNoReply); return; }
 
     btn.disabled = true; btn.textContent = '上傳中…';
     try {
@@ -546,7 +732,7 @@
 
       loadPosts('reset');
     } catch(e) { showErr(errEl, e.message); }
-    finally { btn.disabled = false; btn.textContent = '送出回覆'; }
+    finally { btn.disabled = false; btn.textContent = t.replySubmitBtn; }
   }
 
   function openReplyEdit(replyId, postId, content) {
@@ -563,9 +749,9 @@
     const replyId = document.getElementById('editReplyId').value;
     const postId  = document.getElementById('editReplyPostId').value;
     const content = document.getElementById('editReplyContent').value.trim();
-    if (!content) { showErr(errEl,'內容不能為空'); return; }
+    if (!content) { showErr(errEl, t.errEmptyContent); return; }
 
-    btn.disabled = true; btn.textContent = '儲存中…';
+    btn.disabled = true; btn.textContent = t.saving;
     try {
       await updateDoc(doc(db, 'replies', replyId), {
         content, updatedAt: serverTimestamp(),
@@ -574,11 +760,11 @@
       if (card) card.querySelector('.reply-content').textContent = content;
       closeModal('replyEditModal');
     } catch(e) { showErr(errEl, e.message); }
-    finally { btn.disabled = false; btn.textContent = '儲存回覆'; }
+    finally { btn.disabled = false; btn.textContent = t.saveReplyBtn; }
   }
 
   async function deleteReply(replyId, postId) {
-    if (!confirm('確定要刪除此回覆？')) return;
+    if (!confirm(t.confirmDelReply)) return;
     try {
       const token = await currentUser.getIdToken();
       const res   = await fetch('/.netlify/functions/deleteReply', {
@@ -592,7 +778,7 @@
       const count = document.querySelectorAll('.reply-card').length;
       const el = document.getElementById('replyCount');
       if (el) el.textContent = count;
-    } catch(e) { alert('刪除失敗：' + e.message); }
+    } catch(e) { alert(t.deleteFail(e.message)); }
   }
 
   // ══════════════════════════════════════════════
@@ -692,12 +878,53 @@
   function fmtDate(d) {
     if (!d) return '';
     const dt = d instanceof Date ? d : new Date(d);
-    return dt.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return dt.toLocaleString(lang === 'zh' ? 'zh-TW' : 'en-US', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
   }
   function showErr(el, msg) { el.textContent = '⚠️ ' + msg; el.style.display = 'block'; }
 
-  // Post file input binding (after DOM ready)
+  // Apply translations to static HTML elements
   document.addEventListener('DOMContentLoaded', () => {
+    document.title = t.title;
+    document.querySelector('.back-link a').textContent = t.back;
+    document.querySelector('.logo').innerHTML = t.logo;
+    document.getElementById('headerSearch').placeholder = t.searchPlaceholder;
+    document.getElementById('postBtn').textContent = t.postBtn;
+    document.getElementById('postBtn').title = t.loginFirst;
+    document.querySelector('.nav-label').textContent = t.navLabel;
+    const navLabels = document.querySelectorAll('.nav-label');
+    if (navLabels[1]) navLabels[1].textContent = t.infoLabel;
+    // Sidebar categories
+    const navItems = document.querySelectorAll('#navList li a');
+    const cats = ['catAll','catGold','catSilver','catETF','catTech'];
+    navItems.forEach((a, i) => {
+      const dot = a.querySelector('.cdot');
+      a.textContent = t[cats[i]] || a.textContent;
+      if (dot) a.prepend(dot);
+    });
+    document.querySelector('#navList ~ .nav-div ~ .nav-label + ul li a').innerHTML =
+      `<span class="cdot" style="background:#ccc"></span>${t.announce}`;
+    document.getElementById('feedTitle').textContent = t.feedTitleAll;
+    document.getElementById('feedSubtitle').textContent = t.feedSubAll;
+    document.querySelector('#searchBar button').textContent = t.clearSearch;
+    // Profile page
+    document.querySelector('.profile-back').textContent = t.profileBack;
+    document.querySelector('.profile-posts-label').textContent = t.profilePostsLabel;
+    // Post modal
+    document.getElementById('postModalTitle').textContent = t.postModalTitle;
+    document.querySelector('.rules-box strong').textContent = t.rulesTitle;
+    document.querySelector('.rules-box').innerHTML = `<strong>${t.rulesTitle}</strong><br>${t.rules}`;
+    document.querySelector('label[for="f_cat"], .form-group:nth-of-type(1) .form-label').textContent = `${t.labelCat} `;
+    document.getElementById('f_cat').options[0].textContent = t.selectCat;
+    document.getElementById('f_cat').options[1].textContent = t.catGold;
+    document.getElementById('f_cat').options[2].textContent = t.catSilver;
+    document.getElementById('f_cat').options[4].textContent = t.catTech;
+    document.getElementById('f_title').placeholder = t.titlePlaceholder;
+    document.getElementById('f_content').placeholder = t.contentPlaceholder;
+    document.getElementById('postSubmitBtn').textContent = t.submitPost;
+    // Reply edit modal
+    document.querySelector('#replyEditModal .modal-title').textContent = t.editReplyTitle;
+    document.getElementById('replyEditBtn').textContent = t.saveReplyBtn;
+
     document.getElementById('postFileInput').addEventListener('change', e =>
       handleFileSelect(e.target, 'postPrev', 'post', 10)
     );
@@ -727,10 +954,10 @@
     try {
       const uSnap = await getDoc(doc(db, 'users', uid));
       const userData = uSnap.exists() ? uSnap.data() : null;
-      const name = userData?.displayName || '未知會員';
+      const name = userData?.displayName || t.profileMember;
       const photo = userData?.photoURL || '';
       const joined = userData?.createdAt?.toDate
-        ? userData.createdAt.toDate().toLocaleDateString('zh-TW') : '不明';
+        ? userData.createdAt.toDate().toLocaleDateString(lang === 'zh' ? 'zh-TW' : 'en-US') : t.profileUnknown;
       profileCard.innerHTML = `
         ${photo
           ? `<img class="profile-avatar" src="${esc(photo)}" alt="">`
@@ -738,7 +965,7 @@
         <div class="profile-info">
           <div class="profile-name">${esc(name)}</div>
           <div class="profile-uid">UID · ${esc(uid)}</div>
-          <div class="profile-joined">加入日期：${joined}</div>
+          <div class="profile-joined">${t.profileJoined(joined)}</div>
         </div>`;
       const q = query(
         collection(db, 'posts'),
@@ -749,7 +976,7 @@
       const snap = await getDocs(q);
       const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       if (!posts.length) {
-        profilePostList.innerHTML = '<div class="profile-empty">尚無發表文章</div>';
+        profilePostList.innerHTML = `<div class="profile-empty">${t.profileNoPost}</div>`;
       } else {
         profilePostList.innerHTML = posts.map(p => {
           const ts = p.createdAt?.toDate ? p.createdAt.toDate() : new Date(p.createdAt);
@@ -757,8 +984,8 @@
             <div class="post-body">
               <div class="post-title">${esc(p.title)}</div>
               <div class="post-meta">
-                <span class="cat-tag ${catTagClass[p.category]||''}">${catEmoji[p.category]||''} ${esc(p.category)}</span>
-                <span>${ts.toLocaleDateString('zh-TW')}</span>
+                <span class="cat-tag ${catTagClass[p.category]||''}">${catEmoji[p.category]||''} ${catDisplay[p.category]||esc(p.category)}</span>
+                <span>${ts.toLocaleDateString(lang === 'zh' ? 'zh-TW' : 'en-US')}</span>
                 <span>👁 ${p.views||0}</span>
                 <span>💬 ${p.replyCount||0}</span>
               </div>
@@ -767,7 +994,7 @@
         }).join('');
       }
     } catch(e) {
-      profileCard.innerHTML = `<div class="error-msg">載入失敗：${esc(e.message)}</div>`;
+      profileCard.innerHTML = `<div class="error-msg">${t.profileLoadFail(esc(e.message))}</div>`;
     }
   };
 
