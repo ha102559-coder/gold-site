@@ -24,10 +24,10 @@ exports.handler = async function(event, context) {
       },
       body: JSON.stringify({
         metals: {
-          XAU: parseFloat(metals.XAU),
-          XAG: parseFloat(metals.XAG),
-          XPT: parseFloat(metals.XPT),  // 補上
-          XPD: parseFloat(metals.XPD),  // 補上
+  XAU: parseFloat(metals.gold),      
+  XAG: parseFloat(metals.silver),    
+  XPT: parseFloat(metals.platinum),  
+  XPD: parseFloat(metals.palladium),
         }
       })
     };
