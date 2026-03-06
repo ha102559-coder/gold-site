@@ -1826,8 +1826,8 @@ function renderPrice(data) {
 async function fetchGoldPrice() {
   try {
     const res = await fetch('/.netlify/functions/goldprice');
-    const data = await res.json();
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();                     
     renderPrice(data);
   } catch(err) {
     console.error('金價API錯誤:', err);
