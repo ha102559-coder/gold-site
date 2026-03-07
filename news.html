@@ -1147,7 +1147,7 @@
       <div class="info-panel lang-en" id="info-contact-en" style="display:none">
         <div class="info-section"><div class="info-section-title">Get in Touch</div><p>We value every user's feedback. Reach us for suggestions, questions, or partnership inquiries.</p>
           <div class="info-contact-card">
-            <div class="info-contact-row"><div class="info-contact-icon">✉️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">EMAIL</div><a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a></div></div>
+            <div class="info-contact-row"><div class="info-contact-icon">✉️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">EMAIL</div><a href="/cdn-cgi/l/email-protection#32515d5c4653514672555d5e5642535e5351571c4645" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="a1c2cecfd5c0c2d5e1c6cecdc5d1c0cdc0c2c48fd5d6">[email&#160;protected]</span></a></div></div>
             <div class="info-contact-row"><div class="info-contact-icon">🕐</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">HOURS</div>Mon–Fri 09:00–18:00 (GMT+8)</div></div>
             <div class="info-contact-row"><div class="info-contact-icon">⏱️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">RESPONSE</div>Within 1–3 business days</div></div>
           </div>
@@ -1158,13 +1158,13 @@
         <div class="info-section"><div class="info-section-title">Data Collection</div><p>We collect account info (email, username) and technical data (browsing behavior, device info, IP address).</p></div>
         <div class="info-section"><div class="info-section-title">Purpose</div><p>Data is used to provide services, send notifications, improve UX, and prevent fraud.</p><div class="info-highlight">We will <strong style="color:var(--text)">never</strong> sell your data to third parties.</div></div>
         <div class="info-section"><div class="info-section-title">Cookies</div><p>We use cookies to maintain sessions and collect anonymous stats. Manage via browser settings.</p></div>
-        <div class="info-section"><div class="info-section-title">Security</div><p>Industry-standard encryption protects your data. Questions? <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+        <div class="info-section"><div class="info-section-title">Security</div><p>Industry-standard encryption protects your data. Questions? <a href="/cdn-cgi/l/email-protection#0d6e6263796c6e794d6a6261697d6c616c6e6823797a" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="07646869736664734760686b6377666b666462297370">[email&#160;protected]</span></a>. Last updated: Jan 2025</p></div>
       </div>
       <div class="info-panel lang-en" id="info-terms-en" style="display:none">
         <div class="info-section"><div class="info-section-title">Service</div><p>Gold Palace provides precious metals market info, analysis, and community discussions. By using this platform, you agree to these terms.</p></div>
         <div class="info-section"><div class="info-section-title">Membership</div><p>Must be 18+. One account per user. Accounts are non-transferable.</p></div>
         <div class="info-section"><div class="info-section-title">Conduct</div><div class="info-highlight">✅ Allowed: Share experiences, discuss markets, lawful comments<br>❌ Prohibited: Misinformation, harassment, spam, illegal activity</div></div>
-        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All content is <strong style="color:var(--text)">for reference only</strong>. We are not liable for investment losses. IP protected. <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All content is <strong style="color:var(--text)">for reference only</strong>. We are not liable for investment losses. IP protected. <a href="/cdn-cgi/l/email-protection#ccafa3a2b8adafb88caba3a0a8bcada0adafa9e2b8bb" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="fb9894958f9a988fbb9c94979f8b9a979a989ed58f8c">[email&#160;protected]</span></a>. Last updated: Jan 2025</p></div>
       </div>
 
 
@@ -1172,12 +1172,260 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════
 // 📝 文章資料 — 在這裡新增文章
 // 複製一個 { } 區塊貼在最前面，填入資料即可
 // ════════════════════════════════════════
+let currentLang = 'zh';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('langZH').classList.toggle('active', lang === 'zh');
+  document.getElementById('langEN').classList.toggle('active', lang === 'en');
+  if (typeof i18n !== 'undefined') {
+    const t = i18n[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t && t[key] !== undefined) el.innerHTML = t[key];
+    });
+  }
+  renderAll();
+}
+
 const articles = [
+  {
+    id: 8,
+    title: "全球央行瘋狂買金：為什麼各國都在囤積黃金？",
+    titleEn: "Why Are Central Banks Hoarding Gold at Record Pace?",
+    category: "國際情勢",
+    date: "2025.11.01",
+    readTime: "8 分鐘",
+    views: "4.3k",
+    emoji: "🏦",
+    bgColor: "linear-gradient(135deg,#0a0e1a,#10182e,#0a0e1a)",
+    excerpt: "2024年全球央行淨購金量突破1,000噸，連續兩年創歷史紀錄。中國、印度、波蘭、土耳其為何競相增持黃金？這股「去美元化」浪潮背後，藏著改變全球金融秩序的深層邏輯。",
+    excerptEn: "Global central banks net-purchased over 1,000 tonnes of gold for the second consecutive record year in 2024. Why are China, India, Poland and Turkey all racing to accumulate gold? The de-dollarization wave signals a deeper shift in the global financial order.",
+    readTimeEn: "8 min",
+    content: `
+      <p>2022年，美國凍結俄羅斯約3,000億美元的外匯儲備，這一舉動震驚全球央行圈。一個問題在各國財政部悄然浮現：「如果美元儲備隨時可能被凍結，我們還能信任它嗎？」從那一刻起，全球央行購金步伐急速加快，並在2023、2024年連續兩年突破千噸大關。</p>
+
+      <h2>一、數字說話：央行購金創歷史紀錄</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:130px">國家／機構</th>
+              <th class="th-num" style="min-width:110px">2024年淨購金量</th>
+              <th class="th-num" style="min-width:120px">黃金佔外匯儲備比例</th>
+              <th class="th-num" style="min-width:110px">主要動機</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd">
+              <td class="td-country">🇨🇳 中國人民銀行</td>
+              <td class="td-num gold-col">225 噸</td>
+              <td class="td-num">5.2%</td>
+              <td class="td-num" style="color:var(--text-muted)">去美元化</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">🇮🇳 印度儲備銀行</td>
+              <td class="td-num gold-col">72 噸</td>
+              <td class="td-num">9.8%</td>
+              <td class="td-num" style="color:var(--text-muted)">儲備多元化</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">🇵🇱 波蘭國家銀行</td>
+              <td class="td-num gold-col">90 噸</td>
+              <td class="td-num">17.4%</td>
+              <td class="td-num" style="color:var(--text-muted)">地緣安全</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">🇹🇷 土耳其央行</td>
+              <td class="td-num gold-col">75 噸</td>
+              <td class="td-num">32.1%</td>
+              <td class="td-num" style="color:var(--text-muted)">貨幣危機對沖</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">🇸🇬 新加坡金管局</td>
+              <td class="td-num gold-col">45 噸</td>
+              <td class="td-num">4.1%</td>
+              <td class="td-num" style="color:var(--text-muted)">儲備多元化</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">🌍 其他央行合計</td>
+              <td class="td-num gold-col">538 噸</td>
+              <td class="td-num">—</td>
+              <td class="td-num" style="color:var(--text-muted)">多重動機</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="highlight">
+        📌 數據來源：世界黃金協會（WGC）2024年度央行黃金儲備報告，數據為概估值，僅供參考。
+      </div>
+
+      <h2>二、為什麼現在買？三大驅動力</h2>
+      <p><strong>① 美元武器化的警示效應</strong><br>黃金存放於本國境內或中立第三方金庫，不受任何單一國家制裁機制控制，是唯一真正「無對手方風險」的儲備資產。對許多與美國關係微妙的國家而言，這一特性的吸引力空前巨大。</p>
+      <p><strong>② 美元長期信用的隱憂</strong><br>美國聯邦政府債務在2024年底突破36兆美元，利息支出首次超過國防預算。雖然短期內美元地位難以撼動，但各國央行已開始未雨綢繆，將黃金視為超主權的長期價值儲存工具。</p>
+      <p><strong>③ 黃金在投資組合中的實證優勢</strong><br>歷史數據顯示，將黃金配置提升至外匯儲備的10–15%，能在不顯著影響整體報酬的情況下，大幅降低極端風險情境下的損失。這是純粹的資產配置邏輯，與政治立場無關。</p>
+
+      <h2>三、「去美元化」真的在發生嗎？</h2>
+      <p>美元在全球外匯儲備中的佔比，已從2001年的73%降至2024年的58%，創30年新低。這個趨勢是緩慢但持續的。「去美元化」並不代表各國打算完全放棄美元——而是增加黃金、歐元等其他資產的比重，降低單一貨幣的過度依賴。短期內美元仍是最主要的貿易結算與儲備貨幣，但這股多元化趨勢將為黃金提供長達數十年的結構性需求支撐。</p>
+
+      <h2>四、對黃金價格的影響</h2>
+      <p>央行購金與一般投資者不同——它們不追漲殺跌，而是有計畫地長期增持，對金價形成持續的底部支撐。市場估計，若全球央行將黃金佔儲備比例從目前平均約15%提升至20%，僅這一個需求來源便需額外吸納逾6,000噸黃金，相當於全球兩年的礦山產量。</p>
+
+      <div class="highlight">
+        ⚠️ 風險提示：本文所有數據與分析<strong>僅供參考</strong>，不構成任何投資建議。黃金投資涉及市場風險，請依個人財務狀況審慎評估。
+      </div>
+    `,
+    contentEn: `
+      <p>In 2022, the US froze approximately $300 billion of Russia's foreign exchange reserves. The move sent shockwaves through central banking circles worldwide. A quiet question began circulating in finance ministries: "If dollar reserves can be frozen at any moment, can we still trust them?" Since then, central bank gold purchases have accelerated sharply — surpassing 1,000 tonnes for two consecutive record years in 2023 and 2024.</p>
+
+      <h2>I. Back-to-Back Record Buying</h2>
+      <p>According to the World Gold Council, central banks net-purchased over 1,000 tonnes of gold in both 2023 and 2024. Key buyers include the People's Bank of China (225t), the National Bank of Poland (90t), the Central Bank of Turkey (75t), and the Reserve Bank of India (72t). The shared motivation: reduce dependence on a single reserve currency and diversify into an asset with no counterparty risk.</p>
+
+      <h2>II. Three Core Drivers</h2>
+      <p><strong>① The weaponization of the dollar.</strong> Gold held domestically or in neutral third-party vaults cannot be frozen by any single nation's sanctions regime. For countries with complex geopolitical relationships, this is an increasingly compelling feature.</p>
+      <p><strong>② Long-term US fiscal concerns.</strong> US federal debt crossed $36 trillion in late 2024, with interest payments exceeding the defense budget for the first time. While the dollar's dominance faces no near-term threat, central banks are hedging tail risks decades ahead by treating gold as a sovereign-neutral store of value.</p>
+      <p><strong>③ Portfolio diversification evidence.</strong> Historical data shows that raising gold to 10–15% of reserves meaningfully reduces losses in extreme scenarios without significantly impacting overall returns. This is pure asset allocation logic, not politics.</p>
+
+      <h2>III. Is De-Dollarization Real?</h2>
+      <p>The dollar's share of global FX reserves has fallen from 73% in 2001 to approximately 58% in 2024 — a 30-year low. The trend is slow but persistent. De-dollarization does not mean abandoning the dollar — it means reducing over-concentration by adding gold, euros, and other assets. The dollar remains dominant, but structural diversification will provide decades of support for gold demand.</p>
+
+      <h2>IV. What This Means for Gold Prices</h2>
+      <p>Central banks are not momentum traders. They buy systematically and hold long-term, providing a persistent price floor. Analysts estimate that if global central banks raised gold allocations from ~15% to ~20% of reserves, this single demand source alone would require absorbing over 6,000 additional tonnes — equivalent to two full years of global mine production.</p>
+      <div class="highlight">
+        ⚠️ All data and analysis is <strong>for reference only</strong> and does not constitute investment advice. Gold investment involves market risk.
+      </div>
+    `
+  },
+  {
+    id: 7,
+    title: "黃金真的能抗通膨嗎？50年數據告訴你真相",
+    titleEn: "Does Gold Really Hedge Inflation? 50 Years of Data Reveal the Truth",
+    category: "總體經濟",
+    date: "2025.10.15",
+    readTime: "9 分鐘",
+    views: "6.1k",
+    emoji: "📊",
+    bgColor: "linear-gradient(135deg,#0e1a0a,#1a2e10,#0e1a0a)",
+    excerpt: "「買黃金抗通膨」是流傳最廣的投資觀念之一，但數據真的支持這個說法嗎？本文梳理1975年至今的黃金與通膨歷史數據，揭示黃金抗通膨能力的真實面貌，以及什麼情境下它真正有效。",
+    excerptEn: "\"Buy gold to hedge inflation\" is one of the most common investment beliefs — but does the data support it? We analyze 50 years of gold and CPI data to reveal when gold truly works as a hedge, and when it doesn't.",
+    readTimeEn: "9 min",
+    content: `
+      <p>「買黃金可以對抗通膨」幾乎是最廣為流傳的投資觀念。但這究竟是事實、還是迷思？本文梳理1975年至今近50年的歷史數據，從不同通膨環境、不同持有期間，逐一檢驗黃金的抗通膨實力，給您一個有數據支撐的清晰答案。</p>
+
+      <h2>一、黃金抗通膨的理論基礎</h2>
+      <p>黃金被視為抗通膨工具，核心邏輯有三：第一，黃金供給有限，無法像紙幣一樣被無限印製；第二，當通膨侵蝕貨幣購買力時，以美元計價的黃金理論上應隨之上漲；第三，高通膨環境往往伴隨貨幣政策失信與經濟動盪，黃金的避險屬性會被進一步強化。理論上聽起來無懈可擊——但現實數據卻複雜許多。</p>
+
+      <h2>二、50年數據：黃金在不同通膨時代的表現</h2>
+      <div style="overflow-x:auto;margin:24px 0;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="min-width:140px">時期</th>
+              <th class="th-num" style="min-width:110px">美國CPI年增率</th>
+              <th class="th-num" style="min-width:110px">黃金期間漲幅</th>
+              <th class="th-num" style="min-width:110px">實質報酬（扣通膨）</th>
+              <th class="th-num" style="min-width:100px">抗通膨效果</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-odd">
+              <td class="td-country">1975–1980<br><span style="font-size:11px;color:var(--text-dim)">石油危機惡性通膨</span></td>
+              <td class="td-num" style="color:#FCA5A5">平均 8.9%</td>
+              <td class="td-num gold-col">+1,350%</td>
+              <td class="td-num" style="color:#6EE7B7">極高正報酬</td>
+              <td class="td-num" style="color:#6EE7B7">✅ 優異</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">1980–1999<br><span style="font-size:11px;color:var(--text-dim)">通膨逐步受控</span></td>
+              <td class="td-num">平均 3.8%</td>
+              <td class="td-num" style="color:#FCA5A5">-28%</td>
+              <td class="td-num" style="color:#FCA5A5">長期負報酬</td>
+              <td class="td-num" style="color:#FCA5A5">❌ 失效</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">2000–2011<br><span style="font-size:11px;color:var(--text-dim)">金融海嘯後寬鬆</span></td>
+              <td class="td-num">平均 2.6%</td>
+              <td class="td-num gold-col">+560%</td>
+              <td class="td-num" style="color:#6EE7B7">高正報酬</td>
+              <td class="td-num" style="color:#6EE7B7">✅ 優異</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">2012–2018<br><span style="font-size:11px;color:var(--text-dim)">低通膨低利率</span></td>
+              <td class="td-num">平均 1.7%</td>
+              <td class="td-num" style="color:#FCA5A5">-8%</td>
+              <td class="td-num" style="color:#FCA5A5">小幅負報酬</td>
+              <td class="td-num" style="color:var(--gold)">⚠️ 普通</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">2019–2020<br><span style="font-size:11px;color:var(--text-dim)">疫情量化寬鬆</span></td>
+              <td class="td-num">平均 1.9%</td>
+              <td class="td-num gold-col">+55%</td>
+              <td class="td-num" style="color:#6EE7B7">高正報酬</td>
+              <td class="td-num" style="color:#6EE7B7">✅ 優異</td>
+            </tr>
+            <tr class="tr-even">
+              <td class="td-country">2021–2023<br><span style="font-size:11px;color:var(--text-dim)">疫後通膨飆升</span></td>
+              <td class="td-num" style="color:#FCA5A5">平均 5.8%</td>
+              <td class="td-num">+12%</td>
+              <td class="td-num" style="color:#FCA5A5">實質微負</td>
+              <td class="td-num" style="color:var(--gold)">⚠️ 有限</td>
+            </tr>
+            <tr class="tr-odd">
+              <td class="td-country">2024–2025<br><span style="font-size:11px;color:var(--text-dim)">通膨趨緩＋降息</span></td>
+              <td class="td-num">平均 3.1%</td>
+              <td class="td-num gold-col">+68%</td>
+              <td class="td-num" style="color:#6EE7B7">高正報酬</td>
+              <td class="td-num" style="color:#6EE7B7">✅ 優異</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="highlight">
+        📌 關鍵發現：黃金的漲跌與通膨高低的相關性，遠不如「貨幣政策預期」與「實質利率走向」來得緊密。
+      </div>
+
+      <h2>三、真正驅動黃金的不是通膨，而是「實質利率」</h2>
+      <p>2021–2022年是最典型的反例：美國CPI一度飆升至9.1%，創40年新高，但黃金同期表現平平，甚至一度下跌。原因在於聯準會大幅升息，推高實質利率，持有黃金的機會成本急遽上升，資金轉向債券。相反地，2019–2020年通膨溫和，黃金卻大漲55%——因為量化寬鬆壓低實質利率至負值，資金湧入黃金尋求保值。</p>
+      <p>結論：<strong>黃金最強的時候，往往不是通膨最高的時候，而是實質利率為負或急速下行的時候。</strong></p>
+
+      <h2>四、哪種情境下黃金抗通膨最有效？</h2>
+      <p><strong>① 惡性通膨（CPI持續超過6%）</strong>：貨幣信用崩潰、央行失去控制，黃金成為最後的價值儲存工具。1970年代石油危機是最佳範本。</p>
+      <p><strong>② 實質利率為負</strong>：即便通膨溫和，只要名義利率被壓低至通膨率之下，黃金便具備強烈吸引力。2009–2011年、2020年均屬此類。</p>
+      <p><strong>③ 系統性金融危機</strong>：股市崩盤時，黃金的非相關資產特性使其成為最佳避風港，有效降低整體投資組合波動。</p>
+
+      <h2>五、長期持有黃金，真的保住購買力了嗎？</h2>
+      <p>若以1975年為基準，黃金的長期購買力保存效果遠優於持有現金。但與股市相比，黃金的長期複利報酬（約年化4–5%）明顯落後全球股市指數（約年化8–10%）。這說明黃金的核心價值並非「致富」，而是<strong>「在特定風險情境下保住財富」</strong>——它是組合中的防守型資產，而非進攻型資產。</p>
+
+      <div class="highlight">
+        💡 實用建議：多數財務規劃師建議配置5–15%的黃金於整體資產組合中，作為通膨與系統性風險的緩衝，而非押注黃金大漲的投機工具。本文所有內容<strong>僅供參考</strong>，不構成任何投資建議。
+      </div>
+    `,
+    contentEn: `
+      <p>"Buy gold to hedge inflation" is one of the most widely repeated investment mantras. But is it fact or myth? This article examines nearly 50 years of data across different inflation regimes to give you a data-driven answer.</p>
+
+      <h2>I. The Theory Behind Gold as an Inflation Hedge</h2>
+      <p>Gold's inflation-hedge logic rests on three pillars: its supply is finite and cannot be printed; when inflation erodes purchasing power, dollar-denominated gold should rise in tandem; and high-inflation environments often coincide with monetary policy failures that amplify gold's safe-haven appeal. Sound airtight in theory — but the data is far more nuanced.</p>
+
+      <h2>II. The Real Driver: Real Interest Rates, Not Inflation</h2>
+      <p>The most telling counterexample is 2021–2022: US CPI spiked to 9.1%, a 40-year high — yet gold barely moved. The reason: the Fed's aggressive rate hikes pushed real interest rates sharply higher, raising the opportunity cost of holding non-yielding gold. Conversely, in 2019–2020 gold surged 55% despite mild inflation, because QE drove real rates deeply negative.</p>
+      <p><strong>Gold peaks not when inflation is highest, but when real rates are negative or falling sharply.</strong></p>
+
+      <h2>III. When Does Gold Work Best?</h2>
+      <p>Gold performs most powerfully in three scenarios: (1) <strong>Hyperinflationary episodes</strong> where monetary credibility collapses; (2) <strong>Negative real rate environments</strong>, where nominal rates are held below the inflation rate; and (3) <strong>Systemic financial crises</strong>, where gold's uncorrelated nature provides meaningful portfolio protection.</p>
+
+      <h2>IV. The Verdict on Long-Term Purchasing Power</h2>
+      <p>Gold has significantly outperformed cash over the long run. But compared to global equities, gold's annualized return (~4–5%) lags well behind broad stock indices (~8–10%). Gold is not a <em>wealth-building</em> asset — it is a <strong>wealth-preservation</strong> asset. Defensive, not offensive.</p>
+      <div class="highlight">
+        💡 Most financial planners recommend allocating 5–15% of a portfolio to gold as a buffer against inflation and systemic risk. All content is <strong>for reference only</strong> and does not constitute investment advice.
+      </div>
+    `
+  },
   {
     id: 6,
     title: "金豆、金條、金幣怎麼選？三種實體黃金完整優缺點比較",
@@ -2268,8 +2516,7 @@ function closeArticleOutside(e) {
 // 鍵盤 ESC 關閉
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
 
-// 初始化渲染
-renderAll();
+// 初始化渲染由 setLang 統一處理
 
 // ── 金價側邊欄更新 ──
 
@@ -2464,7 +2711,7 @@ onAuthStateChanged(auth, user => {
       <div class="info-panel lang-en" id="info-contact-en" style="display:none">
         <div class="info-section"><div class="info-section-title">Get in Touch</div><p>We value every user's feedback. Reach us for suggestions, questions, or partnership inquiries.</p>
           <div class="info-contact-card">
-            <div class="info-contact-row"><div class="info-contact-icon">✉️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">EMAIL</div><a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a></div></div>
+            <div class="info-contact-row"><div class="info-contact-icon">✉️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">EMAIL</div><a href="/cdn-cgi/l/email-protection#30535f5e4451534470575f5c5440515c5153551e4447" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="2e4d41405a4f4d5a6e4941424a5e4f424f4d4b005a59">[email&#160;protected]</span></a></div></div>
             <div class="info-contact-row"><div class="info-contact-icon">🕐</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">HOURS</div>Mon–Fri 09:00–18:00 (GMT+8)</div></div>
             <div class="info-contact-row"><div class="info-contact-icon">⏱️</div><div><div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">RESPONSE</div>Within 1–3 business days</div></div>
           </div>
@@ -2475,13 +2722,13 @@ onAuthStateChanged(auth, user => {
         <div class="info-section"><div class="info-section-title">Data Collection</div><p>We collect account info (email, username) and technical data (browsing behavior, device info, IP address).</p></div>
         <div class="info-section"><div class="info-section-title">Purpose</div><p>Data is used to provide services, send notifications, improve UX, and prevent fraud.</p><div class="info-highlight">We will <strong style="color:var(--text)">never</strong> sell your data to third parties.</div></div>
         <div class="info-section"><div class="info-section-title">Cookies</div><p>We use cookies to maintain sessions and collect anonymous stats. Manage via browser settings.</p></div>
-        <div class="info-section"><div class="info-section-title">Security</div><p>Industry-standard encryption protects your data. Questions? <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+        <div class="info-section"><div class="info-section-title">Security</div><p>Industry-standard encryption protects your data. Questions? <a href="/cdn-cgi/l/email-protection#f2919d9c86939186b2959d9e9682939e939197dc8685" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="86e5e9e8f2e7e5f2c6e1e9eae2f6e7eae7e5e3a8f2f1">[email&#160;protected]</span></a>. Last updated: Jan 2025</p></div>
       </div>
       <div class="info-panel lang-en" id="info-terms-en" style="display:none">
         <div class="info-section"><div class="info-section-title">Service</div><p>Gold Palace provides precious metals market info, analysis, and community discussions. By using this platform, you agree to these terms.</p></div>
         <div class="info-section"><div class="info-section-title">Membership</div><p>Must be 18+. One account per user. Accounts are non-transferable.</p></div>
         <div class="info-section"><div class="info-section-title">Conduct</div><div class="info-highlight">✅ Allowed: Share experiences, discuss markets, lawful comments<br>❌ Prohibited: Misinformation, harassment, spam, illegal activity</div></div>
-        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All content is <strong style="color:var(--text)">for reference only</strong>. We are not liable for investment losses. IP protected. <a href="mailto:contact@goldpalace.tw" style="color:var(--gold)">contact@goldpalace.tw</a>. Last updated: Jan 2025</p></div>
+        <div class="info-section"><div class="info-section-title">Disclaimer</div><p>All content is <strong style="color:var(--text)">for reference only</strong>. We are not liable for investment losses. IP protected. <a href="/cdn-cgi/l/email-protection#d2b1bdbca6b3b1a692b5bdbeb6a2b3beb3b1b7fca6a5" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="abc8c4c5dfcac8dfebccc4c7cfdbcac7cac8ce85dfdc">[email&#160;protected]</span></a>. Last updated: Jan 2025</p></div>
       </div>
 
 
@@ -2489,7 +2736,7 @@ onAuthStateChanged(auth, user => {
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── INFO MODAL ──
 const infoConfig = {
   zh: {
@@ -2573,25 +2820,14 @@ const i18n = {
     sidebar_about_link:'View live gold prices on homepage →',
     tag_etf:'Gold ETF', tag_cb:'Central Bank Buying', tag_ta:'Technical Analysis', tag_silver:'Silver', tag_inflation:'Inflation',
     footer_desc:'Professional precious metals investment platform. All information is for reference only and does not constitute investment advice.',
-    footer_links:'Quick Links', footer_member:'Members', footer_about:'About', footer_back:'Back to Home',
+   
+    footer_links:'Quick Links', footer_member:'Member Services', footer_about:'About', footer_back:'Back to Home',
     footer_copy:'© 2025 Gold Palace · Precious Metals Platform · <span style="color:var(--text-dim)">For reference only, not investment advice</span>',
-    info_about:'About Us', info_contact:'Contact', info_privacy:'Privacy Policy', info_terms:'Terms of Service',
+    info_about:'About Us', info_contact:'Contact Us', info_privacy:'Privacy Policy', info_terms:'Terms of Service',
   }
 };
-let currentLang = localStorage.getItem('lang') || 'zh';
-function setLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('lang', lang);
-  document.getElementById('langZH').classList.toggle('active', lang === 'zh');
-  document.getElementById('langEN').classList.toggle('active', lang === 'en');
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    if (i18n[lang][k] !== undefined) el.innerHTML = i18n[lang][k];
-  });
-  renderAll();
-  if (typeof _currentInfoTab !== 'undefined') switchInfoTab(_currentInfoTab);
-}
-document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
+
+setLang('zh');
 </script>
 </body>
 </html>
