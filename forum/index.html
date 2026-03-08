@@ -8,7 +8,7 @@
 <title>Investment Forum</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 
-<!-- ★ 在這裡填入你的 Firebase 設定 ★ -->
+<!-- ★ Enter your Firebase config here ★ -->
 <script type="module">
   import { initializeApp }                           from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
@@ -20,7 +20,7 @@
                                                      from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
 
   // ══════════════════════════════════════════════
-  // ★ 填入你的 Firebase 設定（步驟三取得）★
+  // ★ Enter your Firebase config (from step 3) ★
   // ══════════════════════════════════════════════
   const firebaseConfig = {
     apiKey:            "AIzaSyB7SY3k0835AyM1fLDtOs0thPrg3cmxifk",
@@ -44,88 +44,88 @@
 
   const t = {
     zh: {
-      title:           '投資討論區',
-      back:            '← 返回主頁',
-      logo:            '貴<span>金</span>屬 · 投資討論區',
-      searchPlaceholder:'搜尋標題…',
-      loginBtn:        'Google 登入',
-      logoutBtn:       '登出',
-      postBtn:         '✏ 發文',
-      loginFirst:      '請先登入',
-      navLabel:        '討論分類',
-      infoLabel:       '資訊',
-      catAll:          '全部',
-      catGold:         '黃金',
-      catSilver:       '白銀',
+      title:           'Investment Forum',
+      back:            '← Back to Home',
+      logo:            'Precious <span>Metals</span> · Forum',
+      searchPlaceholder:'Search title…',
+      loginBtn:        'Sign in with Google',
+      logoutBtn:       'Sign out',
+      postBtn:         '✏ New Post',
+      loginFirst:      'Please sign in first',
+      navLabel:        'Categories',
+      infoLabel:       'INFO',
+      catAll:          'All',
+      catGold:         'Gold',
+      catSilver:       'Silver',
       catETF:          'ETF',
-      catTech:         '科技股',
-      announce:        '公告',
-      feedTitleAll:    '全部討論',
-      feedSubAll:      '顯示所有分類的最新討論',
-      feedTitleGold:   '黃金討論',
-      feedSubGold:     '黃金投資相關討論',
-      feedTitleSilver: '白銀討論',
-      feedSubSilver:   '白銀投資相關討論',
-      feedTitleETF:    'ETF 討論',
-      feedSubETF:      'ETF 基金相關討論',
-      feedTitleTech:   '科技股討論',
-      feedSubTech:     '科技類股討論',
-      loading:         '載入中…',
-      noPost:          '暫無討論',
-      prevPage:        '‹ 上頁',
-      nextPage:        '下頁 ›',
-      pageInfo:        (n) => `第 ${n} 頁`,
-      searchingFor:    (kw) => `搜尋「${kw}」中…`,
-      clearSearch:     '✕ 清除',
-      loadFail:        (msg) => `⚠️ 載入失敗：${msg}<br><small>請確認 Firebase 設定是否正確，或 Firestore 索引是否已建立。</small>`,
-      detailLoadFail:  (msg) => `載入失敗：${msg}`,
-      noReply:         '尚無回覆，來第一個留言！',
-      replyCount:      (n) => `回覆留言（${n}）`,
-      replyFormTitle:  '發表回覆',
-      replyPlaceholder:'輸入回覆內容…',
-      replyMedia:      '附加圖片 / 影片（最多 5 個）',
-      replyUpload:     '點擊上傳圖片或影片',
-      replySubmitBtn:  '送出回覆',
-      loginPrompt:     '請 <a onclick="loginGoogle()" style="color:var(--gold);cursor:pointer">Google 登入</a> 後才能回覆',
-      editBtn:         '✏ 編輯',
-      deleteBtn:       '🗑 刪除',
-      confirmDelPost:  '確定要刪除這篇文章？此操作無法復原。',
-      confirmDelReply: '確定要刪除此回覆？',
-      deleteFail:      (msg) => '刪除失敗：' + msg,
-      postModalTitle:  '發表文章',
-      editModalTitle:  '編輯文章',
-      rulesTitle:      '發文規定',
-      rules:           '1. 請勿張貼重複文章、無意義內容或廣告。<br>2. 請勿提供個人聯絡方式。<br>3. 請勿涉及人身攻擊、污衊或違社會善良風俗內容。<br>4. 本討論區有 IP 記錄，禁止張貼違法內容。',
-      labelCat:        '分類',
+      catTech:         'Tech Stocks',
+      announce:        'Announcements',
+      feedTitleAll:    'All Discussions',
+      feedSubAll:      'Latest posts from all categories',
+      feedTitleGold:   'Gold Discussion',
+      feedSubGold:     'Gold investment topics',
+      feedTitleSilver: 'Silver Discussion',
+      feedSubSilver:   'Silver investment topics',
+      feedTitleETF:    'ETF Discussion',
+      feedSubETF:      'ETF fund topics',
+      feedTitleTech:   'Tech Stocks',
+      feedSubTech:     'Technology sector topics',
+      loading:         'Loading…',
+      noPost:          'No posts yet',
+      prevPage:        '‹ Prev',
+      nextPage:        'Next ›',
+      pageInfo:        (n) => `Page ${n}`,
+      searchingFor:    (kw) => `Searching "${kw}"…`,
+      clearSearch:     '✕ Clear',
+      loadFail:        (msg) => `⚠️ Failed to load: ${msg}<br><small>Please check your Firebase config or Firestore indexes.</small>`,
+      detailLoadFail:  (msg) => `Failed to load: ${msg}`,
+      noReply:         'No replies yet. Be the first!',
+      replyCount:      (n) => `Replies (${n})`,
+      replyFormTitle:  'Leave a Reply',
+      replyPlaceholder:'Write your reply…',
+      replyMedia:      'Attach images / videos (max 5)',
+      replyUpload:     'Click to upload image or video',
+      replySubmitBtn:  'Submit Reply',
+      loginPrompt:     'Please <a onclick="loginGoogle()" style="color:var(--gold);cursor:pointer">sign in</a> to reply',
+      editBtn:         '✏ Edit',
+      deleteBtn:       '🗑 Delete',
+      confirmDelPost:  'Delete this post? This action cannot be undone.',
+      confirmDelReply: 'Delete this reply?',
+      deleteFail:      (msg) => 'Delete failed: ' + msg,
+      postModalTitle:  'New Post',
+      editModalTitle:  'Edit Post',
+      rulesTitle:      'Posting Rules',
+      rules:           '1. No duplicate posts, spam, or advertisements.<br>2. Do not share personal contact information.<br>3. No personal attacks, defamation, or content against public decency.<br>4. IP addresses are logged. Illegal content is strictly prohibited.',
+      labelCat:        'Category',
       labelRequired:   '*',
-      selectCat:       '選擇分類',
-      labelTitle:      '標題',
-      titleLimit:      '（最多50字）',
-      titlePlaceholder:'輸入文章標題',
-      labelContent:    '內容',
-      contentPlaceholder:'輸入文章內容…',
-      labelMedia:      '上傳圖片 / 影片（最多10個）',
-      uploadLabel:     '點擊上傳圖片或影片（單檔上限 5GB，Firebase Storage 免費 5GB）',
-      submitPost:      '發　表',
-      savePost:        '儲存文章',
-      uploading:       '上傳中…',
-      saving:          '儲存中…',
-      errNoCat:        '請選擇分類',
-      errNoTitle:      '請輸入標題',
-      errNoContent:    '請輸入內容',
-      errNoReply:      '請輸入回覆內容',
-      errEmptyContent: '內容不能為空',
-      loginFail:       (msg) => '登入失敗：' + msg,
-      editReplyTitle:  '編輯回覆',
-      saveReplyBtn:    '儲存回覆',
-      profileBack:     '← 返回討論區',
-      profilePostsLabel:'發表過的文章',
-      profileJoined:   (d) => `加入日期：${d}`,
-      profileUnknown:  '不明',
-      profileNoPost:   '尚無發表文章',
-      profileMember:   '未知會員',
-      profileLoadFail: (msg) => `載入失敗：${msg}`,
-      updateTime:      (t) => `資料每2小時更新 · 最後更新：${t}`,
+      selectCat:       'Select category',
+      labelTitle:      'Title',
+      titleLimit:      '(max 50 chars)',
+      titlePlaceholder:'Enter post title',
+      labelContent:    'Content',
+      contentPlaceholder:'Write your post…',
+      labelMedia:      'Upload images / videos (max 10)',
+      uploadLabel:     'Click to upload image or video (max 5GB per file)',
+      submitPost:      'Submit',
+      savePost:        'Save Post',
+      uploading:       'Uploading…',
+      saving:          'Saving…',
+      errNoCat:        'Please select a category',
+      errNoTitle:      'Please enter a title',
+      errNoContent:    'Please enter content',
+      errNoReply:      'Please enter a reply',
+      errEmptyContent: 'Content cannot be empty',
+      loginFail:       (msg) => 'Sign-in failed: ' + msg,
+      editReplyTitle:  'Edit Reply',
+      saveReplyBtn:    'Save Reply',
+      profileBack:     '← Back to Forum',
+      profilePostsLabel:'Posts by this user',
+      profileJoined:   (d) => `Joined: ${d}`,
+      profileUnknown:  'Unknown',
+      profileNoPost:   'No posts yet',
+      profileMember:   'Unknown Member',
+      profileLoadFail: (msg) => `Failed to load: ${msg}`,
+      updateTime:      (t) => `Updated every 2 hours · Last update: ${t}`,
     },
     en: {
       title:           'Investment Forum',
@@ -322,8 +322,8 @@
       const postsCol = collection(db, 'posts');
 
       if (searchKeyword) {
-        // Firestore 不支援原生全文搜尋，用前綴比對標題
-        // 搜尋 title >= keyword AND title < keyword + '\uf8ff'
+        // Firestore doesn't support full-text search; using prefix matching on title
+        // Search: title >= keyword AND title < keyword + '\uf8ff'
         const kw = searchKeyword;
         const conditions = [
           where('isDeleted', '==', false),
@@ -402,8 +402,8 @@
         <div class="post-body">
           <div class="title-row">
             <span class="ptitle">${esc(p.title)}</span>
-            ${isNew?`<span class="badge bnew">${lang==='zh'?'新':'New'}</span>`:''}
-            ${p.replyCount>0?`<span class="badge breply">${lang==='zh'?'新回':'Reply'}</span>`:''}
+            ${isNew?`<span class="badge bnew">New</span>`:''}
+            ${p.replyCount>0?`<span class="badge breply">Reply</span>`:''}
           </div>
           <div class="pmeta">
             <span class="cat-tag ${catTagClass[p.category]||''}">${catEmoji[p.category]||''} ${catName}</span>
@@ -689,7 +689,7 @@
     errEl.style.display = 'none';
     if (!content) { showErr(errEl, t.errNoReply); return; }
 
-    btn.disabled = true; btn.textContent = '上傳中…';
+    btn.disabled = true; btn.textContent = 'Uploading…';
     try {
       const mediaUrls = await uploadMediaFiles(uploadFiles.reply, `replies/${Date.now()}`);
 
@@ -949,8 +949,8 @@
     showProfilePage();
     const profileCard = document.getElementById('profileCard');
     const profilePostList = document.getElementById('profilePostList');
-    profileCard.innerHTML = '<div class="loading">載入中…</div>';
-    profilePostList.innerHTML = '<div class="loading">載入中…</div>';
+    profileCard.innerHTML = '<div class="loading">Loading…</div>';
+    profilePostList.innerHTML = '<div class="loading">Loading…</div>';
     try {
       const uSnap = await getDoc(doc(db, 'users', uid));
       const userData = uSnap.exists() ? uSnap.data() : null;
@@ -1183,50 +1183,50 @@ main{flex:1;min-width:0;}
 </head>
 <body>
 
-<!-- 返回主頁連結 -->
-<div class="back-link"><a href="/">← 返回主頁</a></div>
+<!-- Back to home link -->
+<div class="back-link"><a href="/">← Back to Home</a></div>
 
 <header>
-  <div class="logo" onclick="goHome()">貴<span>金</span>屬 · 投資討論區</div>
+  <div class="logo" onclick="goHome()">Precious <span>Metals</span> · Forum</div>
   <div class="search-wrap">
-    <input type="text" id="headerSearch" placeholder="搜尋標題…">
+    <input type="text" id="headerSearch" placeholder="Search title…">
     <button onclick="doSearch()">🔍</button>
   </div>
   <div id="headerUser">
-    <button class="btn-google" onclick="loginGoogle()">Google 登入</button>
+    <button class="btn-google" onclick="loginGoogle()">Sign in with Google</button>
   </div>
 </header>
 
 <div class="layout">
   <aside>
-    <button class="post-btn" id="postBtn" onclick="openPostModal()" disabled title="請先登入">✏ 發文</button>
-    <div class="nav-label">討論分類</div>
+    <button class="post-btn" id="postBtn" onclick="openPostModal()" disabled title="Please sign in first">✏ New Post</button>
+    <div class="nav-label">Categories</div>
     <ul class="nav-list" id="navList">
-      <li class="active" data-cat="all"><a onclick="filterCat('all',this)"><span class="cdot d-all"></span>全部</a></li>
-      <li data-cat="黃金"><a onclick="filterCat('黃金',this)"><span class="cdot d-gold"></span>黃金</a></li>
-      <li data-cat="白銀"><a onclick="filterCat('白銀',this)"><span class="cdot d-silver"></span>白銀</a></li>
+      <li class="active" data-cat="all"><a onclick="filterCat('all',this)"><span class="cdot d-all"></span>All</a></li>
+      <li data-cat="黃金"><a onclick="filterCat('黃金',this)"><span class="cdot d-gold"></span>Gold</a></li>
+      <li data-cat="白銀"><a onclick="filterCat('白銀',this)"><span class="cdot d-silver"></span>Silver</a></li>
       <li data-cat="ETF"><a onclick="filterCat('ETF',this)"><span class="cdot d-etf"></span>ETF</a></li>
-      <li data-cat="科技股"><a onclick="filterCat('科技股',this)"><span class="cdot d-tech"></span>科技股</a></li>
+      <li data-cat="科技股"><a onclick="filterCat('科技股',this)"><span class="cdot d-tech"></span>Tech Stocks</a></li>
     </ul>
     <div class="nav-div"></div>
-    <div class="nav-label">資訊</div>
+    <div class="nav-label">INFO</div>
     <ul class="nav-list">
-      <li><a onclick=""><span class="cdot" style="background:#ccc"></span>公告</a></li>
+      <li><a onclick=""><span class="cdot" style="background:#ccc"></span>Announcements</a></li>
     </ul>
   </aside>
 
   <main>
     <div class="feed-header">
       <div>
-        <div class="feed-title" id="feedTitle">全部討論</div>
-        <div class="feed-sub" id="feedSubtitle">顯示所有分類的最新討論</div>
+        <div class="feed-title" id="feedTitle">All Discussions</div>
+        <div class="feed-sub" id="feedSubtitle">Latest posts from all categories</div>
       </div>
     </div>
     <div id="searchBar" class="search-bar" style="display:none">
       <span id="searchTxt"></span>
-      <button onclick="clearSearch()">✕ 清除</button>
+      <button onclick="clearSearch()">✕ Clear</button>
     </div>
-    <div id="postList"><div class="loading">載入中…</div></div>
+    <div id="postList"><div class="loading">Loading…</div></div>
     <div id="paginationArea"></div>
   </main>
 </div>
@@ -1234,12 +1234,12 @@ main{flex:1;min-width:0;}
 <!-- PROFILE PAGE -->
 <div id="profilePage" style="display:none;">
   <div class="profile-wrap">
-    <div class="profile-back" onclick="closeProfilePage()">← 返回討論區</div>
+    <div class="profile-back" onclick="closeProfilePage()">← ← Back to Forum</div>
     <div class="profile-card" id="profileCard">
-      <div class="loading">載入中…</div>
+      <div class="loading">Loading…</div>
     </div>
-    <div class="profile-posts-label">發表過的文章</div>
-    <div id="profilePostList"><div class="loading">載入中…</div></div>
+    <div class="profile-posts-label">Posts by this user</div>
+    <div id="profilePostList"><div class="loading">Loading…</div></div>
   </div>
 </div>
 
@@ -1247,46 +1247,46 @@ main{flex:1;min-width:0;}
 <div class="modal-overlay" id="postModal" onclick="if(event.target.id==='postModal')closeModal('postModal')">
   <div class="modal">
     <div class="modal-hd">
-      <div class="modal-title" id="postModalTitle">發表文章</div>
+      <div class="modal-title" id="postModalTitle">New Post</div>
       <button class="modal-x" onclick="closeModal('postModal')">✕</button>
     </div>
     <div class="modal-bd">
       <div class="rules-box">
-        <strong>發文規定</strong><br>
-        1. 請勿張貼重複文章、無意義內容或廣告。<br>
-        2. 請勿提供個人聯絡方式。<br>
-        3. 請勿涉及人身攻擊、污衊或違社會善良風俗內容。<br>
-        4. 本討論區有 IP 記錄，禁止張貼違法內容。
+        <strong>Posting Rules</strong><br>
+        1. No duplicate posts, spam, or advertisements.<br>
+        2. Do not share personal contact information.<br>
+        3. No personal attacks, defamation, or content against public decency.<br>
+        4. IP addresses are logged. Illegal content is strictly prohibited.
       </div>
       <div id="postFormErr" class="error-msg" style="display:none"></div>
       <input type="hidden" id="editPostId">
       <div class="form-group">
-        <label class="form-label">分類 <span style="color:var(--red)">*</span></label>
+        <label class="form-label">Category <span style="color:var(--red)">*</span></label>
         <select class="form-select" id="f_cat">
-          <option value="">選擇分類</option>
-          <option value="黃金">黃金</option>
-          <option value="白銀">白銀</option>
+          <option value="">Select category</option>
+          <option value="黃金">Gold</option>
+          <option value="白銀">Silver</option>
           <option value="ETF">ETF</option>
-          <option value="科技股">科技股</option>
+          <option value="科技股">Tech Stocks</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">標題 <span style="color:var(--red)">*</span> <span style="font-weight:300;color:#aaa">（最多50字）</span></label>
-        <input type="text" class="form-input" id="f_title" maxlength="50" placeholder="輸入文章標題">
+        <label class="form-label">Title <span style="color:var(--red)">*</span> <span style="font-weight:300;color:#aaa">(max 50 chars)</span></label>
+        <input type="text" class="form-input" id="f_title" maxlength="50" placeholder="Enter post title">
       </div>
       <div class="form-group">
-        <label class="form-label">內容 <span style="color:var(--red)">*</span></label>
-        <textarea class="form-textarea" id="f_content" placeholder="輸入文章內容…"></textarea>
+        <label class="form-label">Content <span style="color:var(--red)">*</span></label>
+        <textarea class="form-textarea" id="f_content" placeholder="Write your post…"></textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">上傳圖片 / 影片（最多10個）</label>
+        <label class="form-label">Upload images / videos (max 10)</label>
         <div class="media-previews" id="postPrev"></div>
         <div class="upload-area" onclick="document.getElementById('postFileInput').click()">
           <input type="file" id="postFileInput" multiple accept="image/*,video/*" style="display:none">
-          <span class="upload-label">點擊上傳圖片或影片（單檔上限 5GB，Firebase Storage 免費 5GB）</span>
+          <span class="upload-label">Click to upload image or video (max 5GB per file)</span>
         </div>
       </div>
-      <button class="submit-btn" id="postSubmitBtn" onclick="submitPost()">發　表</button>
+      <button class="submit-btn" id="postSubmitBtn" onclick="submitPost()">Submit</button>
     </div>
   </div>
 </div>
@@ -1295,10 +1295,10 @@ main{flex:1;min-width:0;}
 <div class="modal-overlay" id="detailModal" onclick="if(event.target.id==='detailModal')closeModal('detailModal')">
   <div class="modal wide">
     <div class="modal-hd">
-      <div class="modal-title" id="detailTitle">文章內容</div>
+      <div class="modal-title" id="detailTitle">Post Content</div>
       <button class="modal-x" onclick="closeModal('detailModal')">✕</button>
     </div>
-    <div class="modal-bd" id="detailBody"><div class="loading">載入中…</div></div>
+    <div class="modal-bd" id="detailBody"><div class="loading">Loading…</div></div>
   </div>
 </div>
 
@@ -1306,7 +1306,7 @@ main{flex:1;min-width:0;}
 <div class="modal-overlay" id="replyEditModal" onclick="if(event.target.id==='replyEditModal')closeModal('replyEditModal')">
   <div class="modal">
     <div class="modal-hd">
-      <div class="modal-title">編輯回覆</div>
+      <div class="modal-title">Edit Reply</div>
       <button class="modal-x" onclick="closeModal('replyEditModal')">✕</button>
     </div>
     <div class="modal-bd">
@@ -1316,7 +1316,7 @@ main{flex:1;min-width:0;}
       <div class="form-group">
         <textarea class="form-textarea" id="editReplyContent" style="height:100px"></textarea>
       </div>
-      <button class="submit-btn" id="replyEditBtn" onclick="submitReplyEdit()">儲存回覆</button>
+      <button class="submit-btn" id="replyEditBtn" onclick="submitReplyEdit()">Save Reply</button>
     </div>
   </div>
 </div>
