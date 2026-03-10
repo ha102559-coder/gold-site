@@ -391,6 +391,14 @@
   /* ─── INFO PANEL hidden/shown ─── */
   .info-panel { display: none; }
   .info-panel.active { display: block; }
+
+  /* ─── PAGINATION ─── */
+  .pagination { display:flex; justify-content:center; align-items:center; gap:8px; padding:40px 0 60px; flex-wrap:wrap; }
+  .page-btn { background:var(--dark-3); border:1px solid var(--border); color:var(--text-muted); width:42px; height:42px; border-radius:8px; font-family:'Noto Sans TC',sans-serif; font-size:0.95rem; font-weight:500; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
+  .page-btn:hover:not(.disabled) { background:rgba(201,168,76,0.15); border-color:var(--gold); color:var(--gold-light); }
+  .page-btn.active { background:linear-gradient(135deg,var(--gold-deep),var(--gold)); border-color:transparent; color:#111; font-weight:700; box-shadow:0 4px 14px rgba(201,168,76,0.4); }
+  .page-btn.disabled { opacity:0.3; cursor:not-allowed; }
+  .page-dots { color:var(--text-dim); font-size:1rem; line-height:42px; padding:0 4px; }
 </style>
 </head>
 <body>
@@ -551,6 +559,7 @@
 
   <!-- PRODUCT GRID -->
   <div class="product-grid" id="productGrid"></div>
+  <div class="pagination" id="pagination"></div>
 
 </div>
 
@@ -674,6 +683,9 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc,
+         orderBy, query, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const ADMIN_EMAIL = 'enzdwllg@gmail.com';
 
@@ -687,7 +699,28 @@ const app = initializeApp({
 });
 
 const auth = getAuth(app);
+const db   = getFirestore(app);
 const provider = new GoogleAuthProvider();
+
+// ═══════════════════════════════════════
+// 狀態變數
+// ═══════════════════════════════════════
+let allProducts   = [];
+let currentFilter = 'all';
+let currentPage   = 1;
+const PAGE_SIZE   = 8;
+window._isAdmin   = false;
+let _editingDocId = null;
+
+// ── 工具函數 ──
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
 
 // ── 登入狀態監聽 ──
 onAuthStateChanged(auth, user => {
@@ -706,35 +739,48 @@ onAuthStateChanged(auth, user => {
     userMenu.style.display = 'none';
   }
 
-  // 管理員才顯示後台面板與編輯/刪除按鈕
   adminPanel.style.display = isAdmin ? 'block' : 'none';
   window._isAdmin = isAdmin;
-  renderProducts();
+  loadProducts();
 });
 
 window.signInWithGoogle = async () => {
   try { await signInWithPopup(auth, provider); }
   catch(e) { if (e.code !== 'auth/popup-closed-by-user') showToast('登入失敗，請稍後再試'); }
 };
-
 window.signOutUser = async () => { await signOut(auth); };
-</script>
 
-<script>
-// ═══════════════════════════════════════
-// 商品資料（localStorage）
-// ═══════════════════════════════════════
-let products = JSON.parse(localStorage.getItem('gd_jewelry') || '[]');
-let currentFilter = 'all';
-let nextId = products.length ? Math.max(...products.map(p=>p.id)) + 1 : 1;
-window._isAdmin = false;
-
-function getFiltered() {
-  return currentFilter === 'all' ? products : products.filter(p => p.cat === currentFilter);
+// ── 載入商品 ──
+async function loadProducts() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)">載入中…</div>';
+  try {
+    const q = query(collection(db, 'jewelry_products'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    allProducts = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+    currentPage = 1;
+    renderProducts();
+  } catch(e) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:#f87171">⚠️ 載入失敗：${e.message}</div>`;
+  }
 }
 
+// ── 篩選 ──
+function getFiltered() {
+  return currentFilter === 'all' ? allProducts : allProducts.filter(p => p.cat === currentFilter);
+}
+
+window.filterProducts = function(cat, btn) {
+  currentFilter = cat;
+  currentPage = 1;
+  document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+};
+
+// ── 渲染商品 ──
 function renderProducts() {
-  const grid = document.getElementById('productGrid');
+  const grid     = document.getElementById('productGrid');
   const filtered = getFiltered();
   document.getElementById('itemCount').textContent = filtered.length;
 
@@ -742,11 +788,17 @@ function renderProducts() {
     grid.innerHTML = window._isAdmin
       ? `<div class="add-card"><div class="add-card-icon">💍</div><div class="add-card-text">點擊上方表單新增第一件商品</div></div>`
       : `<div class="add-card" style="cursor:default"><div class="add-card-icon">💍</div><div class="add-card-text">商品即將上架，敬請期待</div></div>`;
+    document.getElementById('pagination').innerHTML = '';
     return;
   }
 
-  grid.innerHTML = filtered.map(p => {
-    const imgHtml = p.img
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (currentPage > totalPages) currentPage = 1;
+  const start     = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  grid.innerHTML = pageItems.map(p => {
+    const imgHtml    = p.img
       ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="product-img-placeholder" style="display:none">💍</div>`
       : `<div class="product-img-placeholder">💍</div>`;
     const badgeHtml  = p.badge ? `<div class="product-badge ${p.badge}">${p.badge.toUpperCase()}</div>` : '';
@@ -754,14 +806,14 @@ function renderProducts() {
     const priceHtml  = p.price ? `<div class="product-price">${esc(p.price)}</div><div class="product-price-note">參考售價，實際以商家為準</div>` : '';
     const btn2Html   = p.link2 ? `<a class="btn-affiliate-out" href="${esc(p.link2)}" target="_blank" rel="noopener sponsored">${esc(p.link2text||'查看更多')}</a>` : '';
     const adminBtns  = window._isAdmin
-      ? `<button class="del-btn" onclick="deleteProduct(${p.id})">刪除</button><button class="edit-btn" onclick="openEdit(${p.id})">編輯</button>`
+      ? `<button class="del-btn" onclick="deleteProduct('${p._id}')">刪除</button><button class="edit-btn" onclick="openEdit('${p._id}')">編輯</button>`
       : '';
     return `
-      <div class="product-card fade-up" data-id="${p.id}">
+      <div class="product-card fade-up" data-id="${p._id}">
         ${adminBtns}
         <div class="product-img-wrap">${badgeHtml}${imgHtml}</div>
         <div class="product-body">
-          <div class="product-cat">${esc(p.cat)}</div>
+          <div class="product-cat">${esc(p.cat||'')}</div>
           <div class="product-name">${esc(p.name)}</div>
           ${p.desc ? `<div class="product-desc">${esc(p.desc)}</div>` : ''}
           ${tagsHtml ? `<div class="product-meta">${tagsHtml}</div>` : ''}
@@ -777,61 +829,86 @@ function renderProducts() {
       setTimeout(() => el.classList.add('visible'), i * 60);
     });
   });
+
+  renderPagination(totalPages);
 }
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function renderPagination(totalPages) {
+  const container = document.getElementById('pagination');
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+  let html = '';
+  html += `<button class="page-btn ${currentPage===1?'disabled':''}" onclick="changePage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage-1 && i <= currentPage+1)) {
+      html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
+    } else if (i === currentPage-2 || i === currentPage+2) {
+      html += `<span class="page-dots">…</span>`;
+    }
+  }
+  html += `<button class="page-btn ${currentPage===totalPages?'disabled':''}" onclick="changePage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  container.innerHTML = html;
 }
 
-function filterProducts(cat, btn) {
-  currentFilter = cat;
-  document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+window.changePage = (page) => {
+  const totalPages = Math.ceil(getFiltered().length / PAGE_SIZE);
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
   renderProducts();
-}
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
-function addProduct() {
+// ── 新增商品 ──
+window.addProduct = async function() {
   if (!window._isAdmin) return;
   const name = document.getElementById('f-name').value.trim();
   const link = document.getElementById('f-link').value.trim();
   if (!name) { showToast('請填寫商品名稱'); return; }
   if (!link) { showToast('請填寫聯盟連結'); return; }
-  products.unshift({
-    id: nextId++, name,
-    cat:       document.getElementById('f-cat').value,
-    price:     document.getElementById('f-price').value.trim(),
-    tags:      document.getElementById('f-tags').value.trim(),
-    badge:     document.getElementById('f-badge').value,
-    desc:      document.getElementById('f-desc').value.trim(),
-    link,
-    link2:     document.getElementById('f-link2').value.trim(),
-    link2text: document.getElementById('f-link2text').value.trim(),
-    img:       document.getElementById('f-img').value.trim(),
-  });
-  save(); clearForm(); renderProducts();
-  showToast('✦ 商品已新增');
-}
+  try {
+    await addDoc(collection(db, 'jewelry_products'), {
+      name, link,
+      cat:       document.getElementById('f-cat').value,
+      price:     document.getElementById('f-price').value.trim(),
+      tags:      document.getElementById('f-tags').value.trim(),
+      badge:     document.getElementById('f-badge').value,
+      desc:      document.getElementById('f-desc').value.trim(),
+      link2:     document.getElementById('f-link2').value.trim(),
+      link2text: document.getElementById('f-link2text').value.trim(),
+      img:       document.getElementById('f-img').value.trim(),
+      createdAt: serverTimestamp(),
+    });
+    clearForm();
+    showToast('✦ 商品已新增');
+    await loadProducts();
+  } catch(e) { showToast('新增失敗：' + e.message); }
+};
 
-function clearForm() {
+window.clearForm = function() {
   ['f-name','f-price','f-tags','f-desc','f-link','f-link2','f-link2text','f-img'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-badge').value = '';
   document.getElementById('f-cat').value = '項鍊';
   document.getElementById('f-imgpreview').style.display = 'none';
-}
+};
 
-function deleteProduct(id) {
+// ── 刪除商品 ──
+window.deleteProduct = async function(docId) {
   if (!window._isAdmin) return;
   if (!confirm('確定刪除此商品？')) return;
-  products = products.filter(p => p.id !== id);
-  save(); renderProducts();
-  showToast('商品已刪除');
-}
+  try {
+    await deleteDoc(doc(db, 'jewelry_products', docId));
+    showToast('商品已刪除');
+    await loadProducts();
+  } catch(e) { showToast('刪除失敗：' + e.message); }
+};
 
-function openEdit(id) {
+// ── 編輯商品 ──
+window.openEdit = async function(docId) {
   if (!window._isAdmin) return;
-  const p = products.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('e-id').value = id;
+  const snap = await getDoc(doc(db, 'jewelry_products', docId));
+  if (!snap.exists()) return;
+  const p = snap.data();
+  _editingDocId = docId;
+  document.getElementById('e-id').value = docId;
   ['name','cat','badge','price','tags','desc','link','link2','link2text','img'].forEach(k => {
     document.getElementById('e-'+k).value = p[k] || '';
   });
@@ -839,28 +916,32 @@ function openEdit(id) {
   if (p.img) { prev.src = p.img; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
   document.getElementById('editOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-}
+};
 
-function saveEdit() {
-  if (!window._isAdmin) return;
-  const id = parseInt(document.getElementById('e-id').value);
-  const idx = products.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  ['name','cat','badge','price','tags','desc','link','link2','link2text','img'].forEach(k => {
-    products[idx][k] = document.getElementById('e-'+k).value.trim();
-  });
-  save(); closeEdit(); renderProducts();
-  showToast('✦ 商品已更新');
-}
+window.saveEdit = async function() {
+  if (!window._isAdmin || !_editingDocId) return;
+  try {
+    const data = {};
+    ['name','cat','badge','price','tags','desc','link','link2','link2text','img'].forEach(k => {
+      data[k] = document.getElementById('e-'+k).value.trim();
+    });
+    data.updatedAt = serverTimestamp();
+    await updateDoc(doc(db, 'jewelry_products', _editingDocId), data);
+    closeEdit();
+    showToast('✦ 商品已更新');
+    await loadProducts();
+  } catch(e) { showToast('更新失敗：' + e.message); }
+};
 
-function closeEdit() {
+window.closeEdit = function() {
   document.getElementById('editOverlay').classList.remove('open');
   document.body.style.overflow = '';
-}
-function closeEditOutside(e) { if (e.target === document.getElementById('editOverlay')) closeEdit(); }
+  _editingDocId = null;
+};
+window.closeEditOutside = function(e) { if (e.target === document.getElementById('editOverlay')) closeEdit(); };
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEdit(); });
 
-function previewImg(input, previewId, urlId) {
+window.previewImg = function(input, previewId, urlId) {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
@@ -869,20 +950,8 @@ function previewImg(input, previewId, urlId) {
     document.getElementById(urlId).value = e.target.result;
   };
   reader.readAsDataURL(file);
-}
+};
 
-function save() {
-  try { localStorage.setItem('gd_jewelry', JSON.stringify(products)); } catch(e) {}
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-// 初始渲染（Firebase 回調前先畫一次）
-renderProducts();
 </script>
 
 
@@ -939,7 +1008,7 @@ renderProducts();
               <div class="info-contact-icon">✉️</div>
               <div>
                 <div style="font-size:11px;letter-spacing:1px;color:var(--text-dim);margin-bottom:3px">客服信箱</div>
-                <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>
+                <a href="/cdn-cgi/l/email-protection#0f7b7a7c667b6e6c6766636b4f68626e6663216c6062" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="9febeaecf6ebfefcf7f6f3fbdff8f2fef6f3b1fcf0f2">[email&#160;protected]</span></a>
               </div>
             </div>
             <div class="info-contact-row">
@@ -986,7 +1055,7 @@ renderProducts();
         </div>
         <div class="info-section">
           <div class="info-section-title">資料安全</div>
-          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>。</p>
+          <p>我們採用業界標準的加密技術保護您的個人資料，並定期審查安全措施。若您對個人資料有任何疑問，請聯繫 <a href="/cdn-cgi/l/email-protection#6c18191f05180d0f040500082c0b010d0500420f0301" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="354140465c4154565d5c5951755258545c591b565a58">[email&#160;protected]</span></a>。</p>
         </div>
         <div class="info-section">
           <div class="info-section-title">政策更新</div>
@@ -1018,7 +1087,7 @@ renderProducts();
         </div>
         <div class="info-section">
           <div class="info-section-title">智慧財產權</div>
-          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="mailto:tusitachild@gmail.com" style="color:var(--gold)">tusitachild@gmail.com</a>。</p>
+          <p>本平台所有內容，包含文字、圖像、程式碼及設計，均受著作權法保護。未經授權不得轉載、複製或商業使用。如需授權，請聯繫 <a href="/cdn-cgi/l/email-protection#c0b4b5b3a9b4a1a3a8a9aca480a7ada1a9aceea3afad" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="e99d9c9a809d888a8180858da98e84888085c78a8684">[email&#160;protected]</span></a>。</p>
         </div>
         <div class="info-section">
           <div class="info-section-title">條款修訂</div>
@@ -1030,7 +1099,7 @@ renderProducts();
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── INFO MODAL ──
 const infoConfig = {
   about:   { icon: '🏛️', label: 'ABOUT US', title: '關於我們' },
@@ -1051,18 +1120,4 @@ function closeInfoModalOutside(e) {
 function switchInfoTab(tab, clickedBtn) {
   const cfg = infoConfig[tab];
   document.getElementById('infoModalIcon').textContent = cfg.icon;
-  document.getElementById('infoModalLabel').textContent = cfg.label;
-  document.getElementById('infoModalTitle').textContent = cfg.title;
-  ['about','contact','privacy','terms'].forEach(t => {
-    document.getElementById('info-'+t).classList.toggle('active', t===tab);
-  });
-  document.querySelectorAll('.info-modal-tab').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'"+tab+"'")) {
-      btn.classList.add('active');
-    }
-  });
-}
-</script>
-</body>
-</html>
+  document.getEle
